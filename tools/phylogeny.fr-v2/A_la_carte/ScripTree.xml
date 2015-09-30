@@ -1,0 +1,462 @@
+<!-- Fichier ScripTree  ScripTree   ScripTree -->
+
+<tool id="ScripTree-1.0" name="ScripTree" version="1.0" force_history_refresh="True">
+
+	<description>scripting phylogenetic graphics</description>
+
+	<command interpreter="bash">ScripTree.sh  	-a  $fileNewick
+
+							-z  "$script.choice $script.fileScript $script.writeScript"
+
+							#if $script.choice == "choice":
+							-y  $script.tree.drawingChoice
+						  		#if $script.tree.drawingChoice == "true":
+								-b "$script.tree.nbColumns $script.tree.nbConformation $script.tree.type $script.tree.size $script.tree.style $script.tree.nbInterleaf $script.tree.typeOrientation" <!--$tree.root-->
+								#end if
+							-v  $script.branch.branchChoice 
+								#if $script.branch.branchChoice == "true":
+						 		-c  "$script.branch.nbRound $script.branch.nbThreshold $script.branch.supportBranchColor $script.branch.whereSupportBranch $script.branch.typeSupport $script.branch.sizeSupport $script.branch.styleSupport"
+								#end if
+							-u  $script.support.supportChoice 
+								#if $script.support.supportChoice == "true":
+						 		-d  "$script.support.nbRound2 $script.support.nbThreshold2 $script.support.supportBranchColor2 $script.support.whereSupportBranch2 $script.support.typeSupport2 $script.support.sizeSupport2 $script.support.styleSupport2"
+								#end if
+							#end if
+
+							-e  "$annotation.annotationChoice $annotation.fileAnnotation $annotation.writeAnnot" 
+							#if $annotation.annotationChoice == "true":
+							-t  $annotation.bracket.bracketChoice 
+								#if $annotation.bracket.bracketChoice == "true":
+								-f  "$annotation.bracket.lbaWhat $annotation.bracket.lbaType $annotation.bracket.lbaSize  $annotation.bracket.lbaStyle $annotation.bracket.lbaColor  $annotation.bracket.lbaWidth"
+								#end if
+							-s  $annotation.string.stringChoice 
+								#if $annotation.string.stringChoice == "true": 
+								-g  "$annotation.string.lsaWhat $annotation.string.lsaType $annotation.string.lsaSize  $annotation.string.lsaStyle $annotation.string.lsaColor"
+								#end if
+							-r  $annotation.symbol.symbolChoice
+								#if $annotation.symbol.symbolChoice == "true":  
+								-i  "$annotation.symbol.lyaWhat $annotation.symbol.lyaSymbol $annotation.symbol.lyaColor"
+								#end if
+							-q  $annotation.query.queryChoice
+								#if $annotation.query.queryChoice == "true": 
+								-j  "$annotation.query.qaOperation $annotation.query.qaColor $annotation.query.qaWhat"
+								#end if
+							<!---p $annotation.query2.query2Choice 
+								#if $annotation.query2.query2Choice == "true":
+								-k   "$annotation.query2.qaOperation2 $annotation.query2.qaColor2 $annotation.query2.qaWhat2"
+								#end if-->
+							#end if
+
+							-o   $output
+
+	</command>
+
+
+	<inputs>
+		<param name="fileNewick" format="txt" type="data" label="Newick file"/>	
+		<conditional name="script">
+			<param name="choice" type="select" label="Script options">
+				<option value="choice">Choose options</option>
+				<option value="default">script by default</option>
+				<option value="file">upload file</option>
+				<option value="write">write script</option>
+			</param>
+			<when value="default">
+				<param name="fileScript" type="hidden" value="script.txt"/>
+				<param name="writeScript" type="hidden" value=""/>
+			</when>				
+			<when value="file">
+				<param name="fileScript" format="txt" type="data" label="Script file"/>
+				<param name="writeScript" type="hidden" value=""/>		
+			</when>						
+			<when value="write">
+				<param name="fileScript" type="hidden" value="script.txt"/>
+				<param name="writeScript" type="text" size="15x50" area="true" label="Write script"/>
+			</when>
+
+	<when value="choice">
+				<param name="fileScript" type="hidden" value="script.txt"/>
+				<param name="writeScript" type="hidden" value=""/>
+<!--tree or t-->
+
+		<conditional name="tree">
+			<param name="drawingChoice" type="select" label="Tree drawing and edition commands">
+				<option value="false">No</option>
+				<option value="true">Yes</option>
+			</param>
+			<when value="true">
+				<param name="nbColumns" type="select" label="Tree drawing Number of columns">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+				</param>
+				<param name="nbConformation" type="select" label="Tree drawing Conformation">
+					<option value="1">Phylogram</option>
+					<option value="2">Cladogram</option>
+					<option value="3">Equal</option>
+				</param>         
+				<param name="type" type="select" label="Tree drawing Font-family">
+					<option value="Arial">Arial</option>
+					<option value="Times">Times</option>  	
+				</param>
+				<param name="size" type="integer" min="2" max="30" value="8" label="Tree drawing Font-size"/>
+				<param name="style" type="select" label="Tree drawing Font-style">
+					<option value="italic">Italic</option>
+					<option value="normal">Normal</option> 
+					<option value="bold">Bold</option>
+				</param> 
+				<param name="nbInterleaf" type="select" label="Tree drawing Interleaf space in pixels">
+					<option value="10">10</option>
+					<option value="5">5</option>	
+					<option value="15">15</option>
+					<option value="20">20</option>
+				</param>
+				<param name="typeOrientation" type="select" label="Tree drawing Orientation">
+					<option value="we">Left to right </option>
+					<option value="ew">Right to left</option>
+				</param>
+				<!--<param name="root" type="text" label="Tree-Root tree(s) at a node corresponding to the leaf labels or pattern list" help="This operation works also for multi-tree with differents leaf labels sets"/>-->
+			</when>
+			<when value="false">
+			</when>
+		</conditional>
+
+<!--e_string_newick or esn-->
+
+		<conditional name="branch">
+			<param name="branchChoice" type="select" label="Branch lengths commands">
+				<option value="false">No</option>
+				<option value="true">Yes</option>
+			</param>
+			<when value="true">	
+				<param name="nbRound" type="select" label="Branch lengths Round decimal number">
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>				
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="10">10</option>
+					<option value="15">15</option>
+				</param>
+				<param name="nbThreshold" type="select" label="Branch lengths Display values greater than threshold">
+					<option value="0">0</option>
+					<option value="0.1">0.1</option>
+					<option value="0.2">0.2</option>
+					<option value="0.3">0.3</option>
+					<option value="0.4">0.4</option>
+					<option value="0.5">0.5</option>
+					<option value="0.6">0.6</option>
+					<option value="0.7">0.7</option>
+					<option value="0.8">0.8</option>
+					<option value="0.9">0.9</option>
+				</param>
+				<param name="supportBranchColor" type="select" label="Branch lengths Color">
+					<option value="green">green</option>
+					<option value="black">black</option>
+					<option value="red">red</option>
+					<option value="blue">blue</option>
+					<option value="yellow">yellow</option>
+					<option value="orange">orange</option>
+				</param>
+				<param name="whereSupportBranch" type="select" label="Branch lengths Position on edges">
+					<option value="n">north</option>
+					<option value="s">south</option>
+					<option value="e">east</option>
+					<option value="w">west</option>
+					<option value="c">center</option>
+				</param>
+				<param name="typeSupport" type="select" label="Branch lengths Font-family">
+					<option value="Arial">Arial</option>
+					<option value="Times">Times</option>  	
+				</param>
+				<param name="sizeSupport" type="integer" min="2" max="30" value="5" label="Branch lengths Font-size"/>
+				<param name="styleSupport" type="select" label="Branch-Font-style">
+					<option value="italic">Italic</option>
+					<option value="normal">Normal</option> 
+					<option value="bold">Bold</option>
+				</param> 
+			</when>
+			<when value="false">
+			</when>
+		</conditional>
+
+<!--e_string_newick or esn-->
+
+		<conditional name="support">			
+			<param name="supportChoice" type="select" label="Branch support commands">
+				<option value="false">No</option>
+				<option value="true">Yes</option>
+			</param>
+			<when value="true">	
+				<param name="nbRound2" type="select" label="Branch support Round decimal number">
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>				
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="10">10</option>
+					<option value="15">15</option>
+				</param>
+				<param name="nbThreshold2" type="select" label="Branch support Display values greater than threshold">
+					<option value="0">0</option>
+					<option value="0.1">0.1</option>
+					<option value="0.2">0.2</option>
+					<option value="0.3">0.3</option>
+					<option value="0.4">0.4</option>
+					<option value="0.5">0.5</option>
+					<option value="0.6">0.6</option>
+					<option value="0.7">0.7</option>
+					<option value="0.8">0.8</option>
+					<option value="0.9">0.9</option>
+				</param>
+				<param name="supportBranchColor2" type="select" label="Branch support Color">
+					<option value="black">black</option>
+					<option value="red">red</option>
+					<option value="green">green</option>
+					<option value="blue">blue</option>
+					<option value="yellow">yellow</option>
+					<option value="orange">orange</option>
+				</param>
+				<param name="whereSupportBranch2" type="select" label="Branch support Position on edges">
+					<option value="s">south</option>
+					<option value="n">north</option>
+					<option value="e">east</option>
+					<option value="w">west</option>
+					<option value="c">center</option>
+				</param>
+				<param name="typeSupport2" type="select" label="Branch support Font-family">
+					<option value="Arial">Arial</option>
+					<option value="Times">Times</option>  	
+				</param>
+				<param name="sizeSupport2" type="integer" min="2" max="30" value="5" label="Branch support Font-size"/>
+				<param name="styleSupport2" type="select" label="Branch support Font-style">
+					<option value="italic">Italic</option>
+					<option value="normal">Normal</option> 
+					<option value="bold">Bold</option>
+				</param>
+			</when>
+			<when value="false">
+			</when>
+		</conditional>
+	</when>
+	</conditional>
+
+		<conditional name="annotation">
+			<param name="annotationChoice" type="select" label="Annotation options">
+				<option value="false">annotation by default</option>
+				<option value="true">upload file</option>
+				<option value="write">write annotation</option>
+			</param>
+
+			<when value="true">
+				<param name="fileAnnotation" format="txt" type="data" label="Annotation file"/>
+				<param name="writeAnnot" type="hidden" value=""/>
+
+<!--l_bracket_annotation or lba-->
+ 	
+				<conditional name="bracket">
+					<param name="bracketChoice" type="select" label="Leaf's bracket commands">
+						<option value="false">No</option>
+						<option value="true">Yes</option>
+					</param>
+					<when value="true">
+						<param name="lbaWhat" type="text" label="Leaf's bracket annotation In regard of leaf's labels, from annotation"/> 
+						<param name="lbaType" type="select" label="Leaf's bracket annotation Font-family">
+							<option value="Arial">Arial</option>
+							<option value="Times">Times</option>  	
+						</param>
+						<param name="lbaSize" type="integer" min="2" max="30" value="7" label="Leaf's bracket annotation Font-size"/>
+						<param name="lbaStyle" type="select" label="Leaf's bracket annotation Font-style">
+							<option value="italic">Italic</option>
+							<option value="normal">Normal</option> 
+							<option value="bold">Bold</option>
+						</param>
+						<param name="lbaColor" type="select" label="Leaf's bracket annotation Bracket background color mode">
+							<option value="progressive">progressive</option>
+							<option value="random">random</option>
+						</param>
+						<param name="lbaWidth" type="select" label="Leaf's bracket annotation Bracket width in pixels">
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="15">15</option>
+						</param>
+					</when>
+					<when value="false">
+					</when>
+				</conditional>
+
+<!--l_string_annotation or lsa -->
+
+				<conditional name="string">
+					<param name="stringChoice" type="select" label="Leaf's string commands">
+						<option value="false">No</option>
+						<option value="true">Yes</option>
+					</param>
+					<when value="true">
+						<param name="lsaWhat" type="text" label="Leaf's string annotation Textual matrices in regard of leaf's"/>
+						<param name="lsaType" type="select" label="Leaf's string annotation Font-family">
+							<option value="Arial">Arial</option>
+							<option value="Times">Times</option>  	
+						</param>
+						<param name="lsaSize" type="integer" min="2" max="30" value="7" label="Leaf's string annotation Font-size"/>
+						<param name="lsaStyle" type="select" label="Leaf's string annotation Font-style">
+							<option value="italic">Italic</option>
+							<option value="normal">Normal</option> 
+							<option value="bold">Bold</option>
+						</param>
+						<param name="lsaColor" type="select" label="Leaf's string Color">
+							<option value="black">black</option>
+							<option value="red">red</option>
+							<option value="green">green</option>
+							<option value="blue">blue</option>
+							<option value="yellow">yellow</option>
+							<option value="orange">orange</option>
+						</param>
+					</when>
+					<when value="false">
+					</when>
+				</conditional>
+
+<!--l_symbol_annotation or lya -->
+
+				<conditional name="symbol">
+					<param name="symbolChoice" type="select" label="Leaf's symbol commands">
+						<option value="false">No</option>
+						<option value="true">Yes</option>
+					</param>
+					<when value="true">
+						<param name="lyaWhat" type="text" label="Leaf's symbol annotation Matrices in regard of leaf's labels from annotation"/>
+						<param name="lyaSymbol" type="select" label="Leaf's symbol annotation Stipple">
+							<option value="01">Square/Rectangle</option>
+							<option value="02">Circle/Oval</option>
+							<option value="03">Diamond</option>
+							<option value="07">Triangle top</option>
+							<option value="08">checkboxe Off</option>
+							<option value="09">checkboxe On</option>
+						</param>
+						<param name="lyaColor" type="select" label="Leaf's symbol annotation Bracket background color mode">
+							<option value="progressive">progressive</option>
+							<option value="random">random</option>
+						</param>
+					</when>
+					<when value="false">
+					</when>
+				</conditional> 
+
+<!--query_annotation or qa --> 
+
+				<conditional name="query">
+					<param name="queryChoice" type="select" label="Query annotation commands">
+						<option value="false">No</option>
+						<option value="true">Yes</option>
+					</param>
+					<when value="true">
+						<param name="qaWhat" type="text" label="Query annotation Leaf using node index number" size="1x25" area="True"/>
+						<param name="qaOperation" type="select" label="Query annotation Hightlighting operations">
+							<option value="lfg">Leaf's label foreground color</option>
+							<option value="sfg">Subtree foreground color</option>
+							<option value="efg">Edge foreground color</option>
+						</param>
+						<param name="qaColor" type="select" label="Query annotation String foreground color, symbolic color name or hexadecimal value">
+							<option value="black">black</option>
+							<option value="red">red</option>
+							<option value="green">green</option>
+							<option value="blue">blue</option>
+							<option value="yellow">yellow</option>
+							<option value="orange">orange</option>
+						</param>
+					</when>
+					<when value="false">
+					</when>
+				</conditional>
+
+<!--query_annotation or qa 2--> 
+
+				<!--<conditional name="query2">
+					<param name="queryChoice2" type="select" label="Query annotation commands">
+						<option value="false">No</option>
+						<option value="true">Yes</option>
+					</param>
+					<when value="true">
+						<param name="qaWhat2" type="text" label="qa2-Query leaf using node index number" size="1x25" area="True"/>
+						<param name="qaOperation2" type="select" label="qa2-Hightlightning operations">
+							<option value="lfg">Leaf's label foreground color</option>
+							<option value="sfg">Subtree foreground color</option>
+							<option value="efg">Edge foreground color</option>
+						</param>
+						<param name="qaColor2" type="select" label="qa2-String foreground color, symbolic color name or hexadecimal value">
+							<option value="black">black</option>
+							<option value="red">red</option>
+							<option value="green">green</option>
+							<option value="blue">blue</option>
+							<option value="yellow">yellow</option>
+							<option value="orange">orange</option>
+						</param>
+					</when>
+				</conditional>-->				
+			</when>
+
+			<when value="false">
+				<param name="fileAnnotation" type="hidden" value=""/> 
+				<param name="writeAnnot" type="hidden" value=""/>
+			</when>
+		<when value="write">
+				<param name="fileAnnotation" type="hidden" value="annotation.txt"/>
+				<param name="writeAnnot" type="text" size="15x50" area="true" label="Write annotation"/>
+			</when>
+		</conditional>
+	
+
+	</inputs>
+
+	<outputs>
+
+		<data name="output" format="svg" label="ScripTree-tree.svg"/>    
+
+	</outputs>
+
+	<help>
+.. class:: infomark
+
+**ScripTree version 17, 2014**
+
+.. class:: infomark
+
+**Program encapsulated in Galaxy by ATGC (C. Vernette, V. Lefort)**
+
+-----
+
+==============
+Please cite:
+==============
+
+" ScripTree: scripting_ phylogenetic graphics " 
+
+
+.. _scripting: http://bioinformatics.oxfordjournals.org/content/26/8/1125.full
+
+**François Chevenet, Olivier Croce, Maxime Hebrard, Richard Christen and Vincent Berry** 
+
+Bioinformatics (2010) 26 (8): 1125-1126. doi: 10.1093/bioinformatics/btq086 First published online: March 1, 2010
+
+-----
+
+===========
+Overview:
+===========
+
+There is a large amount of tools for interactive display of phylogenetic trees. However, there is a shortage of tools for the automation of tree rendering. Scripting phylogenetic graphics would enable the saving of graphical analyses involving numerous and complex tree handling operations and would allow the automation of repetitive tasks. ScripTree is a tool intended to fill this gap. It is an interpreter to be used in batch mode.
+
+-----
+
+For further informations, please visite ScripTree_
+
+
+.. _ScripTree: http://www.scriptree.org/
+
+
+	</help>
+	
+
+</tool>

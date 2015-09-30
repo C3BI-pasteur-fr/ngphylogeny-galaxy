@@ -1,0 +1,104 @@
+<tool id="PhyloType-1.0" name="PhyloType" version="1.0" force_history_refresh="True">
+
+	<description>searching for phylotype</description>
+
+	<command interpreter="bash">phylotype.sh -b	$fileTree
+						 -c	$fileAnnot
+						 -d	"$variableListe"
+						 -e	"$size $persistence $ratio" 
+						 -f	"$choice.total $choice.different $choice.local $choice.global $choice.diversity $choice.ratio2 $choice.ratio3 $choice.support $choice.global2"
+						 -g 	"$iteration $treshold"
+						 -i 	$ancestral
+		 				 -o	$output
+	</command>
+
+	<inputs>
+		<param name="fileTree" format="txt" type="data" label="Tree file (newick)"/>
+		<param name="fileAnnot" format="txt" type="data" label="Annotation file"/>
+		<param name="variableListe" type="text" label="Variable(s) name(s) for analysis" size="1x25" area="True"/>
+		<param name="size" type="integer" label="Size ≥" value="3"/>
+		<param name="persistence" type="integer" label="Persistence ≥" value="1"/> 
+		<param name="ratio" type="integer" label="Ratio of size and different ≥" value="1"/>
+		<conditional name="choice">
+			<param name="option" type="boolean" label="More options"/>
+			<when value="true">
+				<param name="total" type="integer" label="Total number of strains" value="-1"/>
+				<param name="different" type="integer" label="Number of subtrees with different annotations included in the phylotype ≤" value="-1"/>
+				<param name="local" type="integer" label="Local separation ≥" value="-1"/>
+				<param name="global" type="integer" label="Global separation ≥" value="-1"/>
+				<param name="diversity" type="integer" label="Diversity ≤" value="-1"/>
+				<param name="ratio2" type="integer" label="Ratio of local separtion and diversity ≥" value="-1"/>
+				<param name="ratio3" type="integer" label="Ratio of global separtion and diversity ≥" value="-1"/>
+				<param name="support" type="float" label="Support of the phylotype ≥" value="0.5"/>
+				<param name="global2" type="integer" label="Global support ≥" value="-1"/>
+			</when>
+			<when value="false">
+				<param name="total" type="hidden" label="Total number of strains" value="-1"/>
+				<param name="different" type="hidden" label="Number of subtrees with different annotations included in the phylotype ≤" value="-1"/>
+				<param name="local" type="hidden" label="Local separation ≥" value="-1"/>
+				<param name="global" type="hidden" label="Global separation ≥" value="-1"/>
+				<param name="diversity" type="hidden" label="Diversity ≤" value="-1"/>
+				<param name="ratio2" type="hidden" label="Ratio of local separtion and diversity ≥" value="-1"/>
+				<param name="ratio3" type="hidden" label="Ratio of global separtion and diversity ≥" value="-1"/>
+				<param name="support" type="hidden" label="Support of the phylotype ≥" value="0.5"/>
+				<param name="global2" type="hidden" label="Global support ≥" value="-1"/>
+			</when>
+		</conditional>
+		<param name="ancestral" type="select" label="Ancestral Annotation inference">
+			<option value="DELTRAN">DELTRAN</option>
+			<option value="ACCTRAN">ACCTRAN</option>
+		</param>
+		<param name="iteration" type="integer" label="Number of iteration" value="1000"/>
+		<param name="treshold" type="integer" label="Sz P.value treshold" value="50"/>
+
+	</inputs>
+
+	<outputs>
+		<data name="output" format="csv" label="PhyloType File"/> 
+	</outputs>
+
+	<help>
+
+.. class:: infomark
+
+**PhyloType version 5, 2014**
+
+.. class:: infomark
+
+**Program encapsulated in Galaxy by ATGC (C. Vernette, V. Lefort)**
+
+-----
+	
+==============
+ Please cite: 
+==============
+
+
+"Searching_ for virus phylotypes" 
+
+
+.. _Searching: http://bioinformatics.oxfordjournals.org/content/29/5/561.long
+
+**François Chevenet, Matthieu Jung, Martine Peeters, Tulio de Oliveira and Olivier Gascuel1**
+
+Bioinformatics. 2013 Mar 1;29(5):561-70. doi: 10.1093/bioinformatics/btt010. Epub 2013 Jan 17.
+
+
+-----
+
+==========
+ Overview
+==========
+
+We propose a new method for obtaining such groups, which we call phylotypes, from a phylogeny having taxa (strains) annotated with extrinsic traits. Phylotypes are subsets of taxa with close phylogenetic relationships and common trait values. The method combines ancestral trait reconstruction using parsimony, with combinatorial and numerical criteria measuring tree shape characteristics and the diversity and separation of the potential phylotypes. A shuffling procedure is used to assess the statistical significance of phylotypes. All algorithms have linear time complexity. This results in very low computing times. 
+
+-----
+
+For further informations, please visite PhyloType_ 
+
+
+.. _PhyloType: http://phylotype.org/
+
+	</help>
+</tool>
+

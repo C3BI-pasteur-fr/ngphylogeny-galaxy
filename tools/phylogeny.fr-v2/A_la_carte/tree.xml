@@ -1,0 +1,209 @@
+<tool id="Inference-1.0" name="Tree" version="1.0">
+	<description>Inference tree</description>
+	<command interpreter="bash">tree.sh     -i $input
+                                            -o $output
+                                            -a $prog.choice
+                                    #if $prog.choice == "fastme" :  
+                                        <!--#if $prog.bootChoice.boot =="true":
+					                        -b "$prog.bootChoice.boot $prog.bootChoice.replicates" 
+					                    #end if-->	
+						                    -c "$prog.typeChoice.model $prog.typeChoice.datatype $prog.gammaChoice.gamma $prog.equilibrium"
+					                    #if $prog.gammaChoice.gamma == "true":
+						                    -d $prog.gammaChoice.rate
+					                    #end if
+						                    -e "$prog.method $prog.NNI $prog.SPR $prog.removeGap "
+                                    #end if
+                                    #if $prog.choice == "phyml" :
+                                            -f "$prog.support_condition.support $prog.datatype_condition.type $prog.gamma_condition.gamma $prog.random_condition.search"						 
+                                        #if $prog.support_condition.support == "boot": 
+                                            -g "$prog.output_boot_tree $prog.support_condition.boot_number"
+                                        #end if
+                                            -j "$prog.prop_invar $prog.datatype_condition.model  $prog.random_condition.search $prog.equiSeq $prog.random_condition.points"
+                                        #if $prog.datatype_condition.type == "nt": 
+                                            -k $prog.datatype_condition.tstv
+                                        #end if
+                                        #if $prog.gamma_condition.gamma == "true": 
+                                            -l "$prog.gamma_condition.categories $prog.gamma_condition.shape"   
+                                        #end if
+                                   #end if
+	</command>
+
+	<inputs>
+		<param name="input" format="txt" type="data" label="Source file" help="Phylip format"/>
+		<conditional name="prog">
+			<param name="choice" type="select" label="Choose the inference program">
+				<option value="fastme">FasME</option>
+				<option value="phyml">PhyML</option>
+			</param>
+			<when value="fastme">
+                <conditional name="typeChoice">
+			        <param name="datatype" type="select"  label="Data type">
+				        <option value="d">DNA</option>
+				        <option value="p">Protein</option>
+			        </param>
+                   	 	<when value="d">
+				        <param name="model" type="select" label="Evolutionary model">
+					        <option value="4">F84</option>
+					        <option value="R">RY</option>
+					        <option value="1">F81</option>
+					        <option value="J">JC69</option>
+					        <option value="K">K2P</option>
+					        <option value="T">TN</option>
+					        <option value="p">p-distance</option>
+				        </param>
+			        </when>
+			        <when value="p">
+				        <param name="model" type="select" label="Evolutionary model">
+					        <option value="L">LG</option>
+					        <option value="W">WAG</option>
+					        <option value="J">JTT</option>
+					        <option value="h">Day off</option>
+					        <option value="C">CpRev</option>
+					        <option value="D">DCMut</option>
+					        <option value="b">HIVb</option>
+					        <option value="I">HIVw</option>
+					        <option value="M">MtREV</option>
+					        <option value="R">RtREV</option>					
+					        <option value="p">p-distance</option>					
+				        </param>			
+			        </when>
+                </conditional>
+                <param name="equilibrium" type="boolean" label="Equilibrium frequencies" truevalue="-e" falsevalue="" help="By default, frequencies are globally counted from the nucleotides alignment or defined by the proteic substitution model. By checking the box, frequencies are pairwise estimated by counting the nucleotides or estimated by counting the amino-acids in the alignment."/>
+		        <conditional name="gammaChoice">
+			        <param name="gamma" type="select" label="Gamma distributed rates across sites">
+				        <option value="true">Yes</option>
+				        <option value="false">No</option>
+			        </param>
+			        <when value="true">
+				        <param name="rate" type="float" label="Gamma distribution parameter" value="1" min="0"/>
+			        </when>
+			        <when value="false">
+			        </when>
+		        </conditional>
+		        <param name="removeGap" type="boolean" label="Remove all sites containing gap" truevalue="-r" falsevalue=""/>
+		        <param name="method" type="select" label="Distance algorithm">
+			        <option value="I">BIONJ</option>
+			        <option value="b">balanced GME</option>
+			        <option value="N">NJ</option>
+			        <option value="U">UNJ</option>
+		        </param>
+		        <param name="NNI" type="boolean" label="Tree swapping NNI" truevalue="b" falsevalue="n" checked="true"/>
+		        <param name="SPR" type="boolean" label="Tree swapping SPR" truevalue="-s" falsevalue=""/>
+		        <!---<conditional name="bootChoice">
+			        <param name="boot" type="select" label="Bootstrap">
+				        <option value="false">No</option>
+				        <option value="true">Yes</option>			
+			        </param>
+			        <when value="true">
+				        <param name="replicates" type="text" value="100" label="Number of replicatess"/>
+			        </when>
+			        <when value="false">
+			        </when>
+		        </conditional>-->
+            </when>
+            <when value="phyml">
+		        <conditional name="datatype_condition">
+			        <param type="select" name="type" label="Data type">
+				        <option value="nt">Nucleic acids</option>
+				        <option value="aa">Amino acids</option>
+			        </param>   		
+			        <when value="nt">
+				        <param type="select" name="model" label="Substitution model">
+					        <option value="HKY85">HKY85</option>
+					        <option value="JC69">JC69</option>
+					        <option value="K80">K80</option>
+					        <option value="F81">F81</option>
+					        <option value="F84">F84</option>
+					        <option value="TN93">TN93</option>
+					        <option value="GTR">GTR</option>
+				        </param>
+				        <param type="text" name="tstv" help="Must be a positive integer, 'e' if you want PhyML to estimate it" value="e" label="Transition/transversion ratio" />
+			        </when>
+			        <when value="aa">
+				        <param type="select" name="model" label="Evolution model">
+					        <option value="LG">LG</option>
+					        <option value="WAG">WAG</option>
+					        <option value="JTT">JTT</option>
+					        <option value="MtREV">MtREV</option>
+					        <option value="Dayhoff">Dayhoff</option>
+					        <option value="DCMut">DCMut</option>
+					        <option value="RtREV">RtREV</option>
+					        <option value="CpREV">CpREV</option>yahoo mail
+					        <option value="VT">VT</option>
+					        <option value="Blosum62">Blosum62</option>
+					        <option value="MtMam">MtMam</option>
+					        <option value="MtArt">MtArt</option>
+					        <option value="HIVw">HIVw</option>
+					        <option value="HIVb">HIVb</option>
+				        </param>           	
+			        </when>
+           		</conditional>
+		        <param name="equiSeq" type="select" label="Equilibrium frequencies" help="Empirical: frequencies are estimated by counting the occurences in the alignment. ML/Model: frequencies are estimated using ML for nucleotides or defined by the proteic substitution model.">
+			        <option value="e">Empirical</option>
+			        <option value="m">ML/Model</option>
+		        </param>
+           		<conditional name="gamma_condition">
+           			<param type="boolean" name="gamma" label="Discrete gamma model" checked="true"/>
+			        <when value="true">
+				        <param type="text" name="categories" help="1 means no gamma model" value="4" label="Number of categories for the discrete gamma model" />
+				        <param type="text" name="shape" help="'e' if you want PhyML to estimate it" value="e" label="Shape parameter of the gamma model" />
+			        </when>
+			        <when value="false">
+			        </when>
+		        </conditional>
+		        <param type="text" name="prop_invar" help="0.0 to ignore this parameter, 'e' if you want PhyML to estimate it" value="0.0" label="Proportion of invariant sites" />
+           		<conditional name="support_condition">
+           			<param type="select" name="support" label="Branch support">
+				        <option value="sh">SH-like aLRT</option>
+				        <option value="aBayes">aBayes</option>
+				        <option value="boot">Bootstrap</option>
+				        <option value="no">No branch support</option>
+			        </param>  
+			        <when value="sh">
+			        </when>
+			        <when value="aBayes">
+			        </when>
+			        <when value="boot">
+				        <param type="text" name="boot_number" help="Must be a positive integer" value="100" label="Number of bootstrap replicates" />
+			        </when>
+			        <when value="no">
+			        </when>
+		        </conditional>
+		        <conditional name="random_condition">
+			        <param type="select" name="search" label="Tree searching">
+				        <option value="NNI">NNI (Nearest Neighbor Interchange)</option>
+				        <option value="SPR">SPR (Subtree Pruning and Regraphing)</option>
+				        <option value="BEST">Best of NNI and SPR</option>
+			        </param>
+			        <when value="SPR">
+				        <param type="text" name="points" help="Must be an integer" value="0" label="Number of random starting points" />
+			        </when>
+			        <when value="BEST">
+				        <param type="text" name="points" help="Must be an integer" value="0" label="Number of random starting points" />
+			        </when>
+			        <when value="NNI">
+                        <param name="points" type="hidden" value=""/>
+			        </when>
+		        </conditional>		            
+            </when>
+        </conditional>
+	</inputs>
+	<outputs>
+		<data format="txt" name="output" label="Tree"/>
+	</outputs>
+	<help>
+
+.. class:: infomark
+
+**Program encapsulated in Galaxy by ATGC (C. Vernette, V. Lefort)**
+
+-----
+
+===========
+Overview:
+===========
+
+Meta-brick for phylogenetic tree building.  
+
+	</help>
+</tool>

@@ -1,0 +1,87 @@
+<tool id="muscle1" name="MUSCLE" version="1.0">
+	<description>multiple sequence alignment software</description>
+	<command interpreter="bash">muscle.sh 	-in $input 
+						-out $output 
+						-quiet 
+						-maxiters $c.iterations 
+					#if $c.run == "custom" :
+						-diags
+					#end if
+</command>
+	<inputs>
+		<param format="fasta" name="input" type="data" label="Source file" help="Fasta sequence file"/>
+		<conditional name="c">
+			<param name="run" type="select" label="Run mode">
+				<option value="16">Full mode</option> 
+				<option value="2">Progressive mode (faster)</option>
+				<option value="1">Fastest mode</option>
+				<option value="custom">Custom mode</option>
+			</param>
+			<when value="16">
+				<param name="iterations" type="hidden" value="16"/>
+			</when>
+			<when value="2">
+				<param name="iterations" type="hidden" value="2"/> 
+			</when>
+			<when value="1">
+				<param name="iterations" type="hidden" value="1"/> 
+			</when>
+			<when value="custom">
+				<param name="iterations" type="text" help="Increase the quality, increase the computing time" value="16" label="Maximum number of iterations" />
+				<param name="dia" type="boolean" label="Find diagonals" help="Faster for similar sequences" truevalue="-diags"/>
+			</when>
+		</conditional>
+	</inputs>
+	<outputs>
+		<data format="fasta" name="output" label="MUSCLE Aligned sequencies "/>
+	</outputs>
+	<help>
+
+.. class:: infomark
+
+**Program encapsulated in Galaxy by Southgreen**
+
+.. class:: infomark
+
+**MUSCLE version 3.8.31, 2004**
+
+-----
+	
+==============
+ Please cite: 
+==============
+	
+"MUSCLE: multiple sequence_ alignment with high accuracy and high throughput."
+
+
+.. _sequence: http://nar.oxfordjournals.org/content/32/5/1792.long
+
+**Edgar R.C.**
+
+Nucleic Acids Res. 32(5):1792-1797, doi:10.1093/nar/gkh340, 2004.
+
+"MUSCLE: a multiple sequence alignment_ method with reduced time and space complexity."
+
+
+.. _alignment: http://www.biomedcentral.com/1471-2105/5/113/
+
+**Edgar R.C.**
+
+BMC Bioinformatics, (5) 113, 2004.
+
+-----	
+	
+==========
+ Overview
+==========	
+
+MUSCLE is a program for creating multiple alignments of amino acid or nucleotide sequences. A range of options is provided that give you the choice of optimizing accuracy, speed, or some compromise between the two.
+
+-----
+
+For further informations, please visite the MUSCLE_ website.
+
+.. _MUSCLE: http://www.drive5.com/muscle/
+	</help>
+
+</tool>

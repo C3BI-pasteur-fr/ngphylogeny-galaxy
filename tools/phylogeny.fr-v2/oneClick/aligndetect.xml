@@ -1,0 +1,31 @@
+<tool id="AlignDetect-1.0" name="Automatic alignment" version="1.0">
+	<description></description>
+	<command interpreter="bash">aligndetect.sh $input $input2 $output
+	</command>
+	<inputs>
+		<param name="input" format="fasta" type="data" label="Source file" help="Fasta sequence file"/>
+		<param name="input2" format="txt" type="data" label="Information file" help="Automatic detection file"/>
+	</inputs>
+	<outputs>
+		<data format="fasta" name="output" label="Alignment"/>
+	</outputs>
+	<help>
+.. class:: infomark
+
+**Program encapsulated in Galaxy by ATGC (C. Vernette, V. Lefort)**
+
+-----
+
+===========
+Overview:
+===========
+
+Meta-brick to aligned sequences for phylogenetic analyses.
+
+This meta brick is part of a workflow for oneClick analysis on phylogeny.fr_
+
+.. _phylogeny.fr: http://www.phylogeny.fr/
+
+
+	</help>
+</tool>

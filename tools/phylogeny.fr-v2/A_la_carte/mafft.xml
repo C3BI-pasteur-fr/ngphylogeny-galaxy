@@ -1,0 +1,228 @@
+<tool id="mafft1" name="MAFFT">
+	<description>multiple sequence alignment software</description>
+	<command interpreter="bash">./mafft.sh $output_tree $input --quiet 
+			#if $methode.choice == "accuracy" :
+					$methode.epC.alignmentM
+				#if $methode.epC.alignmentM != "--ep 0 --genafpair --maxiterate 1000" :
+					--ep $methode.epC.ep
+				#end if
+			#else
+					$methode.alignmentM --ep $methode.ep
+			#end if
+			#if $datatype_condition.type == "nt": 
+ 					--nuc
+			#end if
+			#if $datatype_condition.type == "aa": 
+ 					--amino
+			#end if
+			#if $datatype_condition.type != "nt": 
+				#if $datatype_condition.PAM_value_condition.matrix == "bl30": 
+ 					--bl 30
+				#end if
+				#if $datatype_condition.PAM_value_condition.matrix == "bl45": 
+ 					--bl 45
+				#end if	
+				#if $datatype_condition.PAM_value_condition.matrix == "bl62": 
+ 					--bl 62
+				#end if	
+				#if $datatype_condition.PAM_value_condition.matrix == "bl80": 
+					--bl 80
+				#end if	
+				#if $datatype_condition.PAM_value_condition.matrix == "PAM": 
+ 					--jtt $datatype_condition.PAM_value_condition.PAM_value
+				#end if		
+			#end if
+ 					--op $op $input > $output
+	</command>
+	<inputs>
+		<param format="fasta" name="input" type="data" label="Source file" help="Fasta sequence file"/>
+		<conditional name="datatype_condition">
+			<param type="select" name="type" label="Data type">
+				<option value="auto">Automatic detection</option>
+				<option value="nt">Nucleic acids</option>
+				<option value="aa">Amino acids</option>
+			</param>   
+			<when value="aa">
+				<conditional name="PAM_value_condition">
+					<param type="select" name="matrix" label="Matrix" help="Usefull only for amino acids">
+						<option value="bl62">BLOSUM 62</option>
+						<option value="bl30">BLOSUM 30</option>
+						<option value="bl45">BLOSUM 45</option>
+						<option value="bl80">BLOSUM 80</option>
+						<option value="PAM">PAM</option>
+					</param>
+					<when value="bl30"></when>
+					<when value="bl45"></when>
+					<when value="bl62"></when>
+					<when value="bl80"></when>
+					<when value="PAM">
+						<param type="text" name="PAM_value" help="Must be greater than 0" value="80" label="Coefficient of the PAM matrix" />						
+					</when>
+				</conditional>
+			</when>
+			<when value="auto">
+				<conditional name="PAM_value_condition">
+					<param type="select" name="matrix" label="Matrix" help="Usefull only for amino acids">
+						<option value="bl62">BLOSUM 62</option>
+						<option value="bl30">BLOSUM 30</option>
+						<option value="bl45">BLOSUM 45</option>
+						<option value="bl80">BLOSUM 80</option>
+						<option value="PAM">PAM</option>
+					</param>
+					<when value="bl30"></when>
+					<when value="bl45"></when>
+					<when value="bl62"></when>
+					<when value="bl80"></when>
+					<when value="PAM">
+						<param type="text" name="PAM_value" help="Must be greater than 0" value="80" label="Coefficient of the PAM matrix" />						
+					</when>
+				</conditional>
+			</when>	
+			<when value="nt">
+			</when>			
+		</conditional>
+		<conditional name="methode">
+			<param name="choice" type="select" label="Methods" help="Accuracy-oriented methods recommended for maximum 200 sequences" >
+				<option value="accuracy">Accuracy-oriented methods</option>
+				<option value="speed">Speed-oriented methods</option>
+			</param>
+			<when value="accuracy">
+				<conditional name="epC">
+					<param name="alignmentM" type="select" label="Alignment methods">
+						<option value="--localpair --maxiterate 1000">L-INS-i (probably most accurate)</option>
+						<option value="--globalpair --maxiterate 1000">G-INS-i (suitable for sequences of similar lengths)</option>
+						<option value="--ep 0 --genafpair --maxiterate 1000">E-INS-i (suitable for sequences containing large unalignable regions)</option>
+					</param>
+					<when value="--localpair --maxiterate 1000">
+						<param type="text" name="ep" help="0.0 default value" value="0.123" label="Gap extension penalty"/>
+					</when>
+					<when value="--globalpair --maxiterate 1000">
+						<param type="text" name="ep" help="0.0 default value" value="0.123" label="Gap extension penalty"/>
+					</when>
+					<when value="--ep 0 --genafpair --maxiterate 1000">
+						<param type="hidden" name="ep" value="0"/>
+					</when>
+				</conditional>				
+			</when>
+			<when value="speed">
+				<param name="alignmentM" type="select" label="Alignment methods">
+					<option value=" --retree 2 --maxiterate 1000">FFT-NS-i (iterative refinement method; max. 1000 iterations)</option>
+					<option value="--retree 2 --maxiterate 0">FFT-NS-2 (fast; progressive method)</option>
+					<option value="--retree 1 --maxiterate 0">FFT-NS-1 (very fast; recommended for >2000 sequences)</option>
+					<option value="--retree 2 --maxiterate 0 --nofft">NW-NS-2 (fast; progressive method without the FFT approximation)</option>
+					<option value="--retree 1 --maxiterate 0 --nofft --parttree">NW-NS-PartTree-1 (recommended for ~10,000 to ~50,000 sequences)</option>
+				</param>
+				<param type="text" name="ep" help="0.0 default value" value="0.123" label="Gap extension penalty" />	
+			</when>
+		</conditional>	
+		<param type="text" name="op" help="1.53 default value" value="1.53" label="Gap opening penalty" />			
+	</inputs>
+	<outputs>
+		<data format="fasta" name="output" label="MAFFT Alignment"/>
+		<data format="txt" name="output_tree" label="MAFFT Guide tree"/>
+	</outputs>
+	<help>
+
+.. class:: infomark
+
+**Program encapsulated in Galaxy by Southgreen**
+**Encapsulation improved by ATGC (C. Vernette, V. Lefort)**
+
+
+.. class:: infomark
+
+**MAFFT version 6.717b, 2009**
+
+-----
+	
+==============
+ Please cite: 
+==============
+
+"Parallelization_ of the MAFFT multiple sequence alignment program."
+
+
+.. _Parallelization: http://bioinformatics.oxfordjournals.org/content/26/15/1899.long
+
+**Katoh, Toh**
+
+Bioinformatics 26:1899-1900, 2010. (describes the multithread version; Linux only)
+
+
+"Multiple_ Alignment of DNA Sequences with MAFFT."
+
+
+.. _Multiple: http://mbe.oxfordjournals.org/content/early/2013/02/08/molbev.mst010.full
+
+**Katoh, Asimenos, Toh**
+
+Methods in Molecular Biology 537:39-64, 2009. (outlines DNA alignment methods and several tips including group-to-group alignment and rough clustering of a large number of sequences)
+
+
+"Improved_ accuracy of multiple ncRNA alignment by incorporating structural information into a MAFFT-based framework."
+
+
+.. _Improved: http://www.biomedcentral.com/1471-2105/9/212
+
+**Katoh, Toh**
+
+BMC Bioinformatics 9:212, 2008. (describes RNA structural alignment methods)
+
+
+"Recent_ developments in the MAFFT multiple sequence alignment program."
+
+
+.. _Recent: http://bib.oxfordjournals.org/content/9/4/286.abstract
+
+**Katoh, Toh**
+
+Briefings in Bioinformatics 9:286-298, 2008. (outlines version 6; Fast Breaking Paper in Thomson Reuters' ScienceWatch)
+
+
+"PartTree_: an algorithm to build an approximate tree from a large number of unaligned sequences." 
+
+
+.. _PartTree: http://bioinformatics.oxfordjournals.org/content/23/3/372.abstract
+
+**Katoh, Toh**
+
+Bioinformatics 23:372-374, Errata, 2007. (describes the PartTree algorithm)
+
+
+"MAFFT version 5: improvement_ in accuracy of multiple sequence alignment."
+
+
+.. _improvement: http://nar.oxfordjournals.org/content/33/2/511.abstract
+
+**Katoh, Kuma, Toh, Miyata**
+
+Nucleic Acids Res. 33:511-518, 2005. (describes [ancestral versions of] the G-INS-i, L-INS-i and E-INS-i strategies)
+
+
+"MAFFT: a novel method_ for rapid multiple sequence alignment based on fast Fourier transform."
+
+
+.. _method: http://nar.oxfordjournals.org/content/30/14/3059.full
+
+**Katoh, Misawa, Kuma, Miyata**
+
+Nucleic Acids Res. 30:3059-3066, 2002.
+ 
+
+-----	
+	
+==========
+ Overview
+==========	
+
+MAFFT is a multiple sequence alignment program for unix-like operating systems. It offers a range of multiple alignment methods, L-INS-i wich is accurate for alignment with less than 200 sequences, FFT-NS-2 which is fast for alignment with less than 10000 sequences. 
+
+-----
+
+For further informations, please visite the MAFFT_ website.
+
+.. _MAFFT: http://mafft.cbrc.jp/alignment/software/
+
+	</help>
+
+</tool>

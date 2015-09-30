@@ -1,0 +1,30 @@
+<tool id="TreeDetect-1.0" name="Automatic tree" version="1.0">
+	<description></description>
+	<command interpreter="bash">treeDetect.sh $input $input2 $output
+	</command>
+	<inputs>
+		<param name="input" format="txt" type="data" label="Source file" help="Phylip sequence file"/>
+		<param name="input2" format="txt" type="data" label="Information file" help="Automatic detection file"/>
+	</inputs>
+	<outputs>
+		<data format="nhx" name="output" label="Tree"/>
+	</outputs>
+	<help>
+.. class:: infomark
+
+**Program encapsulated in Galaxy by ATGC (C. Vernette, V. Lefort)**
+
+-----
+
+===========
+Overview:
+===========
+
+Meta-brick for phylogenetic tree building.
+
+This meta brick is part of a workflow for oneClick analysis on phylogeny.fr_
+
+.. _phylogeny.fr: http://www.phylogeny.fr/
+
+	</help>
+</tool>

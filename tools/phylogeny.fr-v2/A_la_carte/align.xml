@@ -1,0 +1,180 @@
+<tool id="Alignment-1.0" name="Alignment" version="1.0">
+	<description>multiple sequence alignment</description>
+	<command interpreter="bash">align.sh 	-a $prog.progChoice
+						-i $input
+						-o $output
+				#if $prog.progChoice == "clustalO" :
+						-b "$prog.dealign $prog.clusteringGuideTree $prog.clusteringIteration $prog.nbrIter $prog.maxGuideTreeIteration $prog.maxHmmIterations"
+				#end if
+				#if $prog.progChoice == "muscle" :
+						-c $prog.iterations
+				#end if
+				#if $prog.progChoice == "mafft" :
+						-d "$prog.datatype_condition.type $prog.datatype_condition.PAM_value_condition.matrix"
+					#if $prog.datatype_condition.PAM_value_condition.matrix == "PAM": 
+ 						-e $prog.datatype_condition.PAM_value_condition.PAM_value
+					#end if	
+						-f $prog.methode.choice
+					#if $prog.methode.choice == "accuracy" :
+						-g "$prog.methode.epC.alignmentM" 
+						-j $prog.methode.epC.ep
+					#else
+						-g "$prog.methode.alignmentM" 
+						-j $prog.methode.ep	
+					#end if
+						-k "$prog.op $prog.distance_method"
+				#end if
+	</command>
+	<inputs>
+		<param name="input" format="fasta" type="data" label="Source file" help="Fasta sequence file"/>
+		<conditional name="prog">
+			<param name="progChoice" type="select" label="Choose the alignment program">
+				<option value="clustalO">Clustal Omega</option>
+				<option value="muscle">Muscle</option>
+				<option value="mafft">MAFFT</option>
+			</param>
+			<when value="clustalO">
+				<param name="dealign" type="boolean" falsevalue="" truevalue="--dealign" label="Dealign input sequences"/> 	
+ 				<param name="clusteringGuideTree" type="boolean" label="mBed-like clustering guide-tree" falsevalue="--full" truevalue="" checked="true"/> 
+				<param name="clusteringIteration" type="boolean" label="mBed-like clustering iteration" falsevalue="--full-iter" truevalue="" checked="true" />
+				<param name="nbrIter" type="select" label="Number of iterations">
+					<option value="">default</option>
+					<option value="--iter=1">1</option>
+					<option value="--iter=2">2</option>
+					<option value="--iter=3">3</option>
+					<option value="--iter=4">4</option>
+					<option value="--iter=5">5</option>
+				</param>
+				<param name="maxGuideTreeIteration" type="select" label="Maximum guide tree iterations">
+					<option value="">default</option>
+					<option value="--max-guidetree-iterations=1">1</option>
+					<option value="--max-guidetree-iterations=2">2</option>
+					<option value="--max-guidetree-iterations=3">3</option>
+					<option value="--max-guidetree-iterations=4">4</option>
+					<option value="--max-guidetree-iterations=5">5</option>
+				</param>		
+				<param name="maxHmmIterations" type="select" label="Maximum number of HMM iterations">
+					<option value="">default</option>
+					<option value="--max-hmm-iterations=1">1</option>
+					<option value="--max-hmm-iterations=2">2</option>
+					<option value="--max-hmm-iterations=3">3</option>
+					<option value="--max-hmm-iterations=4">4</option>
+					<option value="--max-hmm-iterations=5">5</option>
+				</param>
+			</when>
+			<when value="muscle">
+				<param name="iterations" type="text" help="Increase the quality, increase the computing time" value="16" label="Maximum number of iterations"/>
+			</when>	
+			<when value="mafft">
+				<conditional name="datatype_condition">
+					<param type="select" name="type" label="Data type">
+						<option value="auto">Automatic detection</option>
+						<option value="nt">Nucleic acids</option>
+						<option value="aa">Amino acids</option>
+					</param>   
+					<when value="aa">
+						<conditional name="PAM_value_condition">
+							<param type="select" name="matrix" label="Matrix" help="Usefull only for amino acids">
+								<option value="62">BLOSUM 62</option>
+								<option value="30">BLOSUM 30</option>
+								<option value="45">BLOSUM 45</option>
+								<option value="80">BLOSUM 80</option>
+								<option value="PAM">PAM</option>
+							</param>
+							<when value="30"></when>
+							<when value="45"></when>
+							<when value="62"></when>
+							<when value="80"></when>
+							<when value="PAM">
+								<param type="text" name="PAM_value" help="Must be greater than 0" value="80" label="Coefficient of the PAM matrix" />						
+							</when>
+						</conditional>
+					</when>
+					<when value="auto">
+						<conditional name="PAM_value_condition">
+							<param type="select" name="matrix" label="Matrix" help="Usefull only for amino acids">
+								<option value="62">BLOSUM 62</option>
+								<option value="30">BLOSUM 30</option>
+								<option value="45">BLOSUM 45</option>
+								<option value="80">BLOSUM 80</option>
+								<option value="PAM">PAM</option>
+							</param>
+								<when value="30"></when>
+								<when value="45"></when>
+								<when value="62"></when>
+								<when value="80"></when>
+								<when value="PAM">
+									<param type="text" name="PAM_value" help="Must be greater than 0" value="80" label="Coefficient of the PAM matrix" />						
+								</when>
+						</conditional>
+					</when>	
+					<when value="nt">
+					</when>			
+				</conditional>
+				<conditional name="methode">
+					<param name="choice" type="select" label="Methods" help="Accuracy-oriented methods recommended for maximum 200 sequences" >
+						<option value="accuracy">Accuracy-oriented methods</option>
+						<option value="speed">Speed-oriented methods</option>
+					</param>
+					<when value="accuracy">
+						<conditional name="epC">
+							<param name="alignmentM" type="select" label="Alignment methods">
+								<option value="--localpair --maxiterate 1000">L-INS-i (probably most accurate)</option>
+								<option value="--globalpair --maxiterate 1000">G-INS-i (suitable for sequences of similar lengths)</option>
+								<option value="--ep 0 --genafpair --maxiterate 1000">E-INS-i (suitable for sequences containing large unalignable regions)</option>
+							</param>
+							<when value="--localpair --maxiterate 1000">
+								<param type="text" name="ep" help="0.0 default value" value="0.123" label="Gap extension penalty"/>
+							</when>
+							<when value="--globalpair --maxiterate 1000">
+								<param type="text" name="ep" help="0.0 default value" value="0.123" label="Gap extension penalty"/>
+							</when>
+							<when value="--ep 0 --genafpair --maxiterate 1000">
+								<param type="hidden" name="ep" value="0"/>
+							</when>
+						</conditional>				
+					</when>
+					<when value="speed">
+						<param name="alignmentM" type="select" label="Alignment methods">
+							<option value=" --retree 2 --maxiterate 1000">FFT-NS-i (iterative refinement method; max. 1000 iterations)</option>
+							<option value="--retree 2 --maxiterate 0">FFT-NS-2 (fast; progressive method)</option>
+							<option value="--retree 1 --maxiterate 0">FFT-NS-1 (very fast; recommended for >2000 sequences)</option>
+							<option value="--retree 2 --maxiterate 0 --nofft">NW-NS-2 (fast; progressive method without the FFT approximation)</option>
+							<option value="--retree 1 --maxiterate 0 --nofft --parttree">NW-NS-PartTree-1 (recommended for ~10,000 to ~50,000 sequences)</option>
+						</param>
+						<param type="text" name="ep" help="0.0 default value" value="0.123" label="Gap extension penalty" />	
+					</when>
+				</conditional>	
+				<param type="text" name="op" help="1.53 default value" value="1.53" label="Gap opening penalty" />	
+				<param type="select" name="distance_method" label="Distance method" help="Distance method must be chosen regarding your data">
+					<option value="6merpair">Shared 6mers distance (fastest)</option>
+					<option value="globalpair">Global alignment (NW)</option>
+					<option value="localpair">Local alignment (SW)</option>
+					<option value="genafpair">Local, affine gap cost</option>
+					<option value="fastapair">FASTA distance</option>		
+				</param>	
+			</when>						
+		</conditional>
+	</inputs>
+	<outputs>
+		<data format="fasta" name="output" label="Aligned sequencies "/>
+	</outputs>
+	<help>
+.. class:: infomark
+
+**Program encapsulated in Galaxy by ATGC (C. Vernette, V. Lefort)**
+
+-----
+
+===========
+Overview:
+===========
+
+Meta-brick for aligned sequences for phylogenetic analyses.
+
+	</help>
+</tool>
+
+
+
+
