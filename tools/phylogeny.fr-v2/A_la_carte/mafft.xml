@@ -111,7 +111,7 @@
 	           <param name="alignmentM" type="select" display="radio" label="Alignment methods">
 	               <option value="--localpair --maxiterate 1000" >L-INS-i (probably most accurate)</option>
 	               <option value="--globalpair --maxiterate 1000">G-INS-i (suitable for sequences of similar lengths)</option>
-	               <option value="--genafpair --maxiterate 1000 -ep=0">E-INS-i (suitable for sequences containing large unalignable regions)</option>
+	               <option value="--genafpair --maxiterate 1000 --ep=0">E-INS-i (suitable for sequences containing large unalignable regions)</option>
 	           </param>
             </when>
             <when value="custom">
