@@ -76,17 +76,16 @@
                    label="Use matrix ?" help="Usefull only for amino acids"/>
             <when value="true">
                 <conditional name="matrix_selected">
-		            <param name="matrix" type="select" label="Matrix" >
-		                <option value="30">BLOSUM 30</option>
-		                <option value="45">BLOSUM 45</option>
-		                <option value="62" selected="true">BLOSUM 62</option>
-		                <option value="80">BLOSUM 80</option>
-		                <option value="PAM">PAM</option>
-		            </param>
-		            <when value="PAM">
-		                <param name="PAM" type="text" value="80" label="Coefficient of the PAM matrix" help="Must be greater than 0" />                      
-		                <validator type="in_range" min="0" max="inf" message="Must be greater than or equal to 0"/>
-		            </when>
+                    <param name="matrix" type="select" label="Matrix" >
+                        <option value="30">BLOSUM 30</option>
+                        <option value="45">BLOSUM 45</option>
+                        <option value="62" selected="true">BLOSUM 62</option>
+                        <option value="80">BLOSUM 80</option>
+                        <option value="PAM">PAM</option>
+                    </param>
+                    <when value="PAM">
+                        <param name="PAM" type="interger" value="80" min="1" max="350" label="Coefficient of the PAM matrix"/>                      
+                    </when>
                 </conditional>
              </when>
         </conditional>
@@ -108,28 +107,26 @@
                 </param>
             </when>
             <when value="accuracy">
-	           <param name="alignmentM" type="select" display="radio" label="Alignment methods">
-	               <option value="--localpair --maxiterate 1000" >L-INS-i (probably most accurate)</option>
-	               <option value="--globalpair --maxiterate 1000">G-INS-i (suitable for sequences of similar lengths)</option>
-	               <option value="--genafpair --maxiterate 1000 --ep=0">E-INS-i (suitable for sequences containing large unalignable regions)</option>
-	           </param>
+               <param name="alignmentM" type="select" display="radio" label="Alignment methods">
+                   <option value="--localpair --maxiterate 1000" >L-INS-i (probably most accurate)</option>
+                   <option value="--globalpair --maxiterate 1000">G-INS-i (suitable for sequences of similar lengths)</option>
+                   <option value="--genafpair --maxiterate 1000 --ep=0">E-INS-i (suitable for sequences containing large unalignable regions)</option>
+               </param>
             </when>
             <when value="custom">
                 <param type="select" name="distance_method" display="radio" label="Distance method" help="Distance method must be chosen regarding your data">
-			        <option value="6merpair" selected="true">Shared 6mers distance (fastest)</option>
-			        <option value="globalpair">Global alignment (NW)</option>
-			        <option value="localpair">Local alignment (SW)</option>
-			        <option value="genafpair">Local, affine gap cost</option>
-			        <option value="fastapair">FASTA distance</option>
-		</param> 
-                <param name="ep" type="text" value="0.123" label="Gap extend penalty" help="0.123 default value"/> 
-                <param type="integer" name="iterations" help="1000 for maximum quality" value="1" label="Maximum number of iterations">
-                        <validator type="in_range" min="1" max="1000" message="Must be between 1 and 1000"/>
-                </param>
+                    <option value="6merpair" selected="true">Shared 6mers distance (fastest)</option>
+                    <option value="globalpair">Global alignment (NW)</option>
+                    <option value="localpair">Local alignment (SW)</option>
+                    <option value="genafpair">Local, affine gap cost</option>
+                    <option value="fastapair">FASTA distance</option>
+                </param> 
+                <param name="ep" type="float" value="0.123" label="Gap extend penalty" help="0.123 default value"/> 
+                <param name="iterations" type="integer" value="1" min="1" max="1000" label="Maximum number of iterations" help="1000 for maximum quality"/>
             </when>
         </conditional>
         
-        <param name="op" type="text" value="1.53" label="Gap opening penalty" help="1.53 default value"/>         
+        <param name="op" type="float" value="1.53" label="Gap opening penalty" help="1.53 default value"/>         
         <param name="adjustdir" type="boolean" truevalue="--adjustdirection" falsevalue="" label="Adjust direction?" />
         <param name="getTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Display alignment tree ?"/>
         <param name="reorder" type="boolean" truevalue="--reorder" falsevalue="" checked="False" label="Reorder output?"/>
