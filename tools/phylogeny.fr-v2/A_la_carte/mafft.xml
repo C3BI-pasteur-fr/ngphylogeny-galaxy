@@ -121,7 +121,7 @@
 			        <option value="localpair">Local alignment (SW)</option>
 			        <option value="genafpair">Local, affine gap cost</option>
 			        <option value="fastapair">FASTA distance</option>
-			    </param> 
+		</param> 
                 <param name="ep" type="text" value="0.123" label="Gap extend penalty" help="0.123 default value"/> 
                 <param type="integer" name="iterations" help="1000 for maximum quality" value="1" label="Maximum number of iterations">
                         <validator type="in_range" min="1" max="1000" message="Must be between 1 and 1000"/>
