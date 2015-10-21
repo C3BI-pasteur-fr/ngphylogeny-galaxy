@@ -43,9 +43,6 @@
   <section id="PhyloG" name="A la carte"> 
 	<!--<tool file="phylogeny.fr-v2/A_la_carte/exemple.xml"/>-->
 	<tool file="phylogeny.fr-v2/A_la_carte/align.xml"/>
-	<tool file="phylogeny.fr-v2/A_la_carte/mafft.xml"/>
-	<tool file="phylogeny.fr-v2/A_la_carte/Clustalo.xml"/>
-	<tool file="phylogeny.fr-v2/A_la_carte/muscle.xml"/>
 	<tool file="phylogeny.fr-v2/A_la_carte/clean.xml"/>
 	<tool file="phylogeny.fr-v2/A_la_carte/gblocks.xml"/>
     <tool file="phylogeny.fr-v2/A_la_carte/BMGE.xml"/>
@@ -57,7 +54,13 @@
 	<tool file="phylogeny.fr-v2/A_la_carte/ScripTree.xml"/>
 	<tool file="phylogeny.fr-v2/A_la_carte/phylotype.xml"/>
   </section>
-
+ <section id="Algn" name="Alignment"> 
+    <tool file="phylogeny.fr-v2/Alignment/mafft.xml"/>
+    <tool file="phylogeny.fr-v2/Alignment/Clustalo.xml"/>
+    <tool file="phylogeny.fr-v2/Alignment/muscle.xml"/>
+ </section>
+ 
+ 
  <label id="sep2" text="_______" version="2"/>
 
   <section id="liftOver" name="Lift-Over">
