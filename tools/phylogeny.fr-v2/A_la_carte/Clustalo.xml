@@ -1,61 +1,81 @@
-<!-- Fichier Clustalo Clustalo Clustalo -->
-
 <tool id="Clustalo-1.0" name="Clustal Omega" version="1.0" force_history_refresh="True">
+    <description>multiple sequence alignment software</description>
+    <version_command>
+        <![CDATA[ clustalo --version ]]>
+    </version_command>
+    <command>
+            <![CDATA[ clustalo   
+                --threads \${GALAXY_SLOTS:-1}
+				-i $input
+				$dealign
+				$clusteringGuideTree 
+				$clusteringIteration
+				$nbrIter
+				$maxGuideTreeIteration
+				$maxHmmIterations
+				
+				--force
+				-o $output
+				
+				#if $getTree.value == True:
+				    --guidetree-out=$guideTree  
+				#end if
+				
+				--outfmt=${outputFormat}     
+			]]>                   
+    </command>
 
-	<description>multiple sequence alignment software</description>
+    <inputs>
+        <param name="input" format="txt" type="data" label="Source file" help="Fasta format"/>        
+        <param name="dealign" type="boolean" falsevalue="" truevalue="--dealign" label="Dealign input sequences" help="Only use full if yours sequences are all ready aligned"/>     
+        <param name="clusteringGuideTree" type="boolean" label="mBed-like clustering guide-tree" falsevalue="--full" truevalue="" checked="true"/> 
+        <param name="clusteringIteration" type="boolean" label="mBed-like clustering iteration" falsevalue="--full-iter" truevalue="" checked="true" />
+        <param name="nbrIter" type="select" label="Number of iterations">
+            <option value="">default</option>
+            <option value="--iter=1">1</option>
+            <option value="--iter=2">2</option>
+            <option value="--iter=3">3</option>
+            <option value="--iter=4">4</option>
+            <option value="--iter=5">5</option>
+        </param>
+        <param name="maxGuideTreeIteration" type="select" label="Maximum guide tree iterations">
+            <option value="">default</option>
+            <option value="--max-guidetree-iterations=1">1</option>
+            <option value="--max-guidetree-iterations=2">2</option>
+            <option value="--max-guidetree-iterations=3">3</option>
+            <option value="--max-guidetree-iterations=4">4</option>
+            <option value="--max-guidetree-iterations=5">5</option>
+        </param>        
+        <param name="maxHmmIterations" type="select" label="Maximum number of HMM iterations">
+            <option value="">default</option>
+            <option value="--max-hmm-iterations=1">1</option>
+            <option value="--max-hmm-iterations=2">2</option>
+            <option value="--max-hmm-iterations=3">3</option>
+            <option value="--max-hmm-iterations=4">4</option>
+            <option value="--max-hmm-iterations=5">5</option>
+        </param>
+        <param name="getTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Display tree guide ?"/>
+        <param name="outputFormat" type="select" label="Alignment Output format">
+            <option value="fa" selected="true">FASTA</option>
+            <option value="clu">Clustal</option>
+            <option value="phy">Phylip</option>
+        </param>
+    </inputs>
 
-	<command interpreter="bash">Clustalo.sh	-i $input
-						$dealign
-						$clusteringGuideTree 
-						$clusteringIteration
-						$nbrIter
-						$maxGuideTreeIteration
-						$maxHmmIterations
-						-o $output
-						--threads=1
-						--force
-						--guidetree-out=$guideTree  
-						--outfmt=fa
-	</command>
-
-	<inputs>
-		<param name="input" format="txt" type="data" label="Source file" help="Fasta format"/>		
-		<param name="dealign" type="boolean" falsevalue="" truevalue="--dealign" label="Dealign input sequences" help="Only use full if yours sequences are all ready aligned"/> 	
- 		<param name="clusteringGuideTree" type="boolean" label="mBed-like clustering guide-tree" falsevalue="--full" truevalue="" checked="true"/> 
-		<param name="clusteringIteration" type="boolean" label="mBed-like clustering iteration" falsevalue="--full-iter" truevalue="" checked="true" />
-		<param name="nbrIter" type="select" label="Number of iterations">
-			<option value="">default</option>
-			<option value="--iter=1">1</option>
-			<option value="--iter=2">2</option>
-			<option value="--iter=3">3</option>
-			<option value="--iter=4">4</option>
-			<option value="--iter=5">5</option>
-		</param>
-		<param name="maxGuideTreeIteration" type="select" label="Maximum guide tree iterations">
-			<option value="">default</option>
-			<option value="--max-guidetree-iterations=1">1</option>
-			<option value="--max-guidetree-iterations=2">2</option>
-			<option value="--max-guidetree-iterations=3">3</option>
-			<option value="--max-guidetree-iterations=4">4</option>
-			<option value="--max-guidetree-iterations=5">5</option>
-		</param>		
-		<param name="maxHmmIterations" type="select" label="Maximum number of HMM iterations">
-			<option value="">default</option>
-			<option value="--max-hmm-iterations=1">1</option>
-			<option value="--max-hmm-iterations=2">2</option>
-			<option value="--max-hmm-iterations=3">3</option>
-			<option value="--max-hmm-iterations=4">4</option>
-			<option value="--max-hmm-iterations=5">5</option>
-		</param>
-	</inputs>
-
-	<outputs>
-		<data name="output" format="fasta" label="ClustalO Aligned sequencies" />
-		<data name="guideTree" format="txt" label="ClustalO Guide tree"/>
-	</outputs>
-			
-	<help>
-
+    <outputs>
+        <data name="output" format="fasta" label="${tool.name} aligned sequencies">
+	        <change_format>
+	              <when input="outputFormat" value="clu" format="clustal"/>
+	              <when input="outputFormat" value="phy" format="phylip"/>
+	         </change_format>
+        </data>    
+        <data name="guideTree" format="txt" label="${tool.name} Guide tree">
+            <filter>getTree == True</filter>
+        </data> 
+    </outputs>
+            
+    <help>
+   
 .. class:: infomark
 
 **Clustal omega version 1.2.1** 
@@ -65,7 +85,8 @@
 **Program encapsulated in Galaxy by ATGC (C. Vernette, V. Lefort)**
 
 -----
-
+ 
+      
 ==============
 Please cite:
 ==============
@@ -93,6 +114,6 @@ Clustal-Omega is a general purpose multiple sequence alignment (MSA) program for
 For further informations, please visite the Clustal_ website.
 
 .. _Clustal: http://www.clustal.org
-
-	</help>
+      
+    </help>
 </tool>

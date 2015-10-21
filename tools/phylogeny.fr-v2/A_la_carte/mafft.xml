@@ -1,4 +1,4 @@
-<tool id="mafft1" name="MAFFT">
+<tool id="mafft1" name="MAFFT" version="7.205">
     <description>Multiple sequence alignment software</description>
     <requirements>
         <requirement type="package" version="7.205">mafft</requirement>
@@ -50,13 +50,8 @@
             
             $reorder
            
-            $inputSequences >
-             
-            #if $outputFormat.value == 'fasta'
-                $outputFasta
-            #elif $outputFormat.value == 'clustalw'
-                $outputClustalW
-            #end if
+            $inputSequences > $outputAlignment
+   
             ;
             
             #if $getTree.value == True:
@@ -84,7 +79,7 @@
                         <option value="PAM">PAM</option>
                     </param>
                     <when value="PAM">
-                        <param name="PAM" type="interger" value="80" min="1" max="350" label="Coefficient of the PAM matrix"/>                      
+                        <param name="PAM" type="integer" value="80" min="1" max="350" label="Coefficient of the PAM matrix"/>                      
                     </when>
                 </conditional>
              </when>
@@ -127,7 +122,7 @@
         </conditional>
         
         <param name="op" type="float" value="1.53" label="Gap opening penalty" help="1.53 default value"/>         
-        <param name="adjustdir" type="boolean" truevalue="--adjustdirection" falsevalue="" label="Adjust direction?" />
+        <param name="adjustdir" type="boolean" truevalue="--adjustdirection" falsevalue="" checked="False" label="Adjust direction?" />
         <param name="getTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Display alignment tree ?"/>
         <param name="reorder" type="boolean" truevalue="--reorder" falsevalue="" checked="False" label="Reorder output?"/>
         
@@ -138,185 +133,187 @@
     </inputs>
     
     <outputs>
-        <data name="outputFasta" format="fasta" label="${tool.name} Fasta Alignment">
-            <filter>outputFormat == 'fasta'</filter>
+        <data name="outputAlignment" format="fasta" label="${tool.name} Alignment">
+            <change_format>
+                <when input="outputFormat" value="clustalw" format="clustal"/>
+            </change_format>
         </data>
-        <data name="outputClustalW" format="clustal" label="${tool.name} Alignment Clustal format">
-            <filter>outputFormat == 'clustalw'</filter>
-        </data>
-        <data name="outputTree" format="txt" metadata_source="inputSequences" label="${tool.name} Guide Tree">
+        <data name="outputTree" format="txt" label="${tool.name} Guide Tree">
             <filter>getTree == True </filter>
         </data>  
     </outputs>
     <help>
-        <![CDATA[
-    **What it does**
+       <![CDATA[
+
+.. class:: infomark
+
+**MAFFT version 7.205 **
+
+-----
+
+**What it does**
+
+MAFFT is a multiple sequence alignment program for unix-like operating systems.  
+It offers a range of multiple alignment methods, L-INS-i (accurate; for alignment of <∼200 sequences), 
+FFT-NS-2 (fast; for alignment of <∼30,000 sequences), etc.
+
+From the MAFFT man page, an overview of the different predefined flavours of the tool.
+
+**Accuracy-oriented methods:**
+
+- L-INS-i (probably most accurate; recommended for <200 sequences; iterative refinement method incorporating local pairwise alignment information):
     
-    MAFFT is a multiple sequence alignment program for unix-like operating systems.  
-    It offers a range of multiple alignment methods, L-INS-i (accurate; for alignment of <∼200 sequences), 
-    FFT-NS-2 (fast; for alignment of <∼30,000 sequences), etc.
+    - mafft --localpair --maxiterate 1000 input [> output]
+
+- G-INS-i (suitable for sequences of similar lengths; recommended for <200 sequences; iterative refinement method incorporating global pairwise alignment information):
     
-    From the MAFFT man page, an overview of the different predefined flavours of the tool.
+    - mafft --globalpair --maxiterate 1000 input [> output]
+
+- E-INS-i (suitable for sequences containing large unalignable regions; recommended for <200 sequences):
     
-    **Accuracy-oriented methods:**
+    - mafft --ep 0 --genafpair --maxiterate 1000 input [> output]. For E-INS-i, the --ep 0 option is recommended to allow large gaps. 
+
+
+**Speed-oriented methods:**
+
+- FFT-NS-i (iterative refinement method; two cycles only):
+
+    - mafft --retree 2 --maxiterate 2 input [> output]
+
+- FFT-NS-i (iterative refinement method; max. 1000 iterations):
+
+    - mafft --retree 2 --maxiterate 1000 input [> output]
+
+- FFT-NS-2 (fast; progressive method):
+
+    - mafft --retree 2 --maxiterate 0 input [> output]
+
+- FFT-NS-1 (very fast; recommended for >2000 sequences; progressive method with a rough guide tree):
+
+    - mafft --retree 1 --maxiterate 0 input [> output]
+
+- NW-NS-i (iterative refinement method without FFT approximation; two cycles only):
+
+    - mafft --retree 2 --maxiterate 2 --nofft input [> output]
+
+- NW-NS-2 (fast; progressive method without the FFT approximation):
+
+    - mafft --retree 2 --maxiterate 0 --nofft input [> output]
+
+- NW-NS-PartTree-1 (recommended for ~10,000 to ~50,000 sequences; progressive method with the PartTree algorithm):
+
+    - mafft --retree 1 --maxiterate 0 --nofft --parttree input [> output]
+
+**Options:**
+
+--auto
+    Automatically selects an appropriate strategy from L-INS-i, FFT-NS-i and FFT-NS-2, according to data size. Default: off (always FFT-NS-2)
+--adjustdirection
+    Generate reverse complement sequences, as necessary, and align them together with the remaining sequences. In the case of protein alignment, these options are just ignored.
+  
+--op
+    Gap opening penalty, default: 1.53
+--ep
+    Offset (works like gap extension penalty), default: 0.0
+--maxiterate
+    Maximum number of iterative refinement, default: 0
+--clustalout
+    Output: clustal format, default: fasta
+--thread
+    Number of threads (if unsure, --thread -1)
+
+-----
+
+==============
+ Please cite: 
+==============
+
+"Parallelization_ of the MAFFT multiple sequence alignment program."
+
+
+.. _Parallelization: http://bioinformatics.oxfordjournals.org/content/26/15/1899.long
+
+**Katoh, Toh**
+
+Bioinformatics 26:1899-1900, 2010. (describes the multithread version; Linux only)
+
+
+"Multiple_ Alignment of DNA Sequences with MAFFT."
+
+
+.. _Multiple: http://mbe.oxfordjournals.org/content/early/2013/02/08/molbev.mst010.full
+
+**Katoh, Asimenos, Toh**
+
+Methods in Molecular Biology 537:39-64, 2009. (outlines DNA alignment methods and several tips including group-to-group alignment and rough clustering of a large number of sequences)
+
+
+"Improved_ accuracy of multiple ncRNA alignment by incorporating structural information into a MAFFT-based framework."
+
+
+.. _Improved: http://www.biomedcentral.com/1471-2105/9/212
+
+**Katoh, Toh**
+
+BMC Bioinformatics 9:212, 2008. (describes RNA structural alignment methods)
+
+
+"Recent_ developments in the MAFFT multiple sequence alignment program."
+
+
+.. _Recent: http://bib.oxfordjournals.org/content/9/4/286.abstract
+
+**Katoh, Toh**
+
+Briefings in Bioinformatics 9:286-298, 2008. (outlines version 6; Fast Breaking Paper in Thomson Reuters' ScienceWatch)
+
+
+"PartTree_: an algorithm to build an approximate tree from a large number of unaligned sequences." 
+
+
+.. _PartTree: http://bioinformatics.oxfordjournals.org/content/23/3/372.abstract
+
+**Katoh, Toh**
+
+Bioinformatics 23:372-374, Errata, 2007. (describes the PartTree algorithm)
+
+
+"MAFFT version 5: improvement_ in accuracy of multiple sequence alignment."
+
+
+.. _improvement: http://nar.oxfordjournals.org/content/33/2/511.abstract
+
+**Katoh, Kuma, Toh, Miyata**
+
+Nucleic Acids Res. 33:511-518, 2005. (describes [ancestral versions of] the G-INS-i, L-INS-i and E-INS-i strategies)
+
+
+"MAFFT: a novel method_ for rapid multiple sequence alignment based on fast Fourier transform."
+
+
+.. _method: http://nar.oxfordjournals.org/content/30/14/3059.full
+
+**Katoh, Misawa, Kuma, Miyata**
+
+Nucleic Acids Res. 30:3059-3066, 2002.
+ 
+
+-----    
     
-    - L-INS-i (probably most accurate; recommended for <200 sequences; iterative refinement method incorporating local pairwise alignment information):
-        
-        - mafft --localpair --maxiterate 1000 input [> output]
-    
-    - G-INS-i (suitable for sequences of similar lengths; recommended for <200 sequences; iterative refinement method incorporating global pairwise alignment information):
-        
-        - mafft --globalpair --maxiterate 1000 input [> output]
-    
-    - E-INS-i (suitable for sequences containing large unalignable regions; recommended for <200 sequences):
-        
-        - mafft --ep 0 --genafpair --maxiterate 1000 input [> output]. For E-INS-i, the --ep 0 option is recommended to allow large gaps. 
-    
-    
-    **Speed-oriented methods:**
-    
-    - FFT-NS-i (iterative refinement method; two cycles only):
-    
-        - mafft --retree 2 --maxiterate 2 input [> output]
-    
-    - FFT-NS-i (iterative refinement method; max. 1000 iterations):
-    
-        - mafft --retree 2 --maxiterate 1000 input [> output]
-    
-    - FFT-NS-2 (fast; progressive method):
-    
-        - mafft --retree 2 --maxiterate 0 input [> output]
-    
-    - FFT-NS-1 (very fast; recommended for >2000 sequences; progressive method with a rough guide tree):
-    
-        - mafft --retree 1 --maxiterate 0 input [> output]
-    
-    - NW-NS-i (iterative refinement method without FFT approximation; two cycles only):
-    
-        - mafft --retree 2 --maxiterate 2 --nofft input [> output]
-    
-    - NW-NS-2 (fast; progressive method without the FFT approximation):
-    
-        - mafft --retree 2 --maxiterate 0 --nofft input [> output]
-    
-    - NW-NS-PartTree-1 (recommended for ~10,000 to ~50,000 sequences; progressive method with the PartTree algorithm):
-    
-        - mafft --retree 1 --maxiterate 0 --nofft --parttree input [> output]
-    
-    **Options:**
-    
-    --auto
-        Automatically selects an appropriate strategy from L-INS-i, FFT-NS-i and FFT-NS-2, according to data size. Default: off (always FFT-NS-2)
-    --adjustdirection
-        Generate reverse complement sequences, as necessary, and align them together with the remaining sequences. In the case of protein alignment, these options are just ignored.
-      
-    --op
-        Gap opening penalty, default: 1.53
-    --ep
-        Offset (works like gap extension penalty), default: 0.0
-    --maxiterate
-        Maximum number of iterative refinement, default: 0
-    --clustalout
-        Output: clustal format, default: fasta
-    --thread
-        Number of threads (if unsure, --thread -1)
-        ]]>
+==========
+ Overview
+==========    
+
+MAFFT is a multiple sequence alignment program for unix-like operating systems. It offers a range of multiple alignment methods, L-INS-i wich is accurate for alignment with less than 200 sequences, FFT-NS-2 which is fast for alignment with less than 10000 sequences. 
+
+-----
+
+For further informations, please visite the MAFFT_ website.
+
+.. _MAFFT: http://mafft.cbrc.jp/alignment/software/
+         ]]>
     </help>
-   
-    .. class:: infomark
-    
-    **MAFFT version 6.717b, 2009**
-    
-    -----
     <citations>
-        <citation type="doi">10.1093/molbev/mst010</citation>
-    
-        ==============
-         Please cite: 
-        ==============
-        
-        "Parallelization_ of the MAFFT multiple sequence alignment program."
-        
-        
-        .. _Parallelization: http://bioinformatics.oxfordjournals.org/content/26/15/1899.long
-        
-        **Katoh, Toh**
-        
-        Bioinformatics 26:1899-1900, 2010. (describes the multithread version; Linux only)
-        
-        
-        "Multiple_ Alignment of DNA Sequences with MAFFT."
-        
-        
-        .. _Multiple: http://mbe.oxfordjournals.org/content/early/2013/02/08/molbev.mst010.full
-        
-        **Katoh, Asimenos, Toh**
-        
-        Methods in Molecular Biology 537:39-64, 2009. (outlines DNA alignment methods and several tips including group-to-group alignment and rough clustering of a large number of sequences)
-        
-        
-        "Improved_ accuracy of multiple ncRNA alignment by incorporating structural information into a MAFFT-based framework."
-        
-        
-        .. _Improved: http://www.biomedcentral.com/1471-2105/9/212
-        
-        **Katoh, Toh**
-        
-        BMC Bioinformatics 9:212, 2008. (describes RNA structural alignment methods)
-        
-        
-        "Recent_ developments in the MAFFT multiple sequence alignment program."
-        
-        
-        .. _Recent: http://bib.oxfordjournals.org/content/9/4/286.abstract
-        
-        **Katoh, Toh**
-        
-        Briefings in Bioinformatics 9:286-298, 2008. (outlines version 6; Fast Breaking Paper in Thomson Reuters' ScienceWatch)
-        
-        
-        "PartTree_: an algorithm to build an approximate tree from a large number of unaligned sequences." 
-        
-        
-        .. _PartTree: http://bioinformatics.oxfordjournals.org/content/23/3/372.abstract
-        
-        **Katoh, Toh**
-        
-        Bioinformatics 23:372-374, Errata, 2007. (describes the PartTree algorithm)
-        
-        
-        "MAFFT version 5: improvement_ in accuracy of multiple sequence alignment."
-        
-        
-        .. _improvement: http://nar.oxfordjournals.org/content/33/2/511.abstract
-        
-        **Katoh, Kuma, Toh, Miyata**
-        
-        Nucleic Acids Res. 33:511-518, 2005. (describes [ancestral versions of] the G-INS-i, L-INS-i and E-INS-i strategies)
-        
-        
-        "MAFFT: a novel method_ for rapid multiple sequence alignment based on fast Fourier transform."
-        
-        
-        .. _method: http://nar.oxfordjournals.org/content/30/14/3059.full
-        
-        **Katoh, Misawa, Kuma, Miyata**
-        
-        Nucleic Acids Res. 30:3059-3066, 2002.
-         
-        
-        -----    
-            
-        ==========
-         Overview
-        ==========    
-        
-        MAFFT is a multiple sequence alignment program for unix-like operating systems. It offers a range of multiple alignment methods, L-INS-i wich is accurate for alignment with less than 200 sequences, FFT-NS-2 which is fast for alignment with less than 10000 sequences. 
-        
-        -----
-        
-        For further informations, please visite the MAFFT_ website.
-        
-        .. _MAFFT: http://mafft.cbrc.jp/alignment/software/
+        <citation type="doi">10.1093/molbev/mst010</citation> 
     </citations>
 </tool>
