@@ -44,16 +44,19 @@
 	<!--<tool file="phylogeny.fr-v2/A_la_carte/exemple.xml"/>-->
 	<tool file="phylogeny.fr-v2/A_la_carte/align.xml"/>
 	<tool file="phylogeny.fr-v2/A_la_carte/clean.xml"/>
-	<tool file="phylogeny.fr-v2/A_la_carte/gblocks.xml"/>
-    <tool file="phylogeny.fr-v2/A_la_carte/BMGE.xml"/>
-	<tool file="phylogeny.fr-v2/A_la_carte/trimal.xml"/>
+
 	<tool file="phylogeny.fr-v2/A_la_carte/conversion.xml"/>
 	<tool file="phylogeny.fr-v2/A_la_carte/tree.xml"/>
 	<tool file="phylogeny.fr-v2/A_la_carte/phyml.xml"/>
 	<tool file="phylogeny.fr-v2/A_la_carte/fastme.xml"/>
 	<tool file="phylogeny.fr-v2/A_la_carte/ScripTree.xml"/>
 	<tool file="phylogeny.fr-v2/A_la_carte/phylotype.xml"/>
-  </section>
+ </section>
+ <section id="AlgnFiltring" name="Alignment Filtering">
+    <tool file="phylogeny.fr-v2/AlignmentFiltering/gblocks.xml"/>
+    <tool file="phylogeny.fr-v2/AlignmentFiltering/BMGE.xml"/>
+    <tool file="phylogeny.fr-v2/AlignmentFiltering/trimal.xml"/>
+ </section>
  <section id="Algn" name="Alignment"> 
     <tool file="phylogeny.fr-v2/Alignment/mafft.xml"/>
     <tool file="phylogeny.fr-v2/Alignment/Clustalo.xml"/>

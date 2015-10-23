@@ -18,8 +18,8 @@
                 #end if
                 
                 -cluster1 $cluster
-                
                 $diags
+                $outputFormat
                 
     </command>
     <inputs>
@@ -43,7 +43,10 @@
             <option value="upgmb" selected="true" >UPGMB</option> 
             <option value="neighborjoining">Neighbor Joining</option>
         </param>
-        
+        <param name="outputFormat" type="select" label="Output format" help="Either FASTA or ClustalW">
+            <option value="" selected="true">FASTA</option>
+            <option value="‑phyi">Phylip interleaved format</option>
+        </param>
     </inputs>
     <outputs>
         <data name="output" format="fasta" label="MUSCLE Aligned sequencies "/>

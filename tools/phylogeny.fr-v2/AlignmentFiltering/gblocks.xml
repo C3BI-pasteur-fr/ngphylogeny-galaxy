@@ -1,40 +1,55 @@
 <tool id="gblocks1" name="Gblocks">
-	<description>cleaning aligned sequences</description>
-	<command interpreter="bash">./gblocks.sh $input $output_alignment $output_stats $b1 $b2 -t=$datatype -b3=$b3 -b4=$b4 -b5=$b5</command>
-	<inputs>
-		<param format="fasta" name="input" type="data" label="Source file" help="Fasta format"/>
-		<param type="select" name="datatype" label="Data type">
-			<option value="d">DNA</option>
-			<option value="p">Protein</option>
-			<option value="c">Codon</option>
-		</param>
-		<param type="text" name="b1" help="Percentage, must be superior to 50" value="51" label="Minimum number of sequences for a conserved position" />
-		<param type="text" name="b2" help="Percentage, must be superior to the minimum number of sequences for a conserved position" value="85" label="Minimum number of Sequences for a flank position" />
-		<param type="text" name="b3" help="Any integer" value="8" label="Maximum number of contiguous non-conserved positions" />
-		<param type="text" name="b4" help="Any integer >1" value="10" label="Minimum length of a block" />
-		<param type="select" name="b5" label="Allowed gap positions">
-			<option value="n">None</option>
-			<option value="h">With half</option>
-			<option value="a">All</option>
-		</param>		
-	</inputs>
-	<outputs>
-		<data format="txt" name="output_alignment" label="Gblocks Cleaned sequencies"/>
-		<data format="html" name="output_stats" label="Gblocks Sequencies information" />
-	</outputs>
-	<help>
-	
-.. class:: infomark
-
-**Program encapsulated in Galaxy by Southgreen**
-**Encapsulation improved by ATGC (C. Vernette, V. Lefort)**
-
+    <description>cleaning aligned sequences</description>
+    <command>gblocks 
+             $input 
+             -b1=$b1
+             -b2=$b2
+             -b3=$b3
+             -b4=$b4
+             -b5=$b5
+             $datatype 
+             
+             > $gblocks_log;
+             
+             mv ${input}-gb $output_aln;
+             mv ${input}-gb.htm $output_htm;
+    
+    </command>
+    <inputs>
+        <param name="input" type="data" format="fasta" label="Source file" help="Fasta format"/>
+        <param name="datatype" type="select" label="Data type">
+            <option value="">Auto</option>
+            <option value="-t=d">DNA</option>
+            <option value="-t=c">Codon</option>
+            <option value="-t=p">Protein</option>
+        </param>
+        <param name="b1" type="text" value="default" label="Minimum number of sequences for a conserved position, must be BIGGER than half the number" help="By default, = 50% of the number of sequences +1." />
+        <param name="b2" type="text" value="default" label="Minimum number of Sequences for a flank position, SMALLER than Minimum Number Of Sequences For A Conserved Position" help="By default, = 85% of the number of sequences"/>
+        
+        <param name="b3" type="integer" value="8" label="Maximum number of contiguous non-conserved positions" help="All segment with contiguous non-conserved positions bigger than this value is rejected" />
+        <param name="b4" type="integer" value="10" label="Minimum length of a block" help="Any integer >1" />
+        <param name="b5" type="select" label="Allowed gap positions">
+            <option value="n">None</option>
+            <option value="h">With half</option>
+            <option value="a">All</option>
+        </param>
+        <param name="display_gblocks_log" type="boolean" checked="False" label="Display gblocks standard output" />       
+    </inputs>
+    <outputs>
+        <data format="text" name="gblocks_log" label="Gblocks log" >
+            <filter>display_gblocks_log == True</filter>
+        </data>   
+        <data format="text" name="output_aln" label="Gblocks Cleaned sequencies" />
+        <data format="html" name="output_htm" label="Gblocks Sequencies information" />
+    </outputs>
+    <help>
+    
 .. class:: infomark
 
 **GBlocks version 0.91b, 2000**
 
 -----
-	
+    
 ==============
  Please cite: 
 ==============
@@ -74,6 +89,6 @@ For further informations, please visite the Gblocks_ website.
 
 
 .. _Gblocks: http://molevol.cmima.csic.es/castresana/Gblocks.html
-	</help>
+    </help>
 
 </tool>

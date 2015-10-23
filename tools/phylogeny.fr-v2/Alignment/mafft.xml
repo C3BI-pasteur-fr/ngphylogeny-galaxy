@@ -49,13 +49,15 @@
             --op $op
             
             $reorder
-           
+            
+            $outputFormat.value
+         
             $inputSequences > $outputAlignment
    
             ;
             
             #if $getTree.value == True:
-                cat ${inputSequences}.tree > $outputTree;
+                mv ${inputSequences}.tree $outputTree;
             #end if
         ]]>
     </command>
@@ -127,15 +129,17 @@
         <param name="reorder" type="boolean" truevalue="--reorder" falsevalue="" checked="False" label="Reorder output?"/>
         
         <param name="outputFormat" type="select" label="Output format" help="Either FASTA or ClustalW">
-            <option value="fasta" selected="true">FASTA</option>
-            <option value="clustalw">ClustalW</option>
+            <option value="" selected="true">FASTA</option>
+            <option value="--clustalout">ClustalW</option>
+            <option value="--phylipout">Phylip</option>
         </param>
     </inputs>
     
     <outputs>
         <data name="outputAlignment" format="fasta" label="${tool.name} Alignment">
             <change_format>
-                <when input="outputFormat" value="clustalw" format="clustal"/>
+                <when input="outputFormat" value="--clustalout" format="clustal"/>
+                <when input="outputFormat" value="--phylipout" format="phylip"/>
             </change_format>
         </data>
         <data name="outputTree" format="txt" label="${tool.name} Guide Tree">
