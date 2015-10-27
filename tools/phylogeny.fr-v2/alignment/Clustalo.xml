@@ -26,7 +26,7 @@
     </command>
 
     <inputs>
-        <param name="input" format="txt" type="data" label="Source file" help="Fasta format"/>        
+        <param name="input" format="fasta" type="data" label="Source file" help="Fasta format"/>        
         <param name="dealign" type="boolean" falsevalue="" truevalue="--dealign" label="Dealign input sequences" help="Only use full if yours sequences are all ready aligned"/>     
         <param name="clusteringGuideTree" type="boolean" label="mBed-like clustering guide-tree" falsevalue="--full" truevalue="" checked="true"/> 
         <param name="clusteringIteration" type="boolean" label="mBed-like clustering iteration" falsevalue="--full-iter" truevalue="" checked="true" />

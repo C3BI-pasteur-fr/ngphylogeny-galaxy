@@ -52,15 +52,18 @@
 	<tool file="phylogeny.fr-v2/A_la_carte/ScripTree.xml"/>
 	<tool file="phylogeny.fr-v2/A_la_carte/phylotype.xml"/>
  </section>
+ 
+ 
+ 
  <section id="AlgnFiltring" name="Alignment Filtering">
-    <tool file="phylogeny.fr-v2/AlignmentFiltering/gblocks.xml"/>
-    <tool file="phylogeny.fr-v2/AlignmentFiltering/BMGE.xml"/>
-    <tool file="phylogeny.fr-v2/AlignmentFiltering/trimal.xml"/>
+    <tool file="phylogeny.fr-v2/alignment_filtering/gblocks.xml"/>
+    <tool file="phylogeny.fr-v2/alignment_filtering/BMGE.xml"/>
+    <tool file="phylogeny.fr-v2/alignment_filtering/trimal.xml"/>
  </section>
  <section id="Algn" name="Alignment"> 
-    <tool file="phylogeny.fr-v2/Alignment/mafft.xml"/>
-    <tool file="phylogeny.fr-v2/Alignment/Clustalo.xml"/>
-    <tool file="phylogeny.fr-v2/Alignment/muscle.xml"/>
+    <tool file="phylogeny.fr-v2/alignment/mafft.xml"/>
+    <tool file="phylogeny.fr-v2/alignment/Clustalo.xml"/>
+    <tool file="phylogeny.fr-v2/alignment/muscle.xml"/>
  </section>
  
  
@@ -70,6 +73,7 @@
     <tool file="extract/liftOver_wrapper.xml" />
   </section>
   <section id="textutil" name="Text Manipulation">
+    <tool file="filters/fastaToPhylip.xml" />
     <tool file="filters/fixedValueColumn.xml" />
     <tool file="stats/column_maker.xml" />
     <tool file="filters/catWrapper.xml" />

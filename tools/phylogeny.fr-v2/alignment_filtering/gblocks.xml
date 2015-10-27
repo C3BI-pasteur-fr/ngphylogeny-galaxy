@@ -39,7 +39,7 @@
         <data format="text" name="gblocks_log" label="Gblocks log" >
             <filter>display_gblocks_log == True</filter>
         </data>   
-        <data format="text" name="output_aln" label="Gblocks Cleaned sequencies" />
+        <data format="fasta" name="output_aln" label="Gblocks Cleaned sequencies" />
         <data format="html" name="output_htm" label="Gblocks Sequencies information" />
     </outputs>
     <help>
