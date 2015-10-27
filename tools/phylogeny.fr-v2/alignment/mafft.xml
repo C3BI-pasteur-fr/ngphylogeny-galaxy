@@ -144,7 +144,7 @@
         </data>
         <data name="outputTree" format="txt" label="${tool.name} Guide Tree">
             <filter>getTree == True </filter>
-        </data>  
+        </data>
     </outputs>
     <tests>
         <test>
