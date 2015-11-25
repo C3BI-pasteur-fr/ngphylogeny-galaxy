@@ -1,6 +1,6 @@
 <tool id="BMGE-1.0" name="BMGE" version="1.0">
 	<description>cleaning aligned sequences</description>
-	<command interpreter="sh">BMGE.sh 	-i $input 
+	<command interpreter="bash">java -jar BMGE.jar -i $input 
 						-t $dataType.codeSeq 
 						-m $dataType.matrice$dataType.estimated 
 						-w $windowsSize 

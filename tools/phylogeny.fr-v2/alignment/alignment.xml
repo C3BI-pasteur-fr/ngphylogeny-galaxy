@@ -1,0 +1,60 @@
+<tool id="selectAlgn" name="Alignment Tools" version="1.0">
+	<description></description>
+	<macros>
+		<import>mafft_macros.xml</import>
+		<import>clustalo_macros.xml</import>
+		<import>muscle_macros.xml</import>
+	</macros>
+	<command>
+			#if $tool == "mafft":
+			   @MAFFT_PATH@ 
+               @MAFFT_COMMAND@
+			#if $tool == "clustalo":
+			   @CLUSTALO_PATH@
+               @CLUSTALO_COMMAND@
+			#else:
+			   @MUSCLE_PATH@
+               @MUSCLE_COMMAND@
+			#end if
+	</command>
+	<inputs>
+		<conditional name="select_tool">
+			<param name="tool" type="select" label="Choose one alignment tool">
+				<option value="mafft">Mafft</option>
+				<option value="clustalo">ClustalO</option>
+				<option value="muscle">Muscle</option>
+			</param>
+			<when value="mafft">
+				<expand macro="mafft_opt" />
+			</when>
+			<when value="clustalo">
+				<expand macro="clustalo_opt" />
+			</when>
+			<when value="muscle">
+				<expand macro="muscle_opt" />
+			</when>
+		</conditional>
+	</inputs>
+	<outputs>
+
+	</outputs>
+	<help>
+.. class:: infomark
+
+**Program encapsulated in Galaxy by ATGC (C. Vernette, V. Lefort)**
+
+-----
+
+===========
+Overview:
+===========
+
+
+Meta-brick to aligned sequences for phylogenetic analyses.
+
+This meta brick is part of a workflow for advanced analysis on phylogeny.fr_
+
+.. _phylogeny.fr: http://www.phylogeny.fr/
+
+	</help>
+</tool>

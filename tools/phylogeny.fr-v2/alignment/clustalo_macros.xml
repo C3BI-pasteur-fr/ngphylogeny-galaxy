@@ -1,32 +1,26 @@
-<tool id="Clustalo-1.0" name="Clustal Omega" version="1.0" force_history_refresh="True">
-    <description>multiple sequence alignment software</description>
-    <version_command>
-        <![CDATA[ clustalo --version ]]>
-    </version_command>
-    <command>
-            <![CDATA[ clustalo   
-                --threads \${GALAXY_SLOTS:-1}
-				-i $input
-				$dealign
-				$clusteringGuideTree 
-				$clusteringIteration
-				$nbrIter
-				$maxGuideTreeIteration
-				$maxHmmIterations
-				
-				--force
-				-o $output
-				
-				#if $getTree.value == True:
-				    --guidetree-out=$guideTree  
-				#end if
-				
-				--outfmt=${outputFormat}     
-			]]>                   
-    </command>
+<macros>
+	<token name="@CLUSTALO_PATH@">clustalo</token>
+    <token name="@CLUSTALO_COMMAND@">
+		--threads \${GALAXY_SLOTS:-1}
+		-i $input
+		$dealign
+		$clusteringGuideTree
+		$clusteringIteration
+		$nbrIter
+		$maxGuideTreeIteration
+		$maxHmmIterations
 
-    <inputs>
-        <param name="input" format="fasta" type="data" label="Source file" help="Fasta format"/>        
+		--force
+		-o $output
+
+		#if $getTree.value == True:
+		--guidetree-out=$guideTree
+		#end if
+
+		--outfmt=${outputFormat}
+	</token>
+	<xml name="clustalo_opt">
+	 <param name="input" format="fasta" type="data" label="Source file" help="Fasta format"/>        
         <param name="dealign" type="boolean" falsevalue="" truevalue="--dealign" label="Dealign input sequences" help="Only use full if yours sequences are all ready aligned"/>     
         <param name="clusteringGuideTree" type="boolean" label="mBed-like clustering guide-tree" falsevalue="--full" truevalue="" checked="true"/> 
         <param name="clusteringIteration" type="boolean" label="mBed-like clustering iteration" falsevalue="--full-iter" truevalue="" checked="true" />
@@ -60,60 +54,16 @@
             <option value="clu">Clustal</option>
             <option value="phy">Phylip</option>
         </param>
-    </inputs>
-
-    <outputs>
+    </xml>
+    <xml name="clustalo_output">
         <data name="output" format="fasta" label="${tool.name} aligned sequencies">
-	        <change_format>
-	              <when input="outputFormat" value="clu" format="clustal"/>
-	              <when input="outputFormat" value="phy" format="phylip"/>
-	         </change_format>
+            <change_format>
+                  <when input="outputFormat" value="clu" format="clustal"/>
+                  <when input="outputFormat" value="phy" format="phylip"/>
+             </change_format>
         </data>    
         <data name="guideTree" format="txt" label="${tool.name} Guide tree">
             <filter>getTree == True</filter>
         </data> 
-    </outputs>
-            
-    <help>
-   
-.. class:: infomark
-
-**Clustal omega version 1.2.1** 
-
-.. class:: infomark
-
-**Program encapsulated in Galaxy by ATGC (C. Vernette, V. Lefort)**
-
------
- 
-      
-==============
-Please cite:
-==============
-
-
-"Fast, scalable generation of high-quality protein multiple sequence alignments using Clustal Omega_."
-
-
-.. _Omega: http://msb.embopress.org/content/7/1/539.long
-
-**Sievers F, Wilm A, Dineen D, Gibson TJ, Karplus K, Li W, Lopez R, McWilliam H, Remmert M, Söding J, Thompson JD, Higgins DG**
-
-Mol Syst Biol. 2011 Oct 11;7:539. doi:10.1038/msb.2011.75. PMID: 21988835.
-
------
-
-===========
-Overview:
-===========
-
-Clustal-Omega is a general purpose multiple sequence alignment (MSA) program for protein and DNA/RNA. It produces high quality MSAs and is capable of handling data-sets of hundreds of thousands of sequences in reasonable time.
-
------
-
-For further informations, please visite the Clustal_ website.
-
-.. _Clustal: http://www.clustal.org
-      
-    </help>
-</tool>
+    </xml>
+</macros>

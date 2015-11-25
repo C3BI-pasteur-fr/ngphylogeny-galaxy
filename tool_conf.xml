@@ -57,15 +57,16 @@
 		<tool file="phylogeny.fr-v2/alignment_filtering/trimal.xml" />
 	</section>
 	<section id="Algn" name="Alignment">
+	       <tool file="phylogeny.fr-v2/alignment/alignment.xml" />
 		<tool file="phylogeny.fr-v2/alignment/mafft.xml" />
-		<tool file="phylogeny.fr-v2/alignment/Clustalo.xml" />
+		<tool file="phylogeny.fr-v2/alignment/clustalo.xml" />
 		<tool file="phylogeny.fr-v2/alignment/muscle.xml" />
 	</section>
 
 	<label id="sep2" text="_______" version="2" />
 
 	<section id="convert" name="Convert Formats">
-		<tool file="phylogeny.fr-v2/convertion/fasta_to_phylip.xml" />
+		<tool file="phylogeny.fr-v2/conversion/fasta_to_phylip.xml" />
 		<tool file="filters/axt_to_concat_fasta.xml" />
 		<tool file="filters/axt_to_fasta.xml" />
 		<tool file="filters/axt_to_lav.xml" />
@@ -87,7 +88,6 @@
 		<tool file="extract/liftOver_wrapper.xml" />
 	</section>
 	<section id="textutil" name="Text Manipulation">
-		<tool file="filters/fastaToPhylip.xml" />
 		<tool file="filters/fixedValueColumn.xml" />
 		<tool file="stats/column_maker.xml" />
 		<tool file="filters/catWrapper.xml" />

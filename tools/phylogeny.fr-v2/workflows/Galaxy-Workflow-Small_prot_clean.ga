@@ -14,51 +14,64 @@
                     "name": "Input Dataset"
                 }
             ], 
+            "label": null, 
             "name": "Input dataset", 
             "outputs": [], 
             "position": {
-                "left": 144, 
-                "top": 200
+                "left": 119, 
+                "top": 194
             }, 
             "tool_errors": null, 
             "tool_id": null, 
             "tool_state": "{\"name\": \"Input Dataset\"}", 
             "tool_version": null, 
             "type": "data_input", 
-            "user_outputs": []
+            "user_outputs": [], 
+            "uuid": "2d5c7e54-fce6-4779-ac85-7619d432a8c3"
         }, 
         "1": {
             "annotation": "", 
             "id": 1, 
             "input_connections": {
-                "input": {
+                "inputSequences": {
                     "id": 0, 
                     "output_name": "output"
                 }
             }, 
-            "inputs": [], 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool MAFFT", 
+                    "name": "getTree"
+                }, 
+                {
+                    "description": "runtime parameter for tool MAFFT", 
+                    "name": "method_condition"
+                }
+            ], 
+            "label": null, 
             "name": "MAFFT", 
             "outputs": [
                 {
-                    "name": "output", 
+                    "name": "outputAlignment", 
                     "type": "fasta"
                 }, 
                 {
-                    "name": "output_tree", 
+                    "name": "outputTree", 
                     "type": "txt"
                 }
             ], 
             "position": {
-                "left": 307, 
-                "top": 330
+                "left": 256, 
+                "top": 324
             }, 
             "post_job_actions": {}, 
             "tool_errors": null, 
             "tool_id": "mafft1", 
-            "tool_state": "{\"__page__\": 0, \"__rerun_remap_job_id__\": null, \"datatype_condition\": \"{\\\"type\\\": \\\"aa\\\", \\\"PAM_value_condition\\\": {\\\"matrix\\\": \\\"bl62\\\", \\\"__current_case__\\\": 2}, \\\"__current_case__\\\": 0}\", \"methode\": \"{\\\"epC\\\": {\\\"alignmentM\\\": \\\"--localpair --maxiterate 1000\\\", \\\"ep\\\": \\\"0.123\\\", \\\"__current_case__\\\": 0}, \\\"__current_case__\\\": 0, \\\"choice\\\": \\\"accuracy\\\"}\", \"input\": \"null\", \"op\": \"\\\"1.53\\\"\"}", 
-            "tool_version": "1.0.0", 
+            "tool_state": "{\"__page__\": 0, \"outputFormat\": \"\\\"\\\"\", \"getTree\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"inputSequences\": \"null\", \"datatype\": \"\\\"--amino\\\"\", \"__rerun_remap_job_id__\": null, \"matrix_condition\": \"{\\\"use_matrix\\\": \\\"False\\\", \\\"__current_case__\\\": 1}\", \"adjustdir\": \"\\\"False\\\"\", \"method_condition\": \"{\\\"alignmentM\\\": {\\\"__class__\\\": \\\"RuntimeValue\\\"}, \\\"__current_case__\\\": 0, \\\"choice\\\": \\\"speed\\\"}\", \"reorder\": \"\\\"False\\\"\", \"op\": \"\\\"1.53\\\"\"}", 
+            "tool_version": "7.205", 
             "type": "tool", 
-            "user_outputs": []
+            "user_outputs": [], 
+            "uuid": "ace960ab-5699-4959-a5b8-3c21c3719cf4"
         }, 
         "2": {
             "annotation": "", 
@@ -66,32 +79,38 @@
             "input_connections": {
                 "input": {
                     "id": 1, 
-                    "output_name": "output"
+                    "output_name": "outputAlignment"
                 }
             }, 
             "inputs": [], 
+            "label": null, 
             "name": "Gblocks", 
             "outputs": [
                 {
-                    "name": "output_alignment", 
-                    "type": "txt"
+                    "name": "gblocks_log", 
+                    "type": "text"
                 }, 
                 {
-                    "name": "output_stats", 
+                    "name": "output_aln", 
+                    "type": "fasta"
+                }, 
+                {
+                    "name": "output_htm", 
                     "type": "html"
                 }
             ], 
             "position": {
-                "left": 506, 
-                "top": 366
+                "left": 567, 
+                "top": 313
             }, 
             "post_job_actions": {}, 
             "tool_errors": null, 
             "tool_id": "gblocks1", 
-            "tool_state": "{\"__page__\": 0, \"datatype\": \"\\\"p\\\"\", \"__rerun_remap_job_id__\": null, \"b4\": \"\\\"4\\\"\", \"b5\": \"\\\"h\\\"\", \"b1\": \"\\\"51\\\"\", \"b2\": \"\\\"52\\\"\", \"b3\": \"\\\"8\\\"\", \"input\": \"null\"}", 
+            "tool_state": "{\"__page__\": 0, \"datatype\": \"\\\"-t=p\\\"\", \"__rerun_remap_job_id__\": null, \"b4\": \"\\\"4\\\"\", \"b5\": \"\\\"h\\\"\", \"b1\": \"\\\"default\\\"\", \"b2\": \"\\\"52\\\"\", \"b3\": \"\\\"8\\\"\", \"input\": \"null\", \"display_gblocks_log\": \"\\\"False\\\"\"}", 
             "tool_version": "1.0.0", 
             "type": "tool", 
-            "user_outputs": []
+            "user_outputs": [], 
+            "uuid": "e5344ca6-e2c8-43ab-a4df-1603129361a1"
         }, 
         "3": {
             "annotation": "", 
@@ -99,10 +118,42 @@
             "input_connections": {
                 "input": {
                     "id": 2, 
-                    "output_name": "output_alignment"
+                    "output_name": "output_aln"
                 }
             }, 
             "inputs": [], 
+            "label": null, 
+            "name": "Conversion", 
+            "outputs": [
+                {
+                    "name": "output", 
+                    "type": "txt"
+                }
+            ], 
+            "position": {
+                "left": 749.9166870117188, 
+                "top": 380.9166717529297
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "conversion", 
+            "tool_state": "{\"__page__\": 0, \"input\": \"null\", \"__rerun_remap_job_id__\": null, \"choice\": \"\\\"phylip\\\"\"}", 
+            "tool_version": "1.0.0", 
+            "type": "tool", 
+            "user_outputs": [], 
+            "uuid": "58fa7bdd-a796-4db7-9ebe-f5f27440e16d"
+        }, 
+        "4": {
+            "annotation": "", 
+            "id": 4, 
+            "input_connections": {
+                "input": {
+                    "id": 3, 
+                    "output_name": "output"
+                }
+            }, 
+            "inputs": [], 
+            "label": null, 
             "name": "PhyML", 
             "outputs": [
                 {
@@ -127,27 +178,29 @@
                 }
             ], 
             "position": {
-                "left": 773, 
-                "top": 366
+                "left": 852, 
+                "top": 512
             }, 
             "post_job_actions": {}, 
             "tool_errors": null, 
             "tool_id": "phyml1", 
-            "tool_state": "{\"prop_invar\": \"\\\"0.0\\\"\", \"__page__\": 0, \"gamma_condition\": \"{\\\"shape\\\": \\\"e\\\", \\\"categories\\\": \\\"4\\\", \\\"gamma\\\": \\\"True\\\", \\\"__current_case__\\\": 0}\", \"support_condition\": \"{\\\"support\\\": \\\"sh\\\", \\\"__current_case__\\\": 0}\", \"random_condition\": \"{\\\"search\\\": \\\"NNI\\\", \\\"__current_case__\\\": 2}\", \"datatype_condition\": \"{\\\"model\\\": \\\"LG\\\", \\\"type\\\": \\\"aa\\\", \\\"__current_case__\\\": 1}\", \"input\": \"null\", \"__rerun_remap_job_id__\": null, \"equiSeq\": \"\\\"e\\\"\"}", 
+            "tool_state": "{\"datatype_condition\": \"{\\\"model\\\": \\\"LG\\\", \\\"type\\\": \\\"aa\\\", \\\"__current_case__\\\": 1}\", \"__page__\": 0, \"inpuTree\": \"{\\\"inputtree\\\": \\\"false\\\", \\\"__current_case__\\\": 1}\", \"gamma_condition\": \"{\\\"shape\\\": \\\"e\\\", \\\"categories\\\": \\\"4\\\", \\\"gamma\\\": \\\"True\\\", \\\"__current_case__\\\": 0}\", \"support_condition\": \"{\\\"support\\\": \\\"sh\\\", \\\"__current_case__\\\": 0}\", \"random_condition\": \"{\\\"search\\\": \\\"NNI\\\", \\\"__current_case__\\\": 2}\", \"prop_invar\": \"\\\"0.0\\\"\", \"input\": \"null\", \"__rerun_remap_job_id__\": null, \"equiSeq\": \"\\\"e\\\"\"}", 
             "tool_version": "3.1", 
             "type": "tool", 
-            "user_outputs": []
+            "user_outputs": [], 
+            "uuid": "e91b9e15-4e97-436b-9481-121286016e44"
         }, 
-        "4": {
+        "5": {
             "annotation": "", 
-            "id": 4, 
+            "id": 5, 
             "input_connections": {
                 "fileNewick": {
-                    "id": 3, 
+                    "id": 4, 
                     "output_name": "output_tree"
                 }
             }, 
             "inputs": [], 
+            "label": null, 
             "name": "ScripTree", 
             "outputs": [
                 {
@@ -156,8 +209,8 @@
                 }
             ], 
             "position": {
-                "left": 1010, 
-                "top": 367
+                "left": 1056, 
+                "top": 346
             }, 
             "post_job_actions": {}, 
             "tool_errors": null, 
@@ -165,7 +218,9 @@
             "tool_state": "{\"__page__\": 0, \"fileNewick\": \"null\", \"__rerun_remap_job_id__\": null, \"annotation\": \"{\\\"annotationChoice\\\": \\\"false\\\", \\\"fileAnnotation\\\": \\\"\\\", \\\"writeAnnot\\\": \\\"\\\", \\\"__current_case__\\\": 1}\", \"script\": \"{\\\"__current_case__\\\": 3, \\\"support\\\": {\\\"supportChoice\\\": \\\"false\\\", \\\"__current_case__\\\": 1}, \\\"tree\\\": {\\\"drawingChoice\\\": \\\"true\\\", \\\"nbInterleaf\\\": \\\"10\\\", \\\"style\\\": \\\"normal\\\", \\\"__current_case__\\\": 0, \\\"nbConformation\\\": \\\"1\\\", \\\"nbColumns\\\": \\\"2\\\", \\\"typeOrientation\\\": \\\"we\\\", \\\"type\\\": \\\"Times\\\", \\\"size\\\": \\\"8\\\"}, \\\"fileScript\\\": \\\"script.txt\\\", \\\"choice\\\": \\\"choice\\\", \\\"writeScript\\\": \\\"\\\", \\\"branch\\\": {\\\"whereSupportBranch\\\": \\\"n\\\", \\\"nbThreshold\\\": \\\"0.5\\\", \\\"sizeSupport\\\": \\\"5\\\", \\\"typeSupport\\\": \\\"Arial\\\", \\\"supportBranchColor\\\": \\\"green\\\", \\\"styleSupport\\\": \\\"italic\\\", \\\"branchChoice\\\": \\\"true\\\", \\\"__current_case__\\\": 0, \\\"nbRound\\\": \\\"2\\\"}}\"}", 
             "tool_version": "1.0", 
             "type": "tool", 
-            "user_outputs": []
+            "user_outputs": [], 
+            "uuid": "2a4513f0-68c1-4b47-8184-b85132f186d3"
         }
-    }
+    }, 
+    "uuid": "44ba5452-a43b-44c1-b8c9-421ede1eb9c3"
 }
