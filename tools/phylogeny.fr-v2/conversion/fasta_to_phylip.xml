@@ -1,8 +1,8 @@
 <tool id="fasta_to_phylip" name="Fasta to Phylip" >
 	<description>file conversion</description>
 	<command interpreter="python">
-	#if $choice == "f2p":
-	   fasta_to_phylip.py $input $output
+	#if $choice.value == "f2p":
+	   fasta_to_phylip.py
 	#else:
 	   phylip_to_fasta.py 
 	#end if
@@ -16,21 +16,17 @@
 		</param>
 	</inputs>
 	<outputs>
-		<data name="output" format="fasta" label="Converted file">
+		<data name="output" format="fasta" label="${input.name}">
 		    <change_format>
                 <when input="choice" value="f2p" format="phylip"/>
             </change_format>
 		</data>
 	</outputs>
 	<help>
-
------
-
 ===========
 Overview:
 ===========
 
 Convert fasta file to phylip format and vice versa.
-  
 	</help>
 </tool>
