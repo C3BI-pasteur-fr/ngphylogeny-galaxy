@@ -31,7 +31,6 @@
                  ##--smooth
                  --silent
                  ##--verbose
-                 
     </command>
 	<inputs>
 		<param name="input" type="data" format="fasta" label="Source file"
@@ -70,22 +69,20 @@
 	            <option value="list">Provide ordering</option>
 	            <option value="all">All permutations</option>
 	         </param>
-	            <when value="nnet"/>
-	            <when value="qnet"/>
-	            <option value="all"/>
-	            <when value="rand">
-	                <param name="randpermut" type="integer" value="1000" label="random permutation"/>
-	            </when>
-	            <when value="list">
-	                <param name="randpermutlist" type="text" label="Comma-seperated string of INT"/>
-	            </when>  
+            <when value="nnet"/>
+            <when value="qnet"/>
+            <option value="all"/>
+            <when value="rand">
+                <param name="randpermut" type="integer" value="1000" label="random permutation"/>
+            </when>
+            <when value="list">
+                <param name="randpermutlist" type="text" label="Comma-seperated string of INT"/>
+            </when>  
          </conditional>
-         
 	</inputs>
-
 	<outputs>
 		<data name="output1" format="fasta" label="Noisy Cleaned sequencies"  from_work_dir="*_out.fas" />
-		<data name="output2" format="eps" label="Noisy Cleaned sequencies"  from_work_dir="*typ.eps" />
+		<data name="output2" format="eps" label="Noisy Cleaned sequencies image"  from_work_dir="*typ.eps" />
 	</outputs>
 <help>
 <![CDATA[ 

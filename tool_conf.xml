@@ -49,15 +49,18 @@
 		<tool file="phylogeny.fr-v2/A_la_carte/fastme.xml" />
 		<tool file="phylogeny.fr-v2/A_la_carte/ScripTree.xml" />
 		<tool file="phylogeny.fr-v2/A_la_carte/phylotype.xml" />
+		<tool file="phylogeny.fr-v2/A_la_carte/etetree.xml" />
+		<tool file="phylogeny.fr-v2/A_la_carte/nwdisplay.xml" />
 	</section>
 
 	<section id="AlgnFiltring" name="Alignment Filtering">
+	    <tool file="phylogeny.fr-v2/alignment_filtering/noisy.xml" />
 		<tool file="phylogeny.fr-v2/alignment_filtering/gblocks.xml" />
 		<tool file="phylogeny.fr-v2/alignment_filtering/BMGE.xml" />
 		<tool file="phylogeny.fr-v2/alignment_filtering/trimal.xml" />
 	</section>
 	<section id="Algn" name="Alignment">
-	       <tool file="phylogeny.fr-v2/alignment/alignment.xml" />
+	    <tool file="phylogeny.fr-v2/alignment/alignment.xml" />
 		<tool file="phylogeny.fr-v2/alignment/mafft.xml" />
 		<tool file="phylogeny.fr-v2/alignment/clustalo.xml" />
 		<tool file="phylogeny.fr-v2/alignment/muscle.xml" />
