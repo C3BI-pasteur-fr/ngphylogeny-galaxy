@@ -1,11 +1,25 @@
 <tool id="noisy" name="Noisy" version="1.5.12.1">
     <description>Cleaning aligned sequences</description>
     <requirements>
-        <requirement type="package" version="1.5.12">Noisy</requirement>
+        <requirement type="package" version="1.5.12">noisy</requirement>
     </requirements>
-    <command>noisy  
-                 $input
-                 --seqtype $seqtype
+    <command><![CDATA[ 
+                noisy $input
+                
+                 #if $sequence.seqtype == 'auto' :
+	                 ## Automatic sequence detection
+	                 ## read an info file to choose witch option set 
+	                 #set $info = open( str($input_info) ).read()
+	                 #if 'dna' in $info:
+	                        --seqtype D
+	                 #else if 'protein' in $info :
+	                        --seqtype P
+	                 #end if
+	                 
+                 #else :
+                            --seqtype $sequence.seqtype
+                 #end if 
+                 
                  --cutoff $cutoff
                  --distance $distance
                  #if $usematrix.matrix == "true":
@@ -30,16 +44,29 @@
                  ##--shuffles
                  ##--smooth
                  --silent
-                 ##--verbose
+                 ##--verbose 
+                 ]]>
     </command>
 	<inputs>
 		<param name="input" type="data" format="fasta" label="Source file"
 			help="Fasta format" />
-		<param name="seqtype" type="select" label="Sequence Coding">
-			<option value="D">DNA</option>
-			<option value="P">Protein</option>
-			<option value="R">RNA</option>
-		</param>
+		
+		<conditional name="sequence">
+			<param name="seqtype" type="select" label="Sequence Coding">
+				<option value="D">DNA</option>
+				<option value="P">Protein</option>
+				<option value="R">RNA</option>
+				<option value="auto">Auto</option>
+			</param>
+			<when value="D"></when>
+			<when value="P"></when>
+			<when value="R"></when>
+			<when value="auto">
+                <param name="input_info" type="data" format="txt" label="info"
+                       help="Precompute file containning sequence description (dna or protein)" />
+            </when>	
+		</conditional>   
+		
 		<param name="cutoff" type="float" value="0.8" min="0" max="1"
 			label="cut-off  [ 0-1 ]"
 			help="Columns with a score below FLOAT are removed from the output alignment." />

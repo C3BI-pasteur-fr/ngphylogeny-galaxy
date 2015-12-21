@@ -1,5 +1,8 @@
 <tool id="fasta_to_phylip" name="Fasta to Phylip" >
 	<description>file conversion</description>
+	<requirements>
+        <requirement type="package" version="1.65">biopython</requirement>
+    </requirements>
 	<command interpreter="python">
 	#if $choice.value == "f2p":
 	   fasta_to_phylip.py

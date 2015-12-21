@@ -2,7 +2,7 @@
 
 	<description>distance based inference of phylogenetic trees</description>
 
-	<command interpreter="bash">./fastme.sh -i $input 
+	<command interpreter="bash">fastme -i $input 
 						-o $treeOutput 
 						-I $statOutput 
 						-O $matrixOutput

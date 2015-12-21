@@ -1,10 +1,8 @@
 <tool id="AutoDetect-1.0" name="Automatic Detection" version="1.0">
 	<description>Detect datatype and number of sequences</description>
-	<command interpreter="bash">automaticDetection.sh $input $choice $output
-	</command>
+	<command interpreter="python">automaticDetection.py $input > $output</command>
 	<inputs>
 		<param name="input" format="fasta" type="data" label="Source file" help="Fasta sequence file"/>
-		<param name="choice" type="boolean" label="Eliminate poorly aligned positions and divergent regions" checked="true"/>  
 	</inputs>
 	<outputs>
 		<data format="txt" name="output" label="Information"/>

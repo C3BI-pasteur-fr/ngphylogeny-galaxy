@@ -24,47 +24,52 @@
 	<section id="send" name="Send Data">
 		<tool file="genomespace/genomespace_exporter.xml" />
 	</section>
-
 	<label id="sep1" text="_______" version="1" />
 	<label id="phy2" text="Phylogeny.fr-v2" version="2" />
-
+	
 	<section id="oneClick" name="oneClick">
 		<tool file="phylogeny.fr-v2/oneClick/automaticDetection.xml" />
 		<tool file="phylogeny.fr-v2/oneClick/aligndetect.xml" />
 		<tool file="phylogeny.fr-v2/oneClick/cleanDetect.xml" />
 		<tool file="phylogeny.fr-v2/oneClick/treeDetect.xml" />
 	</section>
-	<section id="Advanced" name="Advanced">
+	<section id="advanced" name="Advanced">
 		<tool file="phylogeny.fr-v2/Advanced/AdvAlign.xml" />
 		<tool file="phylogeny.fr-v2/Advanced/AdvClean.xml" />
 		<tool file="phylogeny.fr-v2/Advanced/AdvTree.xml" />
 	</section>
-
-	<section id="PhyloG" name="A la carte">
+	<section id="phylog" name="A la carte">
 		<!--<tool file="phylogeny.fr-v2/A_la_carte/exemple.xml"/> -->
 		<tool file="phylogeny.fr-v2/A_la_carte/align.xml" />
 		<tool file="phylogeny.fr-v2/A_la_carte/clean.xml" />
 		<tool file="phylogeny.fr-v2/A_la_carte/tree.xml" />
-		<tool file="phylogeny.fr-v2/A_la_carte/phyml.xml" />
-		<tool file="phylogeny.fr-v2/A_la_carte/fastme.xml" />
-		<tool file="phylogeny.fr-v2/A_la_carte/ScripTree.xml" />
 		<tool file="phylogeny.fr-v2/A_la_carte/phylotype.xml" />
-		<tool file="phylogeny.fr-v2/A_la_carte/etetree.xml" />
-		<tool file="phylogeny.fr-v2/A_la_carte/nwdisplay.xml" />
 	</section>
 
-	<section id="AlgnFiltring" name="Alignment Filtering">
-	    <tool file="phylogeny.fr-v2/alignment_filtering/noisy.xml" />
-		<tool file="phylogeny.fr-v2/alignment_filtering/gblocks.xml" />
-		<tool file="phylogeny.fr-v2/alignment_filtering/BMGE.xml" />
-		<tool file="phylogeny.fr-v2/alignment_filtering/trimal.xml" />
+	<section id="algn" name="Alignment">
+        <tool file="phylogeny.fr-v2/alignment/alignment.xml" />
+        <tool file="phylogeny.fr-v2/mafft/mafft.xml" />
+        <tool file="phylogeny.fr-v2/clustalo/clustalo.xml" />
+        <tool file="phylogeny.fr-v2/muscle/muscle.xml" />
+    </section>
+	<section id="algnFiltring" name="Alignment Filtering">
+	    <tool file="phylogeny.fr-v2/noisy/noisy.xml" />
+		<tool file="phylogeny.fr-v2/gblock/gblocks.xml" />
+		<tool file="phylogeny.fr-v2/bmge/BMGE.xml" />
+		<tool file="phylogeny.fr-v2/trimal/trimal.xml" />
 	</section>
-	<section id="Algn" name="Alignment">
-	    <tool file="phylogeny.fr-v2/alignment/alignment.xml" />
-		<tool file="phylogeny.fr-v2/alignment/mafft.xml" />
-		<tool file="phylogeny.fr-v2/alignment/clustalo.xml" />
-		<tool file="phylogeny.fr-v2/alignment/muscle.xml" />
-	</section>
+    <section id="tree" name="Tree ">
+        <tool file="phylogeny.fr-v2/phyml/phyml.xml" />
+        <tool file="phylogeny.fr-v2/fastme/fastme.xml" />
+        <tool file="phylogeny.fr-v2/sms/sms-phyml.xml" />
+    </section>
+    <section id="treedisplay" name="Tree Display">
+        <tool file="phylogeny.fr-v2/newick_utilies/nwdisplay.xml" />
+        <tool file="phylogeny.fr-v2/scriptree/ScripTree.xml" />
+        <tool file="phylogeny.fr-v2/etetree/etetree.xml" />
+    </section>
+
+
 
 	<label id="sep2" text="_______" version="2" />
 

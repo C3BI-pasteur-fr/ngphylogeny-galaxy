@@ -6,10 +6,10 @@
 		<import>muscle_macros.xml</import>
 	</macros>
 	<command>
-			#if $tool == "mafft":
+			#if $select_tool.tool == "mafft":
 			   @MAFFT_PATH@ 
                @MAFFT_COMMAND@
-			#if $tool == "clustalo":
+			#elif $select_tool.tool == "clustalo":
 			   @CLUSTALO_PATH@
                @CLUSTALO_COMMAND@
 			#else:
@@ -36,7 +36,23 @@
 		</conditional>
 	</inputs>
 	<outputs>
-
+		<data name="outputAlignment" format="fasta" label="Mafft Alignment">
+			<filter>select_tool['selected_tool'] == "mafft"</filter>
+			<change_format>
+				<when input="outputFormat" value="clustalw" format="clustal" />
+			</change_format>
+		</data>
+		<data name="output" format="fasta" label="${select_tool.tool} Aligned sequencies">
+			<filter>select_tool['selected_tool'] != "mafft"</filter>
+			<change_format>
+				<when input="outputFormat" value="clu" format="clustal" />
+				<when input="outputFormat" value="phy" format="phylip" />
+			</change_format>
+		</data>
+	
+		<data name="guideTree" format="txt" label="Guide tree">
+			<filter>select_tool['getTree'] == True</filter>
+		</data>
 	</outputs>
 	<help>
 .. class:: infomark
@@ -58,3 +74,4 @@ This meta brick is part of a workflow for advanced analysis on phylogeny.fr_
 
 	</help>
 </tool>
+ 

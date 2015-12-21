@@ -21,7 +21,7 @@ def main():
     input_handle = open(inputPhylip, "rU")
     output_handle = open(outputFasta, "w")
 
-    alignments = AlignIO.parse(input_handle, "phylip")
+    alignments = AlignIO.parse(input_handle, "phylip-relaxed")
     AlignIO.write(alignments, output_handle, "fasta")
 
     output_handle.close()
