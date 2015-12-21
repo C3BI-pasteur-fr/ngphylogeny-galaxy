@@ -8,7 +8,7 @@
                 
                  #if $sequence.seqtype == 'auto' :
 	                 ## Automatic sequence detection
-	                 ## read an info file to choose witch option set 
+	                 ## read an info file to choose which option set 
 	                 #set $info = open( str($input_info) ).read()
 	                 #if 'dna' in $info:
 	                        --seqtype D
