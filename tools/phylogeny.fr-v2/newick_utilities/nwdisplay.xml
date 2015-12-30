@@ -1,7 +1,7 @@
 <tool id="nwdisplay" name="Newick Display" version="1">
     <description>Display a phylogenetic tree as SVG</description>
     <requirements>
-        <requirement type="package" version="v. 1.6">newick-utils</requirement>
+        <requirement type="package" version="1.6">newick_utilities</requirement>
     </requirements>
     <command>
 			nw_display

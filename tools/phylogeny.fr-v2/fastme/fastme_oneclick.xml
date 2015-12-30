@@ -1,52 +1,69 @@
 <tool id="FastME" name="FastME">
-
 	<description>distance based inference of phylogenetic trees</description>
-
-	<command interpreter="bash">fastme -i $input 
-						-o $treeOutput 
-						-I $statOutput 
-						-O $matrixOutput
+	<requirements>
+        <requirement type="package" version="2.1.4">fastme</requirement>
+    </requirements>
+    <version_command>
+        <![CDATA[ fastme --version ]]>
+    </version_command>
+	<command>fastme -i $input 
+					-o $treeOutput 
+					-I $statOutput 
+					-O $matrixOutput
 					#if $bootChoice.boot =="true":
 						-B $bootOutput
 						-b $bootChoice.replicates
-					#end if	
-					#if $typeChoice.datatype =="d":
-						-D $typeChoice.model
-					#else 
-						-P $typeChoice.model
 					#end if
-						$equilibrium
+						
+					#if $typeChoice.datatype =="d":
+						-d $typeChoice.modeldna
+					#else if $typeChoice.datatype =="p":
+						-p $typeChoice.modelprot
+				    #else:
+		                 ## Read sequence type information:
+			             ## read an info file to choose which option set 
+			             #set $info = open( str($input_info) ).read()
+			             #if 'dna' in $info:
+			                    -d T
+			             #else if 'protein' in $info:
+			                    -p L
+			             #end if
+				    
+					#end if
+					
+					$equilibrium
 					#if $gammaChoice.gamma == "true":
 						-g $gammaChoice.rate
 					#end if
-						$removeGap
-						-m $method
-						-n $NNI
-						$SPR
-						-w b 
-									     
+					$removeGap
+					-m $method
+					-n $NNI 
+					$SPR
+					$TBR
+					-w b >> $statOutput ;
 	</command>
 
 	<inputs>
-		<param name="input" format="txt" type="data" label="Source file" help="Phylip format"/>
+		<param name="input" format="phylip" type="data" label="Source file" help="Phylip format"/>
 		<conditional name="typeChoice">
-			<param name="datatype" type="select"  label="Data type">
+			<param name="datatype" type="select"  label="Data type" >
 				<option value="d">DNA</option>
 				<option value="p">Protein</option>
+				<option value="auto">Auto</option>
 			</param>
 			<when value="d">
-				<param name="model" type="select" label="Evolutionary model">
+				<param name="modeldna" type="select" label="Evolutionary model">
 					<option value="4">F84</option>
 					<option value="R">RY</option>
 					<option value="1">F81</option>
 					<option value="J">JC69</option>
 					<option value="K">K2P</option>
-					<option value="T">TN</option>
+					<option value="T">TN93</option>
 					<option value="p">p-distance</option>
 				</param>
 			</when>
 			<when value="p">
-				<param name="model" type="select" label="Evolutionary model">
+				<param name="modelprot" type="select" label="Evolutionary model">
 					<option value="L">LG</option>
 					<option value="W">WAG</option>
 					<option value="J">JTT</option>
@@ -59,6 +76,9 @@
 					<option value="R">RtREV</option>					
 					<option value="p">p-distance</option>					
 				</param>			
+			</when>
+			<when value="auto">
+			     <param name="input_info" format="txt" type="data" multiple="false" label="sequence type info" help="Precompute file containning sequence description (dna or protein)"/>
 			</when>
 		</conditional>
 		<param name="equilibrium" type="boolean" label="Equilibrium frequencies" truevalue="-e" falsevalue="" help="By default, frequencies are globally counted from the nucleotides alignment or defined by the proteic substitution model. By checking the box, frequencies are pairwise estimated by counting the nucleotides or estimated by counting the amino-acids in the alignment."/>
@@ -80,19 +100,24 @@
 			<option value="N">NJ</option>
 			<option value="U">UNJ</option>
 		</param>
-		<param name="NNI" type="boolean" label="Tree swapping NNI" truevalue="b" falsevalue="n" checked="true"/>
-		<param name="SPR" type="boolean" label="Tree swapping SPR" truevalue="-s" falsevalue=""/>
+		<param name="NNI" type="select" display="radio" label="Tree swapping NNI" help='Nearest Neighbor Interchanges'>
+		    <option value="n">No NNI move</option>
+			<option value="b">Balanced NNI</option>
+			<option value="O">LS NNI</option>
+		</param>
+		<param name="SPR" type="boolean" label="Tree swapping SPR" truevalue="-s" falsevalue="" checked="true" help="Subtree Pruning and Regraft"/>
+		<param name="TBR" type="boolean"  truevalue="-t" falsevalue="" checked="false" label="Tree swapping TBR" help="Tree Bisection and Reconnection"/>
+		
 		<conditional name="bootChoice">
-			<param name="boot" type="select" label="Bootstrap">
-				<option value="false">No</option>
-				<option value="true">Yes</option>			
-			</param>
+			<param name="boot" type="boolean" label="Bootstrap" truevalue="true" falsevalue="false" checked="false"/>
 			<when value="true">
 				<param name="replicates" type="text" value="100" label="Number of replicatess"/>
 			</when>
 			<when value="false">
 			</when>
 		</conditional>
+		
+		
 	</inputs>
 
 	<outputs>
@@ -108,7 +133,7 @@
 
 .. class:: infomark
 
-**FastME version 2.1.2**
+**FastME version 2.1.4**
 
 .. class:: infomark
 

@@ -7,24 +7,24 @@
                 bash sms.sh 
                 -i $input
                 -o $output_models.files_path
-   		-p	
+   		        -p	
    		#if $sequence.seqtype == "auto" :
-                     ## Automatic sequence detection
-                     ## read an info file to choose which option set 
-                     #set $info = open( str($input_info) ).read()
-                     #if 'dna' in $info:
-                            -d nt
-                     #else if 'protein' in $info:
-                            -d aa
-                     #end if
-                #else :
-                    -d $sequence.seqtype
-                #end if
+             ## Automatic sequence detection
+             ## read an info file to choose which option set 
+             #set $info = open( str($input_info) ).read()
+             #if 'dna' in $info:
+                    -d nt
+             #else if 'protein' in $info:
+                    -d aa
+             #end if
+        #else :
+            -d $sequence.seqtype
+        #end if
    		-c $stat_crit
 				
-                #if $inpuTree.inputtree == "true" :
-                    -u $inpuTree.userInpuTree
-                #end if    
+        #if $inpuTree.inputtree == "true" :
+            -u $inpuTree.userInpuTree
+        #end if    
 		-s $move
 	
 		#if $support_condition.support == "sh":
@@ -56,7 +56,7 @@
 			<when value="nt" />
 			<when value="aa" />
 			<when value="auto">
-				<param name="input_info" type="data" format="txt" label="info"
+				<param name="input_info" type="data" format="txt" multiple="false" label="sequence type info"
 					help="Precompute file containning sequence description (dna or protein)" />
 			</when>
 		</conditional>   
@@ -102,21 +102,23 @@
 
 .. class:: infomark
 
-**Program encapsulated in Galaxy by Southgreen**
-**Encapsulation improved by ATGC (C. Vernette, V. Lefort)**
+This script runs SMS to select a model and PhyML with this selected model
 
-.. class:: infomark
+Command example::
 
- This script runs SMS to select a model and PhyML with this selected model
- Command example : ./sms.sh -p -i in.phy -o smsdir/ -d aa -c aic -s NNI -b 0
-SMS options :
+ ./sms.sh -p -i in.phy -o smsdir/ -d aa -c aic -s NNI -b 0
+ 
+SMS options::
+
      -p = Whithout this option the script only runs SMS
      -i = Input alignement file in Phylip format**Mandatory**
      -o = Outputs directory
      -d = Data type : 'aa' or 'nt' **Mandatory**
      -c = Statistical criterion to select the model : 'aic' (default) or 'bic'
      -u = Input starting tree (Newick format)
-PhyML options :
+     
+PhyML options::
+
      -s = Type of tree improvement : 'NNI (default)' or 'SPR'
      -r = Number of random starting trees
      -b = Branch Support : >0 for bootstraps, -4 for aLRT
@@ -125,30 +127,6 @@ PhyML options :
 
 -----
 
-==============
- Please cite: 
-==============
-
-"New algorithms and methods to estimate maximum-likelihood phylogenies_: assessing the performance of PhyML 3.0"
-
-
-.. _phylogenies: http://sysbio.oxfordjournals.org/content/59/3/307.long
-
-**Guindon S., Dufayard JF., Anisimova M., Hordijk W., Lefort V., Gascuel O.**
-
-Systematic Biology 2010 59(3):307-321; doi:10.1093/sysbio/syq010. 
-
-
-"A simple, fast, and accurate algorithm to estimate large phylogenies by maximum likelihood_."
-
-
-.. _likelihood: http://sysbio.oxfordjournals.org/content/52/5/696.full.pdf+html 
-
-**Guindon S., Gascuel O.**
-
-Systematic Biology, 52(5):696-704, 2003.
-
------
 
 ===========
  Overview:
@@ -166,6 +144,11 @@ For further informations, please visite the PhyML_ website.
 
 
 .. _PhyML: http://www.atgc-montpellier.fr/phyml/
-	</help>
 
+	</help>
+    <citations>
+        <citation type="doi">10.1093/sysbio/syq010</citation>
+        <citation type="doi">10.1093/nar/gki352</citation>
+        <citation type="doi">10.1080/10635150390235520</citation>
+    </citations>
 </tool>

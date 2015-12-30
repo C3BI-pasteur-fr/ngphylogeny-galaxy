@@ -113,8 +113,12 @@
 	</outputs>
 <help>
 <![CDATA[ 
-Usage: noisy [OPTIONS] MultiFastaAlignment
-Options:
+Usage::
+
+ noisy [OPTIONS] MultiFastaAlignment
+
+Options::
+
  --cutoff FLOAT     Set cutoff value to FLOAT.
                      (default is >0.80<)
  --distance STRING  Distance methode used by NeighbotNet.
