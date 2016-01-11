@@ -1,4 +1,4 @@
-<tool id="Clustalo-1.0" name="Clustal Omega" version="1.0" force_history_refresh="True">
+<tool id="clustalo" name="Clustal Omega" version="1.0" force_history_refresh="True">
     <description>multiple sequence alignment software</description>
     <macros>
         <import>clustalo_macros.xml</import>

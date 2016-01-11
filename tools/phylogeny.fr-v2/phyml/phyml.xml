@@ -1,7 +1,7 @@
-<tool id="phyml1" name="PhyML" version="3.1">
-	<description>maximum likelihood-based inference of phylogenetic trees</description>
+<tool id="phyml" name="PhyML" version="3.1">
+	<description>Maximum likelihood-based inference of phylogenetic trees</description>
     <requirements>
-        <requirement type="package" version="3.0">phyml</requirement>
+        <requirement type="package" version="3.1">phyml</requirement>
     </requirements>
 	<command>
             phyml -i $input
@@ -162,8 +162,6 @@
 
 **Guindon S., Dufayard JF., Anisimova M., Hordijk W., Lefort V., Gascuel O.**
 
-Systematic Biology 2010 59(3):307-321; doi:10.1093/sysbio/syq010. 
-
 
 "A simple, fast, and accurate algorithm to estimate large phylogenies by maximum likelihood_."
 
@@ -193,5 +191,7 @@ For further informations, please visite the PhyML_ website.
 
 .. _PhyML: http://www.atgc-montpellier.fr/phyml/
 	</help>
-
+	<citations>
+	   <citation type="doi">10.1093/sysbio/syq010</citation> 
+	</citations>
 </tool>

@@ -1,4 +1,4 @@
-<tool id="mafft1" name="MAFFT" version="7.222">
+<tool id="mafft" name="MAFFT" version="7.222">
     <description>Multiple sequence alignment software</description>
     <requirements>
         <requirement type="package" version="7.222">mafft</requirement>

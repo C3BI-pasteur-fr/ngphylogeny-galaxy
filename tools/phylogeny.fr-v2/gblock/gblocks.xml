@@ -1,4 +1,4 @@
-<tool id="gblocks1" name="Gblocks">
+<tool id="gblocks" name="Gblocks">
     <description>cleaning aligned sequences</description>
     <command>gblocks 
              $input 

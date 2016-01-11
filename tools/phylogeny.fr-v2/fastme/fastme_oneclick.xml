@@ -1,17 +1,20 @@
-<tool id="FastME" name="FastME">
-	<description>distance based inference of phylogenetic trees</description>
+<tool id="fastme" name="FastME" version="2.1.4.1">
+	<description>Distance-based inference of phylogenetic trees</description>
 	<requirements>
         <requirement type="package" version="2.1.4">fastme</requirement>
     </requirements>
     <version_command>
         <![CDATA[ fastme --version ]]>
     </version_command>
+    <stdio>
+        <exit_code range="1:" level="fatal" />
+    </stdio>
 	<command>fastme -i $input 
-					-o $treeOutput 
-					-I $statOutput 
-					-O $matrixOutput
+					-o $outputTree 
+					-I $outputLog 
+					-O $outputMatrix
 					#if $bootChoice.boot =="true":
-						-B $bootOutput
+						-B $outputBoostrap
 						-b $bootChoice.replicates
 					#end if
 						
@@ -20,8 +23,8 @@
 					#else if $typeChoice.datatype =="p":
 						-p $typeChoice.modelprot
 				    #else:
-		                 ## Read sequence type information:
-			             ## read an info file to choose which option set 
+		                 ## Read information of sequence type:
+			             ## read an info file to choose which option set and set a model by default
 			             #set $info = open( str($input_info) ).read()
 			             #if 'dna' in $info:
 			                    -d T
@@ -36,20 +39,21 @@
 						-g $gammaChoice.rate
 					#end if
 					$removeGap
-					-m $method
+					-m $distance
 					-n $NNI 
 					$SPR
 					$TBR
-					-w b >> $statOutput ;
+					-w b >> $outputLog ;
 	</command>
 
 	<inputs>
-		<param name="input" format="phylip" type="data" label="Source file" help="Phylip format"/>
+		<param name="input" type="data" format="phylip" label="Phylip input"/>
+		<param name="fileout_label" type="text" value="Newick tree" label="Output name" help="Output name for files" />
 		<conditional name="typeChoice">
 			<param name="datatype" type="select"  label="Data type" >
 				<option value="d">DNA</option>
 				<option value="p">Protein</option>
-				<option value="auto">Auto</option>
+				<option value="auto">Specified in a file</option>
 			</param>
 			<when value="d">
 				<param name="modeldna" type="select" label="Evolutionary model">
@@ -94,7 +98,7 @@
 			</when>
 		</conditional>
 		<param name="removeGap" type="boolean" label="Remove all sites containing gap" truevalue="-r" falsevalue=""/>
-		<param name="method" type="select" label="Distance algorithm">
+		<param name="distance" type="select" label="Distance algorithm">
 			<option value="I">BIONJ</option>
 			<option value="b">balanced GME</option>
 			<option value="N">NJ</option>
@@ -116,58 +120,174 @@
 			<when value="false">
 			</when>
 		</conditional>
-		
-		
 	</inputs>
-
 	<outputs>
-		<data name="treeOutput" format="nhx" label="FastME Tree"/>
-		<data name="statOutput" format="txt" label="FastME Information"/>
-		<data name="bootOutput" format="nhx" label="FastME Bootstrap">
+		<data name="outputTree" format="nwk" label="${fileout_label}"/>
+		<data name="outputLog" format="txt" label="FastME Information"/>
+		<data name="outputBoostrap" format="nwk" label="FastME Bootstrap trees">
 			<filter>bootChoice['boot'] == "true"</filter>
 		</data>
-		<data name="matrixOutput" format="txt" label="FastME Distance matrix"/>
+		<data name="outputMatrix" format="txt" label="FastME Distance matrix"/>
 	</outputs>
-
+    <tests>
+        <test>
+         <param name="input" value="phylip" />
+            <param name="modeldna" value="4"/>
+            <param name="distance" value="I"/>
+            <output name="treeOutput" file="newick" />
+        </test>
+    </tests>
 	<help>
 
 .. class:: infomark
 
+
 **FastME version 2.1.4**
+
 
 .. class:: infomark
 
-**Program encapsulated in Galaxy by ATGC (C. Vernette, V. Lefort)**
+
+**Galaxy integration** Andres Gwendoline, Institut Français de Bioinformatique.
+**Support** For any questions about Galaxy integration, please send an e-mail to support.abims@sb-roscoff.fr
+
 
 -----
 	
-==============
- Please cite: 
-==============
 
-"Fast_ and accurate phylogeny reconstruction algorithms based on the minimum-evolution principle." 
+======
+FastMe
+======
+
+-----------
+Description
+-----------
 
 
-.. _Fast: http://online.liebertpub.com/doi/abs/10.1089/106652702761034136
+    FastME - A distance based phylogeny reconstruction algorithm.
 
-**Desper R., Gascuel O.**
+    FastME showed better topological accuracy than NJ,
+    BIONJ, WEIGHBOR and FITCH, in all evolutionary
+    conditions we tested, which include large range
+    deviations from molecular clock and substitution rates.
+    
+    FastME first builds an initial tree, using either OLS_GME, balanced_GME, NJ or BIONJ algorithms, 
+    and then improves this tree by tree swapping, using either OLS_NNI or balanced_NNI algorithms.
+    OLS_GME and OLS_NNI optimize the ordinary least-squares (OLS) version of the minimum-evolution principle,
+    while balanced_GME and balanced_NNI optimize the balanced version.
 
-Journal of Computational Biology. 2002 9(5):687-705.
+
+
+
+-----------------
+Workflow position
+-----------------
+
+**Upstream tools**
+
+=========== ========================== =======
+Name            output file(s)         format 
+=========== ========================== =======
+Readseq     phylip conversion          phylip 
+=========== ========================== =======
+
+
+**Downstream tools**
+
+=========== ========================== =======
+Name            output file(s)         format
+=========== ========================== =======
+Rooting     out tree                   Newick 
+=========== ========================== =======
+
+
+----------
+Input file
+----------
+
+Phylip file 
+    Phylip file with sequence alignments
+    
+
+----------
+Parameters
+----------
+
+Output name
+        Output base name for the ouput files
+
+Evolutionary model
+    Indicate the evolutionary [model] which can be choosen from:p-distance, RY symmetric, RY, JC69, K2P, F81, F84 (default), TN93, LogDet.
+
+Distance methode
+    FastME computes a tree using a distance algorithm. You may choose this method/topologie from: TaxAdd_BalME, TaxAdd_OLSME, BIONJ (default), NJ, UNJ, NNI_BalME, NNI_OLS or SPR
+
+------------
+Output files
+------------
+
+Output_name
+    Resulting tree at Newick format 
+
+Output_name.log
+    Log file
+
+------------
+Dependencies
+------------
+FastME
+    http://www.atgc-montpellier.fr/fastme
+    
+
+
+---------------------------------------------------
+
+---------------
+Working example
+---------------
+
+Input files
+===========
+
+Philip file
+-----------
+
+::
+
+    168 5125
+    IRAT112      GAGAACCGTC CTGTAAGTAC TCTTGCTTTA AGTAATAAAG TAATACTAAT
+    KARASUKARA   GAGAACCGTC CTGTAAGTAC TCTTGCTTTA AATACGAAAG TAATACTAAT
+
+Parameters
+==========
+
+Output name -> Newick tree
+
+Evolutionary model -> F84
+
+Distance methode -> BIONJ
+
+Output files
+============
+
+Newick tree
+-----------
+
+::
+
+    (((((((((((((((((((((((((GOGOLEMPUK:0.001198,GOGOLEMPAK:0.002128):0.030378,TREMBESE:0.013258):0.055246,(((JIMBRUKJOL:0.045219,KETANKONIR:0.035298):0.006267, ...
+    
 
 -----
 
-==========
- Overview
-==========
-
-FastME first builds an initial tree, using either OLS_GME, balanced_GME, NJ or BIONJ algorithms, and then improves this tree by tree swapping, using either OLS_NNI or balanced_NNI algorithms. OLS_GME and OLS_NNI optimize the ordinary least-squares (OLS) version of the minimum-evolution principle, while balanced_GME and balanced_NNI optimize the balanced version.
-
------
 
 For further informations, please visite FastME_
-
 
 .. _FastME: http://www.atgc-montpellier.fr/fastme/usersguide.php
 
 	</help>
+	<citations>
+	   <citation type="doi">10.1093/molbev/msv150</citation>
+       <citation type="doi">10.1089/106652702761034136</citation>
+    </citations>
 </tool>

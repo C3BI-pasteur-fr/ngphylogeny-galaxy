@@ -1,4 +1,4 @@
-<tool id="BMGE-1.0" name="BMGE" version="1.12">
+<tool id="bmge" name="BMGE" version="1.12">
 	<description>cleaning aligned sequences</description>
 	<requirements>
         <requirement type="package" version="1.12">BMGE</requirement>
