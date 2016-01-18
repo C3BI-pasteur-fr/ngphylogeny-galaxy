@@ -12,6 +12,7 @@
     </version_command>
     <command>  
         mafft
+        
         ##Do not report progress
         --quiet
 
@@ -21,33 +22,31 @@
         $adjustdir
 
         #if $getTree.value == True
-        --treeout
+            --treeout
         #end if
 
         $datatype
 
         #if $matrix_condition.use_matrix == True :
-
-        #if $matrix_condition.matrix_selected.matrix == "PAM":
-        --jtt ${matrix_condition.matrix_selected.PAM}
-        #else
-        --bl ${matrix_condition.matrix_selected.matrix}
-        #end if
+	        #if $matrix_condition.matrix_selected.matrix == "PAM":
+	           --jtt ${matrix_condition.matrix_selected.PAM}
+	        #else
+	           --bl ${matrix_condition.matrix_selected.matrix}
+	        #end if
         #end if
 
         #if $method_condition.choice == "custom" :
-        --$method_condition.distance_method
-        --ep $ep
-        --maxiterate $maxiterate
+            --$method_condition.distance_method
+            --ep $ep
+            --maxiterate $maxiterate
 
         #else:
-        $method_condition.alignmentM
+            $method_condition.alignmentM
         #end if
 
         --op $op
 
         $reorder
-
         $outputFormat.value
 
         $inputSequences > $outputAlignment;
@@ -57,17 +56,14 @@
         #end if
     </command>
     <inputs>
-        <param name="inputSequences" format="fasta" type="data" label="Source file"
-            help="Fasta sequence file" />
+        <param name="inputSequences" format="fasta" type="data" label="Sequences to align" help="Amino acid or nucleotide sequences in FASTA format." />
         <param name="datatype" type="select" label="Data type">
             <option value="">Auto detection</option>
             <option value="--nuc">Nucleic acids</option>
             <option value="--amino">Amino acids</option>
         </param>
         <conditional name="matrix_condition">
-            <param name="use_matrix" type="boolean" truevalue="true"
-                falsevalue="false" checked="False" label="Use matrix ?"
-                help="Usefull only for amino acids" />
+            <param name="use_matrix" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Use matrix ?" help="Usefull only for amino acids" />
             <when value="true">
                 <conditional name="matrix_selected">
                     <param name="matrix" type="select" label="Matrix">
@@ -84,7 +80,6 @@
                 </conditional>
             </when>
         </conditional>
-
         <conditional name="method_condition">
             <param name="choice" type="select" label="Methods"
                 help="Accuracy-oriented methods recommended for maximum 200 sequences">
@@ -95,70 +90,40 @@
             <when value="speed">
                 <param name="alignmentM" type="select" display="radio"
                     label="Alignment methods">
-                    <option value="--retree 2 --maxiterate 1000">FFT-NS-i (iterative refinement method; max.
-                        1000
-                        iterations)
-                    </option>
-                    <option value="--retree 2 --maxiterate 0" selected="true">FFT-NS-2
-                        (fast; progressive method)
-                    </option>
-                    <option value="--retree 1 --maxiterate 0">FFT-NS-1 (very fast; recommended for >2000
-                        sequences)
-                    </option>
-                    <option value="--retree 2 --maxiterate 2 --nofft">NW-NS-i (iterative refinement method without
-                        FFT
-                        approximation; two cycles only )
-                    </option>
-                    <option value="--retree 2 --maxiterate 0 --nofft">NW-NS-2 (fast; progressive method without the
-                        FFT approximation)
-                    </option>
-                    <option value="--retree 1 --maxiterate 0 --nofft --parttree">NW-NS-PartTree-1 (recommended for ~10,000 to
-                        ~50,000 sequences)
-                    </option>
+                    <option value="--retree 2 --maxiterate 1000">FFT-NS-i (iterative refinement method; max. 1000 iterations)</option>
+                    <option value="--retree 2 --maxiterate 0" selected="true">FFT-NS-2 (fast; progressive method)</option>
+                    <option value="--retree 1 --maxiterate 0">FFT-NS-1 (very fast; recommended for >2000 sequences)</option>
+                    <option value="--retree 2 --maxiterate 2 --nofft">NW-NS-i (iterative refinement method without FFT approximation; two cycles only )</option>
+                    <option value="--retree 2 --maxiterate 0 --nofft">NW-NS-2 (fast; progressive method without the FFT approximation)</option>
+                    <option value="--retree 1 --maxiterate 0 --nofft --parttree">NW-NS-PartTree-1 (recommended for ~10,000 to ~50,000 sequences)</option>
                 </param>
             </when>
             <when value="accuracy">
                 <param name="alignmentM" type="select" display="radio"
                     label="Alignment methods">
-                    <option value="--localpair --maxiterate 1000">L-INS-i
-                        (probably most accurate)
-                    </option>
-                    <option value="--globalpair --maxiterate 1000">G-INS-i (suitable for sequences of similar
-                        lengths)
-                    </option>
-                    <option value="--genafpair --maxiterate 1000 --ep=0">E-INS-i (suitable for sequences containing
-                        large
-                        unalignable regions)
-                    </option>
+                    <option value="--localpair --maxiterate 1000">L-INS-i (probably most accurate)</option>
+                    <option value="--globalpair --maxiterate 1000">G-INS-i (suitable for sequences of similar lengths)</option>
+                    <option value="--genafpair --maxiterate 1000 --ep=0">E-INS-i (suitable for sequences containing large unalignable regions)</option>
                 </param>
             </when>
             <when value="custom">
                 <param name="distance_method" type="select" display="radio"
                     label="Distance method" help="Distance method must be chosen regarding your data">
-                    <option value="6merpair" selected="true">Shared 6mers distance
-                        (fastest)
-                    </option>
+                    <option value="6merpair" selected="true">Shared 6mers distance(fastest)</option>
                     <option value="globalpair">Global alignment (NW)</option>
                     <option value="localpair">Local alignment (SW)</option>
                     <option value="genafpair">Local, affine gap cost</option>
                     <option value="fastapair">FASTA distance</option>
                 </param>
-                <param name="ep" type="float" value="0.123" label="Gap extend penalty"
-                    help="0.123 default value" />
-                <param name="iterations" type="integer" value="1" min="1" max="1000"
-                    label="Maximum number of iterations" help="1000 for maximum quality" />
+                <param name="ep" type="float" value="0.123" label="Gap extend penalty" help="0.123 default value" />
+                <param name="iterations" type="integer" value="1" min="1" max="1000" label="Maximum number of iterations" help="1000 for maximum quality" />
             </when>
         </conditional>
-        <param name="op" type="float" value="1.53" label="Gap opening penalty"
-            help="1.53 default value" />
-        <param name="adjustdir" type="boolean" truevalue="--adjustdirection"
-            falsevalue="" checked="False" label="Adjust direction?" />
-        <param name="getTree" type="boolean" truevalue="true"
-            falsevalue="false" checked="False" label="Display alignment tree ?" />
-        <param name="reorder" type="boolean" truevalue="--reorder"
-            falsevalue="" checked="False" label="Reorder output?" />
-        <param name="outputFormat" type="select" label="Output format"
-            help="Either FASTA or ClustalW">
+        <param name="op" type="float" value="1.53" label="Gap opening penalty" help="1.53 default value" />
+        <param name="adjustdir" type="boolean" truevalue="--adjustdirection" falsevalue="" checked="False" label="Adjust direction?" />
+        <param name="getTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Display alignment tree ?" />
+        <param name="reorder" type="boolean" truevalue="--reorder" falsevalue="" checked="False" label="Reorder output?" />
+        <param name="outputFormat" type="select" label="Output format" help="Either FASTA or ClustalW">
             <option value="" selected="true">FASTA</option>
             <option value="--clustalout">ClustalW</option>
             <option value="--phylipout">Phylip</option>
@@ -193,7 +158,7 @@
 
 .. class:: infomark
 
-**MAFFT version 7.205 **
+**MAFFT version 7.222 **
 
 -----
 

@@ -43,12 +43,13 @@
 					#end if
 					
 					--method=$distance
+					
 					--branch_length=B
 					
 					$equilibrium
 					$removeGap
-					$NNI 
-					$SPR >> $outputLog ;
+					$NNI
+					$SPR;
 	</command>
 
 	<inputs>
@@ -138,7 +139,15 @@
          <param name="input" value="phylip" />
             <param name="modeldna" value="4"/>
             <param name="distance" value="I"/>
-            <output name="treeOutput" file="newick" />
+            <output name="outputTree" file="newick" />
+        </test>
+        <test>
+            <param name="input" value="phylip" />
+            <param name="modeldna" value="T"/>
+            <param name="distance" value="I"/>
+            <param name="SPR" value="--spr"/>
+            <param name="fileout_label" value="tree_mT_dI_spr.nwk" />
+            <output name="outputTree" file="tree_mT_dI_spr.nwk" />            
         </test>
     </tests>
 	<help>
@@ -223,7 +232,7 @@ Output name
 Evolutionary model
     Indicate the evolutionary [model] which can be choosen from:p-distance, RY symmetric, RY, JC69, K2P, F81, F84 (default), TN93, LogDet.
 
-Distance methode
+Distance method
     FastME computes a tree using a distance algorithm. You may choose this method/topologie from: TaxAdd_BalME, TaxAdd_OLSME, BIONJ (default), NJ, UNJ, NNI_BalME, NNI_OLS or SPR
 
 ------------
@@ -253,7 +262,7 @@ Working example
 Input files
 ===========
 
-Philip file
+Phylip file
 -----------
 
 ::
@@ -269,7 +278,7 @@ Output name -> Newick tree
 
 Evolutionary model -> F84
 
-Distance methode -> BIONJ
+Distance method -> BIONJ
 
 Output files
 ============
