@@ -1,6 +1,6 @@
 <tool id="fastme" name="FastME" version="2.1.4.1">
-	<description>Distance-based inference of phylogenetic trees</description>
-	<requirements>
+    <description>Distance-based inference of phylogenetic trees</description>
+    <requirements>
         <requirement type="package" version="2.1.4">fastme</requirement>
     </requirements>
     <version_command>
@@ -9,135 +9,142 @@
     <stdio>
         <exit_code range="1:" level="fatal" />
     </stdio>
-	<command>fastme --input_data=$input 
-					--output_tree=$outputTree 
-					--output_matrix=$outputMatrix
+    <command>fastme --input_data=$input 
+                    --output_tree=$outputTree 
+                    --output_matrix=$outputMatrix
                     --output_info=$outputLog
                     --nb_threads=\${GALAXY_SLOTS:-1}
                     
-					#if $bootChoice.boot =="true":
-						--output_info=$outputBoostrap
-						--bootstrap=$bootChoice.replicates
-					#end if
-						
-					#if $typeChoice.datatype =="d":
-						--dna=$typeChoice.modeldna
-						
-					#else if $typeChoice.datatype =="p":
-						--protein=$typeChoice.modelprot
-						
-				    #else:
-		                 ## Read information of sequence type:
-			             ## read an info file to choose which option set and set a model by default
-			             #set $info = open( str($input_info) ).read()
-			             #if 'dna' in $info:
-			                    --dna=T
-			             #else if 'protein' in $info:
-			                   --protein=L
-			             #end if
-				    
-					#end if
-		
-					#if $gammaChoice.gamma == "true":
-						--gamma=$gammaChoice.rate
-					#end if
-					
-					--method=$distance
-					
-					--branch_length=B
-					
-					$equilibrium
-					$removeGap
-					$NNI
-					$SPR;
-	</command>
-
-	<inputs>
-		<param name="input" type="data" format="phylip" label="Phylip input"/>
-		<param name="fileout_label" type="text" value="Newick tree" label="Output name" help="Output name for files" />
-		<conditional name="typeChoice">
-			<param name="datatype" type="select"  label="Data type" >
-				<option value="d">DNA</option>
-				<option value="p">Protein</option>
-				<option value="auto">Specified in a file</option>
-			</param>
-			<when value="d">
-				<param name="modeldna" type="select" label="Evolutionary model">
-					<option value="4">F84</option>
-					<option value="R">RY</option>
-					<option value="1">F81</option>
-					<option value="J">JC69</option>
-					<option value="K">K2P</option>
-					<option value="T">TN93</option>
-					<option value="p">p-distance</option>
-				</param>
-			</when>
-			<when value="p">
-				<param name="modelprot" type="select" label="Evolutionary model">
-					<option value="L">LG</option>
-					<option value="W">WAG</option>
-					<option value="J">JTT</option>
-					<option value="h">Day off</option>
-					<option value="C">CpRev</option>
-					<option value="D">DCMut</option>
-					<option value="b">HIVb</option>
-					<option value="I">HIVw</option>
-					<option value="M">MtREV</option>
-					<option value="R">RtREV</option>					
-					<option value="p">p-distance</option>					
-				</param>			
-			</when>
-			<when value="auto">
-			     <param name="input_info" format="txt" type="data" multiple="false" label="sequence type info" help="Precompute file containning sequence description (dna or protein)"/>
-			</when>
-		</conditional>
-		<param name="equilibrium" type="boolean" label="Equilibrium frequencies" truevalue="--equilibrium" falsevalue="" help="By default, frequencies are globally counted from the nucleotides alignment or defined by the proteic substitution model. By checking the box, frequencies are pairwise estimated by counting the nucleotides or estimated by counting the amino-acids in the alignment."/>
-		<conditional name="gammaChoice">
-			<param name="gamma" type="select" label="Gamma distributed rates across sites">
-				<option value="true">Yes</option>
-				<option value="false">No</option>
-			</param>
-			<when value="true">
-				<param name="rate" type="float" label="Gamma distribution parameter" value="1" min="0"/>
-			</when>
-			<when value="false">
-			</when>
-		</conditional>
-		<param name="removeGap" type="boolean" label="Remove all sites containing gap" truevalue="--remove_gap" falsevalue=""/>
-		<param name="distance" type="select" label="Distance algorithm">
-			<option value="I">BIONJ</option>
-			<option value="B">TaxAdd BalME</option>
+                    #if $bootChoice.boot == "true"
+                        --output_boot=$outputBoostrap
+                        --bootstrap=$bootChoice.replicates
+                    #end if
+                        
+                    #if $typeChoice.datatype =="d"
+                        --dna=$typeChoice.modeldna
+                        
+                    #else if $typeChoice.datatype =="p"
+                        --protein=$typeChoice.modelprot
+                        
+                    #else:
+                         ## Read information of sequence type
+                         ## read an info file to choose which option set and set a model by default
+                         #set $info = open( str($input_info) ).read()
+                         #if 'dna' in $info:
+                                --dna=T
+                         #else if 'protein' in $info:
+                               --protein=L
+                         #end if
+                    
+                    #end if
+        
+                    #if $gammaChoice.gamma == "true"
+                        --gamma=$gammaChoice.rate
+                    #end if
+                    
+                    --method=$distance
+                    --branch_length=$branchLength
+                    
+                    $SPR
+                    $equilibrium
+                    $removeGap
+                    $NNI;
+    </command>
+    <inputs>
+        <param name="input" type="data" format="phylip" label="Phylip input"/>
+        <param name="fileout_label" type="text" value="Newick tree" label="Output name" help="Output name for files" />
+        <conditional name="typeChoice">
+            <param name="datatype" type="select"  label="Data type" >
+                <option value="d">DNA</option>
+                <option value="p">Protein</option>
+                <option value="auto">Specified in a file</option>
+            </param>
+            <when value="d">
+                <param name="modeldna" type="select" label="Evolutionary model">
+                    <option value="4">F84</option>
+                    <option value="R">RY</option>
+                    <option value="1">F81</option>
+                    <option value="J">JC69</option>
+                    <option value="K">K2P</option>
+                    <option value="T">TN93</option>
+                    <option value="p">p-distance</option>
+                </param>
+            </when>
+            <when value="p">
+                <param name="modelprot" type="select" label="Evolutionary model">
+                    <option value="L">LG</option>
+                    <option value="W">WAG</option>
+                    <option value="J">JTT</option>
+                    <option value="h">Day off</option>
+                    <option value="C">CpRev</option>
+                    <option value="D">DCMut</option>
+                    <option value="b">HIVb</option>
+                    <option value="I">HIVw</option>
+                    <option value="M">MtREV</option>
+                    <option value="R">RtREV</option>
+                    <option value="p">p-distance</option>                    
+                </param>
+            </when>
+            <when value="auto">
+                 <param name="input_info" format="txt" type="data" multiple="false" label="sequence type info" help="Precompute file containning sequence description (dna or protein)"/>
+            </when>
+        </conditional>
+        <param name="equilibrium" type="boolean" label="Equilibrium frequencies" truevalue="--equilibrium" falsevalue="" help="By default, frequencies are globally counted from the nucleotides alignment or defined by the proteic substitution model. By checking the box, frequencies are pairwise estimated by counting the nucleotides or estimated by counting the amino-acids in the alignment."/>
+        <conditional name="gammaChoice">
+            <param name="gamma" type="select" label="Gamma distributed rates across sites">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </param>
+            <when value="true">
+                <param name="rate" type="float" label="Gamma distribution parameter" value="1" min="0"/>
+            </when>
+            <when value="false">
+            </when>
+        </conditional>
+        <param name="removeGap" type="boolean" label="Remove all sites containing gap" truevalue="--remove_gap" falsevalue=""/>
+        <param name="distance" type="select" label="Distance algorithm">
+            <option value="I">BIONJ</option>
+            <option value="B">TaxAdd BalME</option>
             <option value="O">TaxAdd LSME</option>
-			<option value="N">NJ</option>
-			<option value="U">UNJ</option>
-		</param>
-		<param name="NNI" type="select" display="radio" label="Tree swapping NNI" help='Nearest Neighbor Interchanges'>
-		    <option value="">No NNI move</option>
-			<option value="--nni=B">Balanced NNI</option>
-			<option value="--nni=O">OLS NNI</option>
-		</param>
-		<param name="SPR" type="boolean" label="Tree swapping SPR" truevalue="--spr" falsevalue="" checked="true" help="Subtree Pruning and Regraft"/>
-		<conditional name="bootChoice">
-			<param name="boot" type="boolean" label="Bootstrap" truevalue="true" falsevalue="false" checked="false"/>
-			<when value="true">
-				<param name="replicates" type="text" value="100" label="Number of replicatess"/>
-			</when>
-			<when value="false">
-			</when>
-		</conditional>
-	</inputs>
-	<outputs>
-		<data name="outputTree" format="nwk" label="${fileout_label}"/>
-		<data name="outputLog" format="txt" label="FastME Information"/>
-		<data name="outputBoostrap" format="nwk" label="FastME Bootstrap trees">
-			<filter>bootChoice['boot'] == "true"</filter>
-		</data>
-		<data name="outputMatrix" format="txt" label="FastME Distance matrix"/>
-	</outputs>
+            <option value="N">NJ</option>
+            <option value="U">UNJ</option>
+        </param>
+        <param name="NNI" type="select" display="radio" label="Tree swapping NNI" help='Nearest Neighbor Interchanges'>
+            <option value="">No NNI move</option>
+            <option value="--nni=B">Balanced NNI</option>
+            <option value="--nni=O">OLS NNI</option>
+        </param>
+        <param name="SPR" type="boolean" label="Tree swapping SPR" truevalue="--spr" falsevalue="" checked="true" help="Subtree Pruning and Regraft"/>
+        <param name="branchLength" type="select" display="radio" label="Branch length to assign to the tree">
+            <option value="n">No branch length estimation</option>
+            <option value="B">BalLS</option>
+            <option value="O">OLS</option>
+        </param>
+        <conditional name="bootChoice">
+            <param name="boot" type="select" label="Bootstrap">
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+            </param>
+            <when value="false"/>
+            <when value="true">
+                <param name="replicates" type="text" value="100" label="Number of replicates"/>
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data name="outputTree" format="nwk" label="${fileout_label}"/>
+        <data name="outputLog" format="txt" label="FastME Information"/>
+        <data name="outputBoostrap" format="nwk" label="FastME Bootstrap trees">
+            <filter>bootChoice['boot'] == "true"</filter>
+        </data>
+        <data name="outputMatrix" format="txt" label="FastME Distance matrix"/>
+    </outputs>
     <tests>
         <test>
          <param name="input" value="phylip" />
             <param name="modeldna" value="4"/>
+            <param name="gamma" value="false"/>
+            <param name="SPR" value="false"/>
             <param name="distance" value="I"/>
             <output name="outputTree" file="newick" />
         </test>
@@ -146,11 +153,11 @@
             <param name="modeldna" value="T"/>
             <param name="distance" value="I"/>
             <param name="SPR" value="--spr"/>
-            <param name="fileout_label" value="tree_mT_dI_spr.nwk" />
-            <output name="outputTree" file="tree_mT_dI_spr.nwk" />            
+            <param name="fileout_label" value="TreeTn93BionjSpr.nwk" />
+            <output name="outputTree" file="TreeTn93BionjSpr.nwk" />            
         </test>
     </tests>
-	<help>
+    <help>
 
 .. class:: infomark
 
@@ -161,12 +168,12 @@
 .. class:: infomark
 
 
-**Galaxy integration** Andres Gwendoline, Institut Français de Bioinformatique.
-**Support** For any questions about Galaxy integration, please send an e-mail to support.abims@sb-roscoff.fr
+**Galaxy integration** Andres Gwendoline, Institut Français de Bioinformatique. Correia Damien, CNRS.
+**Support** For any questions about Galaxy integration, please send an e-mail to vincent.lefort@lirmm.fr
 
 
 -----
-	
+    
 
 ======
 FastMe
@@ -410,9 +417,9 @@ For further informations, please visite FastME_
 
 .. _FastME: http://www.atgc-montpellier.fr/fastme/usersguide.php
 
-	</help>
-	<citations>
-	   <citation type="doi">10.1093/molbev/msv150</citation>
+    </help>
+    <citations>
+       <citation type="doi">10.1093/molbev/msv150</citation>
        <citation type="doi">10.1089/106652702761034136</citation>
     </citations>
 </tool>
