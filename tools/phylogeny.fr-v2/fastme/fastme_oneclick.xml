@@ -48,7 +48,11 @@
                     $SPR
                     $equilibrium
                     $removeGap
-                    $NNI;
+                    $NNI
+                    
+                    >> tmp_stdout;
+                    cat tmp_stdout > $outputLog;
+                   
     </command>
     <inputs>
         <param name="input" type="data" format="phylip" label="Phylip input"/>
