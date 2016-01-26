@@ -4,6 +4,8 @@
         <install version="1.0">
             <actions>
 				<action type="download_by_url">http://www.bioinf.uni-leipzig.de/Software/noisy/Noisy-1.5.12.tar.gz</action>
+                <!-- fixes reported bug, remove space introduced after '>' in fasta header output -->
+                <action type="shell_command"> sed 's/\"> \"/\">\"/g' FileFormats.cpp > FileFormats.cpp</action>
                 <action type="shell_command">./configure --prefix=$INSTALL_DIR</action>
                 <action type="shell_command">make</action>
                 <action type="shell_command">make install</action>			                
