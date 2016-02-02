@@ -17,7 +17,7 @@
 	                 #end if
 	                 
                  #else :
-                            --seqtype $sequence.seqtype
+                    --seqtype $sequence.seqtype
                  #end if 
                  
                  --cutoff $cutoff
@@ -37,39 +37,32 @@
                    $orderingmethode.ordering
                  #end if
                  
-                 ##--noconstant
-                 ##--nogap
+                 $constant
+                 $gap
                  
-                 ##--reorder
-                 ##--shuffles
-                 ##--smooth
+                 --shuffles $shuffles
+                 --smooth $smooth
                  --silent
-                 ##--verbose 
+                 
                  ]]>
     </command>
 	<inputs>
-		<param name="input" type="data" format="fasta" label="Source file"
-			help="Fasta format" />
-		
+		<param name="input" type="data" format="fasta" label="Source file" help="Fasta format" />
 		<conditional name="sequence">
 			<param name="seqtype" type="select" label="Sequence Coding">
 				<option value="D">DNA</option>
 				<option value="P">Protein</option>
 				<option value="R">RNA</option>
-				<option value="auto">Auto</option>
+				<option value="auto">Read this information in a file</option>
 			</param>
 			<when value="D"></when>
 			<when value="P"></when>
 			<when value="R"></when>
 			<when value="auto">
-                <param name="input_info" type="data" format="txt" label="info"
-                       help="Precompute file containning sequence description (dna or protein)" />
+                <param name="input_info" type="data" format="txt" label="info" help="Precompute file containning sequence description (dna or protein)" />
             </when>	
 		</conditional>   
-		
-		<param name="cutoff" type="float" value="0.8" min="0" max="1"
-			label="cut-off  [ 0-1 ]"
-			help="Columns with a score below FLOAT are removed from the output alignment." />
+		<param name="cutoff" type="float" value="0.8" min="0" max="1" label="cut-off  [ 0-1 ]" help="Columns with a score below FLOAT are removed from the output alignment." />
 		<param name="distance" type="select" label="Distance methode used by NeighbotNet">
 		    <option value="HAMMING">HAMMING</option>
             <option value="GTR">GTR</option>
@@ -104,12 +97,17 @@
             </when>
             <when value="list">
                 <param name="randpermutlist" type="text" label="Comma-seperated string of INT"/>
-            </when>  
+            </when>
          </conditional>
+         <param name="constant" type="boolean" truevalue="" falsevalue="--noconstant" checked="True" label="Constant columns in output alignment" />
+         <param name="gap" type="boolean" truevalue="" falsevalue="--nogap" checked="True" label="Count gap symbol as character state"/>
+         <param name="smooth" type="integer" value="1" min="0" max="1000" label="Running avarage over INT columns" />
+         <param name="shuffles" type="integer" value="1000" min="0"  label="Perform INT random shuffles per column" />
 	</inputs>
 	<outputs>
 		<data name="output1" format="fasta" label="Noisy Cleaned sequencies"  from_work_dir="*_out.fas" />
-		<data name="output2" format="eps" label="Noisy Cleaned sequencies image"  from_work_dir="*typ.eps" />
+		<data name="output2" format="eps" label="Noisy Cleaned sequencies image"  from_work_dir="*_typ.eps" />
+		<data name="output3" format="txt" label="Noisy Cleaned sequencies information"  from_work_dir="*_sta.gr" />
 	</outputs>
 <help>
 <![CDATA[ 
@@ -142,8 +140,7 @@ Options::
                     INT,INT,...  provide ordering explicitly as
                                 comma-seperated string of INTs
                     all          all permutations
- -r, --reorder      Only reorder alignment rows (do not shuffle)
-                     (default is >1000<)
+
  --shuffles INT     Perform INT random shuffles per column.
                      (default is >0<)
  -s, --silent       Turn off status bar
@@ -156,7 +153,9 @@ Options::
                     messages about its progress.
 ]]>
 </help>
- <citations>
-        <citation type="doi">10.1186/1748-7188-3-7</citation> 
- </citations>
+    <citations>
+        <citation type="doi">10.1186/1748-7188-3-7</citation>
+        <citation type="doi">10.1093/molbev/msl180</citation>
+        <citation type="doi">10.1093/molbev/msh018s</citation>
+    </citations>
 </tool>
