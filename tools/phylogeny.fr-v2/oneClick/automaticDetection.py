@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from Bio import SeqIO
+import argparse
 
 def analyse_file( inputfile ):
     """
@@ -8,38 +8,41 @@ def analyse_file( inputfile ):
     """
     DNA_Alphabet = "atgcn"
     GAP ="_- ?"
-
+    n = 0
     protein = False
     nucleotid = False
-    input_handle = open(inputfile, "rU")
-    
-    for rec in SeqIO.parse(input_handle, "fasta"):
-        
-        n = 0
-        for letter in rec.seq.lower():
-            if letter in GAP:
-                pass
-            else:
-                if not letter in DNA_Alphabet:
-                    protein =  True
-                    break
-                
-                #reduce time threshold
-                #The probability of observing a protein sequence containing
-                #only DNA Alphabet in the first twenty residues is almost null
-                n += 1
-                if n > 20:
-                    nucleotid = True
-                    break
-
     typeofseq = "dna"
     
-    if protein and nucleotid:
-        print "warning ! we detect two types of sequences"
+    with open(inputfile, "rU") as input_handle:
     
-    elif protein:
-        typeofseq = "protein"
-
+        for line in input_handle:
+        
+            if line.startswith('>') or line.startswith('#'):
+                n = 0
+            
+            else:
+                for letter in line.lower():
+                    if letter in GAP:
+                        pass
+                    else:
+                        if not letter in DNA_Alphabet:
+                            protein =  True
+                            break
+                        
+                        #reduce time threshold
+                        #The probability of observing a protein sequence containing
+                        #only DNA Alphabet in the first twenty residues is almost null
+                        n += 1
+                        if n > 20:
+                            nucleotid = True
+                            break
+        
+                if protein and nucleotid:
+                    print "warning ! we detect two types of sequences"
+            
+                elif protein:
+                    typeofseq = "protein"
+        
     return typeofseq
 
 if __name__ == "__main__":
