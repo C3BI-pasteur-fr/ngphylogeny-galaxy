@@ -4,7 +4,7 @@ import argparse
 
 def analyse_file( inputfile ):
     """
-    Take a fasta file and detect if it contain DNA or Protein
+    Take a fasta file and detect if it contain "dna" or "protein"
     """
     DNA_Alphabet = "atgcn"
     GAP ="_- ?"
@@ -46,13 +46,9 @@ def analyse_file( inputfile ):
     return typeofseq
 
 if __name__ == "__main__":
-    
-    import argparse
-    
+       
     parser = argparse.ArgumentParser()
     parser.add_argument('file', nargs='?', type=str, action="store", default="", help="input fasta file")
     args = parser.parse_args()
     
     print "%s"%(analyse_file(args.file))
-    
-    
