@@ -114,7 +114,7 @@
             <option value="--method=U">UNJ</option>
         </param>
         <param name="treeRefinement" type="select" display="radio" label="Tree Refinement" help='(NNI) Nearest Neighbor Interchanges,(SPR) Subtree Pruning and Regrafting '>
-            <option value="--nni=n">None</option>
+            <option value="">None</option>
             <option value="--nni=O">OLS NNI</option>
             <option value="--nni=B">BalME NNI</option>
             <option value="--spr" selected="true">BalME SPR</option>
@@ -144,15 +144,15 @@
          <param name="input" value="phylip" />
             <param name="modeldna" value="4"/>
             <param name="gamma" value="false"/>
-            <param name="SPR" value="false"/>
-            <param name="distance" value="I"/>
+            <param name="treeRefinement" value=""/>
+            <param name="distance" value="--method=I"/>
             <output name="outputTree" file="newick" />
         </test>
         <test>
             <param name="input" value="phylip" />
             <param name="modeldna" value="T"/>
-            <param name="distance" value="I"/>
-            <param name="SPR" value="--spr"/>
+            <param name="distance" value="--method=I"/>
+            <param name="treeRefinement" value="--nni=B --spr"/>
             <param name="fileout_label" value="TreeTn93BionjSpr.nwk" />
             <output name="outputTree" file="TreeTn93BionjSpr.nwk" />
         </test>
