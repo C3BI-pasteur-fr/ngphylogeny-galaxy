@@ -6,7 +6,7 @@
     <command><![CDATA[ 
                 noisy $input
                 
-                 #if $sequence.seqtype == 'auto' :
+                 #if $sequence.seqtype == 'cfg' :
 	                 ## Automatic sequence detection
 	                 ## read an info file to choose which option set 
 	                 #set $info = open( str($input_info) ).read()
@@ -53,7 +53,7 @@
 				<option value="D">DNA</option>
 				<option value="P">Protein</option>
 				<option value="R">RNA</option>
-				<option value="auto">Read this information in a file</option>
+				<option value="cfg">Config file</option>
 			</param>
 			<when value="D"></when>
 			<when value="P"></when>
@@ -86,7 +86,7 @@
 	            <option value="nnet">NeighborNet</option>
 	            <option value="qnet">QNet</option>
 	            <option value="rand">Sample INT random permutation</option>
-	            <option value="list">Provide ordering</option>
+	            <option value="list">List of index MSA ordering</option>
 	            <option value="all">All permutations</option>
 	         </param>
             <when value="nnet"/>
@@ -101,14 +101,21 @@
          </conditional>
          <param name="constant" type="boolean" truevalue="" falsevalue="--noconstant" checked="True" label="Constant columns in output alignment" />
          <param name="gap" type="boolean" truevalue="" falsevalue="--nogap" checked="True" label="Count gap symbol as character state"/>
-         <param name="smooth" type="integer" value="1" min="0" max="1000" label="Running avarage over INT columns" />
-         <param name="shuffles" type="integer" value="1000" min="0"  label="Perform INT random shuffles per column" />
+         <param name="smooth" type="integer" value="1" min="0" max="1000" label="Running average over INT columns" help="Calculate a running average over the reliability score of INT columns and use this smoothed values to remove unreliable columns from the MAS.s" />
+         <param name="shuffles" type="integer" value="0" min="0" max="1000" label="Perform INT random shuffles per column of the MSA"/>
 	</inputs>
 	<outputs>
 		<data name="output1" format="fasta" label="Noisy Cleaned sequencies"  from_work_dir="*_out.fas" />
 		<data name="output2" format="eps" label="Noisy Cleaned sequencies image"  from_work_dir="*_typ.eps" />
 		<data name="output3" format="txt" label="Noisy Cleaned sequencies information"  from_work_dir="*_sta.gr" />
 	</outputs>
+	<tests>
+        <test>
+	        <param name="input" value="aln.fasta" />
+	        <output name="output1" file="aln_out.fas" />  
+        </test>
+	</tests>
+	
 <help>
 <![CDATA[ 
 Usage::
@@ -117,7 +124,7 @@ Usage::
 
 Options::
 
- --cutoff FLOAT     Set cutoff value to FLOAT.
+ --cutoff FLOAT     Set cutoff value to FLOAT. Columns with a score below FLOAT are removed from the output alignment.
                      (default is >0.80<)
  --distance STRING  Distance methode used by NeighbotNet.
                      (default is >HAMMING< [HAMMING|GTR])
@@ -134,12 +141,11 @@ Options::
                     Choose ordering method.
                      (default is >nnet<)
                     nnet         NeighborNet
-                    qnet         QNet
-                    rand[,INT]   sample INT random permutation
+                    qnet         QNet algorithm is O(n^4) both in time and memory, be careful when you use this option.
+                    rand[,INT]   sample INT random permutation. With rand a random sample of all possible orderings of the TAXA can be specified for which the reliability score is calculated
                                 (default is >1000<)
-                    INT,INT,...  provide ordering explicitly as
-                                comma-seperated string of INTs
-                    all          all permutations
+                    INT,INT,...  provide ordering explicitly as comma-seperated list of TAXA indices in the range (e.g 3,0,4,1,2 as ordering for the 5 TAXA in the input MSA).
+                    all          all permutations, If all is used than for all possible permutations of the TAXA the reliability score is calculated (Note that for more than 8 TAXA this can become rather time consuming!).
 
  --shuffles INT     Perform INT random shuffles per column.
                      (default is >0<)
