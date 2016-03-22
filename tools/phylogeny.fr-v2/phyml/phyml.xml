@@ -1,5 +1,5 @@
 <tool id="phyml" name="PhyML" version="3.1">
-    <description>Maximum likelihood-based inference of phylogenetic trees</description>
+    <description>Phylogeny software based on the maximum-likelihood</description>
     <requirements>
         <requirement type="package" version="3.1">phyml</requirement>
     </requirements>
