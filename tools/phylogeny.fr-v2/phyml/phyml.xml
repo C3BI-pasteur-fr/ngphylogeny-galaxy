@@ -3,8 +3,20 @@
     <requirements>
         <requirement type="package" version="3.1">phyml</requirement>
     </requirements>
-    <command>
-          phyml --input $input
+    <version_command>
+        <![CDATA[ phyml --version ]]>
+    </version_command>
+    <stdio>
+        <regex match="*"
+               source="stdrr"
+               level="fatal"/>
+    </stdio>
+
+    <command><![CDATA[
+          ##PhyML outputs are based on input path and we need to create outputs in working_dir.
+          ln -sf $input input_tmp;
+         
+          phyml --input input_tmp
                 $phylip_format
                 --datatype $seq.type_of_seq
                 --multiple $nb_data_set
@@ -40,18 +52,15 @@
                 #end if
                 
                 --no_memory_check
-                --quiet
-                > ${output_stdout} ; 
-                
-            mv ${input}_phyml_tree.txt $output_tree;
-            mv ${input}_phyml_stats.txt $output_stats;
-            
+                --quiet > ${output_stdout};
+                grep 'failed' ${output_stdout} >&2;
+            ]]>
     </command>
     <inputs>
-        <param name="input" type="data" format="phylip" label="Alignment file" help="phylip format"/>
+        <param name="input" type="data" format="phylip, phy" label="Alignment file" help="phylip format"/>
         <param name="phylip_format" type="select"  label="Changes interleaved format" display="radio">
-                    <option value="">Interleaved</option>
-                    <option value="--sequential">Sequential</option>
+            <option value="">Interleaved</option>
+            <option value="--sequential">Sequential</option>
         </param> 
         <param name="nb_data_set" type="integer" min="1" value="1" label="Number of data sets" />
         <conditional name="seq">
@@ -138,9 +147,9 @@
         </conditional>
     </inputs>
     <outputs>
-        <data format="txt" name="output_tree" label="PhyML Newick tree"/>
-        <data format="txt" name="output_stats" label="PhyML Statistics"/>
-        <data format="txt" name="output_stdout" label="PhyML Stdout"/>
+        <data name="output_tree" format="txt" label="PhyML Newick tree" from_work_dir="*_phyml_tree.txt" />
+        <data name="output_stats" format="txt" label="PhyML Statistics" from_work_dir="*_phyml_stats.txt"/>
+        <data name="output_stdout" format="txt" label="PhyML Stdout"/>
     </outputs>
     <tests>
         <test>
@@ -153,6 +162,7 @@
         </test>
     </tests>
     <help>
+    <![CDATA[ 
 .. class:: infomark
 
 **PhyML version 3.1, 2013**
@@ -195,11 +205,9 @@ OPTIONS
   -i, --input seq_file_name
       seq_file_name is the name of the nucleotide or amino-acid sequence file in PHYLIP format.
   
-  
   -d, --datatype data_type
       data_type is 'nt' for nucleotide (default), 'aa' for amino-acid sequences, or 'generic',
       (use NEXUS file format and the 'symbols' parameter here).
-  
   
   -q, --sequential
       Changes interleaved format (default) to sequential format.
@@ -208,11 +216,9 @@ OPTIONS
   -n, --multiple nb_data_sets
       nb_data_sets is an integer corresponding to the number of data sets to analyse.
   
-  
   -p, --pars
       Use a minimum parsimony starting tree. This option is taken into account when the '-u' option
       is absent and when tree topology modifications are to be done.
-  
   
   -b, --bootstrap int
      
@@ -247,12 +253,11 @@ OPTIONS
   -t  ts_tv_ratio
       ts_tv_ratio : transition/transversion ratio. DNA sequences only.
       Can be a fixed positive value (ex:4.0) or e to get the maximum likelihood estimate.
-   
+      
   -v, --pinv prop_invar
       prop_invar : proportion of invariable sites.
       Can be a fixed value in the [0,1] range or e to get the maximum likelihood estimate.
-  
-  
+
   -c, --nclasses nb_subst_cat
       nb_subst_cat : number of relative substitution rate categories. Default : nb_subst_cat=4.
       Must be a positive integer.
@@ -301,7 +306,7 @@ OPTIONS
   --boot_progress_display   num (default=20)
       num is the frequency at which the bootstrap progress bar will be updated.
       Must be an integer.
-
+ ]]>
     </help>
     <citations>
        <citation type="doi">10.1093/sysbio/syq010</citation> 
