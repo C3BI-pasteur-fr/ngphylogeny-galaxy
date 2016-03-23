@@ -58,7 +58,7 @@
 			<when value="D"></when>
 			<when value="P"></when>
 			<when value="R"></when>
-			<when value="auto">
+			<when value="cfg">
                 <param name="input_info" type="data" format="txt" label="info" help="Precompute file containning sequence description (dna or protein)" />
             </when>	
 		</conditional>   
