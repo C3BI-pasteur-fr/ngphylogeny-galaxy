@@ -1,0 +1,19 @@
+<tool id="AutoDetect-1.0" name="Automatic Detection" version="1.0">
+	<description>Detect sequence datatype</description>
+	<command interpreter="python">automaticDetection.py $input > $output</command>
+	<inputs>
+		<param name="input" format="fasta" type="data" label="Source file" help="Fasta sequence file"/>
+	</inputs>
+	<outputs>
+		<data format="txt" name="output" label="Information"/>
+	</outputs>
+	<help>
+===========
+Overview:
+===========
+
+Detect sequence datatype.
+
+This tool is needed for the oneClick phylogeny workflow analysis.
+	</help>
+</tool>

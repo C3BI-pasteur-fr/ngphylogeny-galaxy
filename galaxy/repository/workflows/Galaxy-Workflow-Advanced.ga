@@ -1,0 +1,182 @@
+{
+    "a_galaxy_workflow": "true", 
+    "annotation": "", 
+    "format-version": "0.1", 
+    "name": "Advanced", 
+    "steps": {
+        "0": {
+            "annotation": "", 
+            "id": 0, 
+            "input_connections": {}, 
+            "inputs": [
+                {
+                    "description": "", 
+                    "name": "Input Dataset"
+                }
+            ], 
+            "name": "Input dataset", 
+            "outputs": [], 
+            "position": {
+                "left": 155, 
+                "top": 283
+            }, 
+            "tool_errors": null, 
+            "tool_id": null, 
+            "tool_state": "{\"name\": \"Input Dataset\"}", 
+            "tool_version": null, 
+            "type": "data_input", 
+            "user_outputs": []
+        }, 
+        "1": {
+            "annotation": "", 
+            "id": 1, 
+            "input_connections": {
+                "input": {
+                    "id": 0, 
+                    "output_name": "output"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Adv Alignment", 
+                    "name": "choice1"
+                }
+            ], 
+            "name": "Adv Alignment", 
+            "outputs": [
+                {
+                    "name": "output", 
+                    "type": "fasta"
+                }
+            ], 
+            "position": {
+                "left": 345, 
+                "top": 278
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "AdvAlign-1.0", 
+            "tool_state": "{\"input\": \"null\", \"__rerun_remap_job_id__\": null, \"choice1\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__page__\": 0}", 
+            "tool_version": "1.0", 
+            "type": "tool", 
+            "user_outputs": []
+        }, 
+        "2": {
+            "annotation": "", 
+            "id": 2, 
+            "input_connections": {
+                "input": {
+                    "id": 1, 
+                    "output_name": "output"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Adv Cleaning", 
+                    "name": "choice1"
+                }, 
+                {
+                    "description": "runtime parameter for tool Adv Cleaning", 
+                    "name": "choice2"
+                }
+            ], 
+            "name": "Adv Cleaning", 
+            "outputs": [
+                {
+                    "name": "output", 
+                    "type": "txt"
+                }
+            ], 
+            "position": {
+                "left": 540, 
+                "top": 283
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "AdvClean-1.0", 
+            "tool_state": "{\"input\": \"null\", \"__rerun_remap_job_id__\": null, \"choice1\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"choice2\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"__page__\": 0}", 
+            "tool_version": "1.0", 
+            "type": "tool", 
+            "user_outputs": []
+        }, 
+        "3": {
+            "annotation": "", 
+            "id": 3, 
+            "input_connections": {
+                "input": {
+                    "id": 2, 
+                    "output_name": "output"
+                }
+            }, 
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Adv Tree", 
+                    "name": "NNI"
+                }, 
+                {
+                    "description": "runtime parameter for tool Adv Tree", 
+                    "name": "boostrap"
+                }, 
+                {
+                    "description": "runtime parameter for tool Adv Tree", 
+                    "name": "SPR"
+                }, 
+                {
+                    "description": "runtime parameter for tool Adv Tree", 
+                    "name": "choice"
+                }, 
+                {
+                    "description": "runtime parameter for tool Adv Tree", 
+                    "name": "gamma"
+                }
+            ], 
+            "name": "Adv Tree", 
+            "outputs": [
+                {
+                    "name": "output", 
+                    "type": "nhx"
+                }
+            ], 
+            "position": {
+                "left": 729, 
+                "top": 282
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "AdvTree-1.0", 
+            "tool_state": "{\"__page__\": 0, \"NNI\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"boostrap\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"SPR\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"choice\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\", \"input\": \"null\", \"__rerun_remap_job_id__\": null, \"gamma\": \"{\\\"__class__\\\": \\\"RuntimeValue\\\"}\"}", 
+            "tool_version": "1.0", 
+            "type": "tool", 
+            "user_outputs": []
+        }, 
+        "4": {
+            "annotation": "", 
+            "id": 4, 
+            "input_connections": {
+                "fileNewick": {
+                    "id": 3, 
+                    "output_name": "output"
+                }
+            }, 
+            "inputs": [], 
+            "name": "ScripTree", 
+            "outputs": [
+                {
+                    "name": "output", 
+                    "type": "svg"
+                }
+            ], 
+            "position": {
+                "left": 924, 
+                "top": 294
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "ScripTree-1.0", 
+            "tool_state": "{\"__page__\": 0, \"fileNewick\": \"null\", \"__rerun_remap_job_id__\": null, \"annotation\": \"{\\\"annotationChoice\\\": \\\"false\\\", \\\"fileAnnotation\\\": \\\"\\\", \\\"writeAnnot\\\": \\\"\\\", \\\"__current_case__\\\": 1}\", \"script\": \"{\\\"__current_case__\\\": 3, \\\"support\\\": {\\\"supportChoice\\\": \\\"false\\\", \\\"__current_case__\\\": 1}, \\\"tree\\\": {\\\"drawingChoice\\\": \\\"true\\\", \\\"nbInterleaf\\\": \\\"15\\\", \\\"style\\\": \\\"normal\\\", \\\"__current_case__\\\": 0, \\\"nbConformation\\\": \\\"1\\\", \\\"nbColumns\\\": \\\"1\\\", \\\"typeOrientation\\\": \\\"we\\\", \\\"type\\\": \\\"Times\\\", \\\"size\\\": \\\"8\\\"}, \\\"fileScript\\\": \\\"script.txt\\\", \\\"choice\\\": \\\"choice\\\", \\\"writeScript\\\": \\\"\\\", \\\"branch\\\": {\\\"whereSupportBranch\\\": \\\"n\\\", \\\"nbThreshold\\\": \\\"0.6\\\", \\\"sizeSupport\\\": \\\"5\\\", \\\"typeSupport\\\": \\\"Arial\\\", \\\"supportBranchColor\\\": \\\"green\\\", \\\"styleSupport\\\": \\\"italic\\\", \\\"branchChoice\\\": \\\"true\\\", \\\"__current_case__\\\": 0, \\\"nbRound\\\": \\\"2\\\"}}\"}", 
+            "tool_version": "1.0", 
+            "type": "tool", 
+            "user_outputs": []
+        }
+    }
+}

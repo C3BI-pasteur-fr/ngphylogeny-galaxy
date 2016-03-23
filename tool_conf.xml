@@ -24,7 +24,7 @@
 	<section id="send" name="Send Data">
 		<tool file="genomespace/genomespace_exporter.xml" />
 	</section>
-	<label id="sep1" text="_______" version="1" />
+	<label id="sep1" text="_______"/>
 	<label id="phy2" text="Phylogeny.fr-v2" version="2" />
 	
 	<section id="oneClick" name="oneClick">
@@ -45,7 +45,6 @@
 		<tool file="phylogeny.fr-v2/A_la_carte/tree.xml" />
 		<tool file="phylogeny.fr-v2/A_la_carte/phylotype.xml" />
 	</section>
-
 	<section id="algn" name="Alignment">
         <tool file="phylogeny.fr-v2/alignment/alignment.xml" />
         <tool file="phylogeny.fr-v2/mafft/mafft.xml" />
@@ -60,18 +59,15 @@
 	</section>
     <section id="tree" name="Tree ">
         <tool file="phylogeny.fr-v2/phyml/phyml.xml" />
-        <tool file="phylogeny.fr-v2/fastme/fastme.xml" />
+        <tool file="phylogeny.fr-v2/fastme/fastme_oneclick.xml" />
         <tool file="phylogeny.fr-v2/sms/sms-phyml.xml" />
     </section>
     <section id="treedisplay" name="Tree Display">
-        <tool file="phylogeny.fr-v2/newick_utilies/nwdisplay.xml" />
+        <tool file="phylogeny.fr-v2/newick_utilities/nwdisplay.xml" />
         <tool file="phylogeny.fr-v2/scriptree/ScripTree.xml" />
         <tool file="phylogeny.fr-v2/etetree/etetree.xml" />
     </section>
-
-
-
-	<label id="sep2" text="_______" version="2" />
+	<label id="sep2" text="_______"/>
 
 	<section id="convert" name="Convert Formats">
 		<tool file="phylogeny.fr-v2/conversion/fasta_to_phylip.xml" />

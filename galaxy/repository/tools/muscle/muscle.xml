@@ -1,0 +1,98 @@
+<tool id="muscle" name="MUSCLE" version="3.8.31 ">
+    <description>MUltiple Sequence Comparison by Log- Expectation</description>
+    <version_command>
+        muscle -version 
+    </version_command>
+    <command>
+                muscle
+                ##Do not display progress messages
+                -quiet
+                -in $input 
+                -out $output 
+                    
+                #if $mode.run == "custom" :
+                    -maxiters $mode.iterations
+                #else:
+                    -maxiters $mode.run
+                #end if
+                
+                -cluster1 $cluster
+                $diags
+                $outputFormat      
+    </command>
+    <inputs>
+        <param name="input" type="data" format="fasta" label="Source file" help="Fasta sequence file"/>
+        <conditional name="mode">
+            <param name="run" type="select" label="Run mode">
+                <option value="2">Progressive mode (faster)</option>
+                <option value="1">Fastest mode</option>
+                <option value="16" selected="true" >Full mode</option> 
+                <option value="custom">Custom mode</option>
+            </param>
+            <when value="custom">
+                <param name="iterations" type="integer" min='1' value="16" label="Maximum number of iterations" help="Increase the quality, increase the computing time"/>
+            </when>
+        </conditional>
+        
+        <param name="diags" type="boolean" truevalue="-diags" falsevalue="" checked="False" label="Find diagonals" help="Faster for similar sequences" />
+        
+        <param name="cluster" type="select" label="Clustering method">
+            <option value="upgma">UPGMA</option>
+            <option value="upgmb" selected="true" >UPGMB</option> 
+            <option value="neighborjoining">Neighbor Joining</option>
+        </param>
+        <param name="outputFormat" type="select" label="Output format" help="Either FASTA or ClustalW">
+            <option value="" selected="true">FASTA</option>
+            <option value="‑phyi">Phylip interleaved format</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="output" format="fasta" label="MUSCLE Aligned sequencies "/>
+    </outputs>
+    <help>
+
+.. class:: infomark
+
+**MUSCLE version 3.8.31, 2004**
+   
+-----
+   
+==============
+ Please cite: 
+==============
+    
+"MUSCLE: multiple sequence_ alignment with high accuracy and high throughput."
+
+
+.. _sequence: http://nar.oxfordjournals.org/content/32/5/1792.long
+
+**Edgar R.C.**
+
+Nucleic Acids Res. 32(5):1792-1797, doi:10.1093/nar/gkh340, 2004.
+
+"MUSCLE: a multiple sequence alignment_ method with reduced time and space complexity."
+
+
+.. _alignment: http://www.biomedcentral.com/1471-2105/5/113/
+
+**Edgar R.C.**
+
+BMC Bioinformatics, (5) 113, 2004.
+
+-----    
+    
+==========
+ Overview
+==========    
+
+MUSCLE is a program for creating multiple alignments of amino acid or nucleotide sequences. A range of options is provided that give you the choice of optimizing accuracy, speed, or some compromise between the two.
+
+-----
+
+For further informations, please visite the MUSCLE_ website.
+
+.. _MUSCLE: http://www.drive5.com/muscle/
+	
+    </help>
+
+</tool>

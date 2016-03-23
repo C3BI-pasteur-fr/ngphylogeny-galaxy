@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<tool_dependency>
-    <package name="noisy" version="1.5.12">
-        <repository changeset_revision="e1857fc85f8d" name="package_noisy_1_5_12" owner="dcorreia" toolshed="https://testtoolshed.g2.bx.psu.edu"  />
-    </package>
-</tool_dependency>

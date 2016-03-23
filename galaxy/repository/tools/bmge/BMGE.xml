@@ -1,0 +1,97 @@
+<tool id="bmge" name="BMGE" version="1.12">
+	<description>cleaning aligned sequences</description>
+	<requirements>
+        <requirement type="package" version="1.12">BMGE</requirement>
+    </requirements>
+	<command>BMGE.jar -i $input 
+					  -t $dataType.codeSeq 
+                      -m $dataType.matrice$dataType.estimated 
+					  -w $windowsSize 
+					  -g $rateCutOff
+					  -h $entropy_threshold
+					  -b $minBlock 
+					   	 $sbtrimming
+					  $outputFormat  $output
+	</command>
+
+	<inputs>
+		<param name="input" format="fasta" type="data" label="Source file" help="Fasta format"/>
+ 	<conditional name="dataType">
+		<param name="codeSeq" type="select" label="Sequence Coding">
+			<option value="DNA">DNA</option>
+			<option value="AA">AA</option>
+			<option value="CODON">Codon</option>
+		</param>
+		<when value="DNA"> 
+			<param name="matrice" type="hidden" label="matrice"  value="DNAPAM"/>                                           	 
+			<param name="estimated" type="integer" label="Name of the PAM matrix [ 1-500 ]"  value="250" min="1" max="500"/>   
+		</when>
+		<when value="AA">
+			<param name="matrice" type="hidden" label="matrice" value="BLOSUM"/>
+			<param name="estimated" type="integer" min="30" max="95" value="62" label="Estimated matrice BLOSUM"/>    						
+		</when>
+		<when value="CODON">
+			<param name="matrice" type="hidden" label="matrice" value="BLOSUM"/>
+            <param name="estimated" type="integer" min="30" max="95" value="62" label="Estimated matrice BLOSUM"/>  
+		</when>
+	</conditional>	
+	<param name="windowsSize" type="integer" label="Sliding Windows Size" min="1" value="3"
+           help="sliding window size (must be odd; ranges from 1 to alignment length; if
+                 set to 1, then entropy-like values are not smoothed; default: 3)"/>
+    <param name="entropy_threshold" type="float" label="Maximum entropy threshold" value="0.5" min="0" max="1"/>                  
+	<param name="rateCutOff" type="float" label="Gap Rate cut-off  [ 0-1 ]" value="0.2" min="0" max="1"/>   
+	<param name="minBlock" type="integer" label="Minimum Block Size" value="5"/>
+	<param name="sbtrimming" type="boolean" truevalue="-s YES" falsevalue="-s NO" checked="False" label="stationarity-based trimming of the multiple
+                 sequence alignement" help='(default: NO)' />
+	<param name="outputFormat" type="select" label="Output format">
+            <option value="-op" selected="true">Phylip</option>
+            <option value="-of">Fasta</option>
+            <option value="-on">Nexus</option>
+            <option value="-oh">HTML</option>
+    </param>			
+	</inputs>
+	<outputs>
+		<data name="output" format="phylip" label="BMGE Cleaned sequencies">
+		    <change_format>
+                <when input="outputFormat" value="-of" format="fasta"/>
+                <when input="outputFormat" value="-on" format="nexus"/>
+                <when input="outputFormat" value="-oh" format="html"/>
+            </change_format>
+		</data>
+	</outputs>
+	<help>
+
+.. class:: infomark
+
+**BMGE version 1.12 , 2015**
+
+
+-----
+
+==============
+Please cite:
+==============
+
+"BMGE_ (Block Mapping and Gathering with Entropy): a new software for selection of phylogenetic informative regions from multiple sequence alignments"
+
+
+.. _BMGE: http://www.biomedcentral.com/1471-2148/10/210
+
+**Alexis Criscuolo and Simonetta Gribaldo**
+
+BMC Evolutionary Biology 2010
+
+-----
+
+===========
+Overview:
+===========
+
+BMGE (Block Mapping and Gathering with Entropy) is a program that selects regions in a multiple sequence alignment that are suited for phylogenetic inference. BMGE selects characters that are biologically relevant, thanks to the use of standard similarity matrices such as PAM or BLOSUM. Moreover, BMGE provides other character- or sequenceremoval operations, such stationary-based character trimming (that provides a subset of compositionally homogeneous characters) or removal of sequences containing a too large proportion of gaps. Finally, BMGE can simply be used to perform standard conversion operations among DNA-, codon-, RY- and amino acid-coding sequences.
+
+
+	</help>
+	<citations>
+        <citation type="doi">10.1186/1471-2148-10-210</citation> 
+    </citations>
+</tool>

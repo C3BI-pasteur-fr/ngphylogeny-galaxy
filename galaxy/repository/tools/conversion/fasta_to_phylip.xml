@@ -1,0 +1,22 @@
+<tool id="fasta_to_phylip" name="Fasta to Phylip" >
+	<description>file conversion</description>
+	<requirements>
+        <requirement type="package" version="1.66">biopython</requirement>
+    </requirements>
+	<command interpreter="python">
+	   fasta_to_phylip.py -i $input -o $output
+	</command>
+	<inputs>
+		<param name="input" format="fasta" type="data" label="Source file" help="fasta or phylip format"/>
+	</inputs>
+	<outputs>
+		<data name="output" format="phylip" label="${input.name}"></data>
+	</outputs>
+	<help>
+===========
+Overview:
+===========
+
+Convert fasta file to phylip Extended format, using Biopython library
+	</help>
+</tool>

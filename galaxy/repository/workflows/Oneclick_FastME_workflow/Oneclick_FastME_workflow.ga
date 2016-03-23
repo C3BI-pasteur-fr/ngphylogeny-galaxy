@@ -1,0 +1,348 @@
+{
+    "a_galaxy_workflow": "true", 
+    "annotation": "toolshed", 
+    "format-version": "0.1", 
+    "name": "OneClick_FastMe_PhylogenyAnalysis", 
+    "steps": {
+        "0": {
+            "annotation": "", 
+            "content_id": null, 
+            "id": 0, 
+            "input_connections": {}, 
+            "inputs": [
+                {
+                    "description": "", 
+                    "name": "Input Dataset"
+                }
+            ], 
+            "label": null, 
+            "name": "Input dataset", 
+            "outputs": [], 
+            "position": {
+                "left": 205.5, 
+                "top": 257.5
+            }, 
+            "tool_errors": null, 
+            "tool_id": null, 
+            "tool_state": "{\"name\": \"Input Dataset\"}", 
+            "tool_version": null, 
+            "type": "data_input", 
+            "uuid": "3c6c9c92-0d91-45d2-8bbd-64005ef779ed", 
+            "workflow_outputs": [
+                {
+                    "label": null, 
+                    "output_name": "output", 
+                    "uuid": "6988a34d-271d-47b1-b9ca-3e6257f5ee49"
+                }
+            ]
+        }, 
+        "1": {
+            "annotation": "", 
+            "content_id": "testtoolshed.g2.bx.psu.edu/repos/rnateam/mafft/rbc_mafft/7.221.3", 
+            "id": 1, 
+            "input_connections": {
+                "inputSequences": {
+                    "id": 0, 
+                    "output_name": "output"
+                }
+            }, 
+            "inputs": [], 
+            "label": null, 
+            "name": "MAFFT", 
+            "outputs": [
+                {
+                    "name": "outputAlignment", 
+                    "type": "fasta"
+                }, 
+                {
+                    "name": "outputTree", 
+                    "type": "txt"
+                }
+            ], 
+            "position": {
+                "left": 451, 
+                "top": 135
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "testtoolshed.g2.bx.psu.edu/repos/rnateam/mafft/rbc_mafft/7.221.3", 
+            "tool_state": "{\"__page__\": 0, \"outputFormat\": \"\\\"\\\"\", \"getTree\": \"\\\"False\\\"\", \"inputSequences\": \"null\", \"datatype\": \"\\\"\\\"\", \"cond_flavour\": \"{\\\"flavourType\\\": \\\"mafft-fftns\\\", \\\"__current_case__\\\": 0}\", \"matrix_condition\": \"{\\\"matrix\\\": \\\"\\\", \\\"__current_case__\\\": 0}\", \"__rerun_remap_job_id__\": null, \"adjustdirection\": \"\\\" \\\"\", \"ep\": \"\\\"0.123\\\"\", \"reorder\": \"\\\"False\\\"\", \"op\": \"\\\"1.53\\\"\"}", 
+            "tool_version": "7.221.3", 
+            "type": "tool", 
+            "uuid": "a32bc078-ccf9-4f55-8b0d-6ec0df697ef2", 
+            "workflow_outputs": [
+                {
+                    "label": null, 
+                    "output_name": "outputAlignment", 
+                    "uuid": "314687d4-48f5-4ec5-9625-8c18b6bf87d1"
+                }, 
+                {
+                    "label": null, 
+                    "output_name": "outputTree", 
+                    "uuid": "989b1ed9-d052-4106-8b4c-136207ca5f59"
+                }
+            ]
+        }, 
+        "2": {
+            "annotation": "", 
+            "content_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/dna_or_protein/AutoDetect-1.0/1.0", 
+            "id": 2, 
+            "input_connections": {
+                "input": {
+                    "id": 0, 
+                    "output_name": "output"
+                }
+            }, 
+            "inputs": [], 
+            "label": null, 
+            "name": "Automatic Detection", 
+            "outputs": [
+                {
+                    "name": "output", 
+                    "type": "txt"
+                }
+            ], 
+            "position": {
+                "left": 457, 
+                "top": 379
+            }, 
+            "post_job_actions": {
+                "HideDatasetActionoutput": {
+                    "action_arguments": {}, 
+                    "action_type": "HideDatasetAction", 
+                    "output_name": "output"
+                }
+            }, 
+            "tool_errors": null, 
+            "tool_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/dna_or_protein/AutoDetect-1.0/1.0", 
+            "tool_state": "{\"input\": \"null\", \"__rerun_remap_job_id__\": null, \"__page__\": 0}", 
+            "tool_version": "1.0", 
+            "type": "tool", 
+            "uuid": "e8a10056-54c3-4d63-93aa-a7a3b1cb2382", 
+            "workflow_outputs": []
+        }, 
+        "3": {
+            "annotation": "", 
+            "content_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/noisy/noisy/1.5.12.1", 
+            "id": 3, 
+            "input_connections": {
+                "input": {
+                    "id": 1, 
+                    "output_name": "outputAlignment"
+                }, 
+                "sequence|input_info": {
+                    "id": 2, 
+                    "output_name": "output"
+                }
+            }, 
+            "inputs": [], 
+            "label": null, 
+            "name": "Noisy", 
+            "outputs": [
+                {
+                    "name": "output1", 
+                    "type": "fasta"
+                }, 
+                {
+                    "name": "output2", 
+                    "type": "eps"
+                }, 
+                {
+                    "name": "output3", 
+                    "type": "txt"
+                }
+            ], 
+            "position": {
+                "left": 775, 
+                "top": 163
+            }, 
+            "post_job_actions": {
+                "HideDatasetActionoutput2": {
+                    "action_arguments": {}, 
+                    "action_type": "HideDatasetAction", 
+                    "output_name": "output2"
+                }, 
+                "HideDatasetActionoutput3": {
+                    "action_arguments": {}, 
+                    "action_type": "HideDatasetAction", 
+                    "output_name": "output3"
+                }
+            }, 
+            "tool_errors": null, 
+            "tool_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/noisy/noisy/1.5.12.1", 
+            "tool_state": "{\"cutoff\": \"\\\"0.4\\\"\", \"orderingmethode\": \"{\\\"ordering\\\": \\\"nnet\\\", \\\"__current_case__\\\": 0}\", \"constant\": \"\\\"True\\\"\", \"missingchar\": \"{\\\"setmissingchar\\\": \\\"False\\\", \\\"__current_case__\\\": 0}\", \"sequence\": \"{\\\"input_info\\\": null, \\\"seqtype\\\": \\\"cfg\\\", \\\"__current_case__\\\": 3}\", \"__page__\": 0, \"__rerun_remap_job_id__\": null, \"smooth\": \"\\\"1\\\"\", \"gap\": \"\\\"True\\\"\", \"shuffles\": \"\\\"1000\\\"\", \"input\": \"null\", \"usematrix\": \"{\\\"matrix\\\": \\\"False\\\", \\\"__current_case__\\\": 0}\", \"distance\": \"\\\"HAMMING\\\"\"}", 
+            "tool_version": "1.5.12.1", 
+            "type": "tool", 
+            "uuid": "5ceb2522-01a7-4cf5-a85c-5d0c516b7d63", 
+            "workflow_outputs": [
+                {
+                    "label": null, 
+                    "output_name": "output1", 
+                    "uuid": "43650c9e-6d12-4823-babe-641c1b268a5b"
+                }
+            ]
+        }, 
+        "4": {
+            "annotation": "", 
+            "content_id": "testtoolshed.g2.bx.psu.edu/repos/mish/fasta_to_phylip/abims_fasta_to_phylip/2.0.0", 
+            "id": 4, 
+            "input_connections": {
+                "input": {
+                    "id": 3, 
+                    "output_name": "output1"
+                }
+            }, 
+            "inputs": [], 
+            "label": null, 
+            "name": "Fasta_to_Phylip", 
+            "outputs": [
+                {
+                    "name": "output", 
+                    "type": "phy"
+                }
+            ], 
+            "position": {
+                "left": 781.9166870117188, 
+                "top": 339.91668701171875
+            }, 
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput": {
+                    "action_arguments": {
+                        "newtype": "phylip"
+                    }, 
+                    "action_type": "ChangeDatatypeAction", 
+                    "output_name": "output"
+                }
+            }, 
+            "tool_errors": null, 
+            "tool_id": "testtoolshed.g2.bx.psu.edu/repos/mish/fasta_to_phylip/abims_fasta_to_phylip/2.0.0", 
+            "tool_state": "{\"input\": \"null\", \"__rerun_remap_job_id__\": null, \"__page__\": 0}", 
+            "tool_version": "2.0.0", 
+            "type": "tool", 
+            "uuid": "bf9ed622-9101-422f-afb8-5666ced5be97", 
+            "workflow_outputs": [
+                {
+                    "label": null, 
+                    "output_name": "output", 
+                    "uuid": "512c3b39-a145-496b-ad18-2e2e931361e7"
+                }
+            ]
+        }, 
+        "5": {
+            "annotation": "", 
+            "content_id": "testtoolshed.g2.bx.psu.edu/repos/gandres/fastme/fastme/2.1.4.2", 
+            "id": 5, 
+            "input_connections": {
+                "input": {
+                    "id": 4, 
+                    "output_name": "output"
+                }, 
+                "typeChoice|input_info": {
+                    "id": 2, 
+                    "output_name": "output"
+                }
+            }, 
+            "inputs": [], 
+            "label": null, 
+            "name": "FastME", 
+            "outputs": [
+                {
+                    "name": "outputTree", 
+                    "type": "nwk"
+                }, 
+                {
+                    "name": "outputLog", 
+                    "type": "txt"
+                }, 
+                {
+                    "name": "outputBoostrap", 
+                    "type": "nwk"
+                }, 
+                {
+                    "name": "outputMatrix", 
+                    "type": "txt"
+                }
+            ], 
+            "position": {
+                "left": 784.9166870117188, 
+                "top": 477.91668701171875
+            }, 
+            "post_job_actions": {
+                "ChangeDatatypeActionoutputTree": {
+                    "action_arguments": {
+                        "newtype": "nhx"
+                    }, 
+                    "action_type": "ChangeDatatypeAction", 
+                    "output_name": "outputTree"
+                }, 
+                "HideDatasetActionoutputBoostrap": {
+                    "action_arguments": {}, 
+                    "action_type": "HideDatasetAction", 
+                    "output_name": "outputBoostrap"
+                }, 
+                "HideDatasetActionoutputLog": {
+                    "action_arguments": {}, 
+                    "action_type": "HideDatasetAction", 
+                    "output_name": "outputLog"
+                }, 
+                "HideDatasetActionoutputMatrix": {
+                    "action_arguments": {}, 
+                    "action_type": "HideDatasetAction", 
+                    "output_name": "outputMatrix"
+                }
+            }, 
+            "tool_errors": null, 
+            "tool_id": "testtoolshed.g2.bx.psu.edu/repos/gandres/fastme/fastme/2.1.4.2", 
+            "tool_state": "{\"distance\": \"\\\"--method=I\\\"\", \"__page__\": 0, \"equilibrium\": \"\\\"False\\\"\", \"__rerun_remap_job_id__\": null, \"bootChoice\": \"{\\\"boot\\\": \\\"false\\\", \\\"__current_case__\\\": 0}\", \"gammaChoice\": \"{\\\"rate\\\": \\\"1.0\\\", \\\"gamma\\\": \\\"true\\\", \\\"__current_case__\\\": 0}\", \"treeRefinement\": \"\\\"--spr\\\"\", \"fileout_label\": \"\\\"Newick tree\\\"\", \"input\": \"null\", \"typeChoice\": \"{\\\"datatype\\\": \\\"cfg\\\", \\\"input_info\\\": null, \\\"__current_case__\\\": 3}\", \"removeGap\": \"null\"}", 
+            "tool_version": "2.1.4.2", 
+            "type": "tool", 
+            "uuid": "ec00afbd-0b74-4946-b36e-d391453fb1a9", 
+            "workflow_outputs": [
+                {
+                    "label": null, 
+                    "output_name": "outputTree", 
+                    "uuid": "7a0e2140-00fc-41a3-b015-463e1ff3644c"
+                }
+            ]
+        }, 
+        "6": {
+            "annotation": "", 
+            "content_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/newick_display/nwdisplay/1", 
+            "id": 6, 
+            "input_connections": {
+                "fileNewick": {
+                    "id": 5, 
+                    "output_name": "outputTree"
+                }
+            }, 
+            "inputs": [], 
+            "label": null, 
+            "name": "Newick Display", 
+            "outputs": [
+                {
+                    "name": "output", 
+                    "type": "svg"
+                }
+            ], 
+            "position": {
+                "left": 1043, 
+                "top": 325
+            }, 
+            "post_job_actions": {}, 
+            "tool_errors": null, 
+            "tool_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/newick_display/nwdisplay/1", 
+            "tool_state": "{\"__page__\": 0, \"condbranchlength\": \"{\\\"branchlength\\\": \\\"false\\\", \\\"__current_case__\\\": 1}\", \"leafPolice\": \"\\\"sans-serif\\\"\", \"scalebar\": \"\\\"True\\\"\", \"__rerun_remap_job_id__\": null, \"width\": \"\\\"800\\\"\", \"leafSize\": \"\\\"10px\\\"\", \"radial\": \"\\\"False\\\"\", \"fileNewick\": \"null\", \"condbranchsupport\": \"{\\\"branchsupport\\\": \\\"false\\\", \\\"__current_case__\\\": 1}\", \"legend\": \"\\\"\\\"\"}", 
+            "tool_version": "1", 
+            "type": "tool", 
+            "uuid": "81ba3d82-c684-4e41-8366-625b240b2d3f", 
+            "workflow_outputs": [
+                {
+                    "label": null, 
+                    "output_name": "output", 
+                    "uuid": "315742d7-e9e3-450e-b9ee-e26f96dee822"
+                }
+            ]
+        }
+    }, 
+    "uuid": "8a30023b-e3d7-4272-b8bb-807370fd7ec6"
+}
