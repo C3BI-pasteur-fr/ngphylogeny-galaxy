@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="newick_utilities" version="1.6">
+        <repository changeset_revision="7dbf3ada206c" name="package_newick_utilities_1_6" owner="dcorreia" toolshed="https://testtoolshed.g2.bx.psu.edu"  />
+    </package>
+</tool_dependency>
