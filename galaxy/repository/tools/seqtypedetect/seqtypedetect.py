@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import sys
 import argparse
 
 def analyse_file( inputfile ):
@@ -7,8 +8,8 @@ def analyse_file( inputfile ):
     Take a fasta file and detect if it contain "dna" or "protein"
     """
     DNA_Alphabet = "atgcn"
-    GAP ="_- ?"
-    n = 0
+    missing_letters="_- ?\n\b\t\r"
+    nb_gap = 0
     protein = False
     nucleotid = False
     typeofseq = "dna"
@@ -16,33 +17,31 @@ def analyse_file( inputfile ):
     with open(inputfile, "rU") as input_handle:
     
         for line in input_handle:
-        
-            if line.startswith('>') or line.startswith('#'):
-                n = 0
-            
-            else:
-                for letter in line.lower():
-                    if letter in GAP:
-                        pass
+            if not line.startswith('>') and not line.startswith('#'):
+                for n, letter in enumerate(line.lower()):
+                    if letter in missing_letters:
+                        nb_gap +=1 
                     else:
-                        if not letter in DNA_Alphabet:
+                        if not (letter in DNA_Alphabet):
                             protein =  True
                             break
                         
                         #reduce time threshold
                         #The probability of observing a protein sequence containing
                         #only DNA Alphabet in the first twenty residues is almost null
-                        n += 1
-                        if n > 20:
+                        if n > (20 - nb_gap) :
                             nucleotid = True
                             break
         
-                if protein and nucleotid:
-                    print "warning ! we detect two types of sequences"
+        if protein and nucleotid:
+            sys.stderr.write( "Warning ! Two types of sequences detected\n")
             
-                elif protein:
-                    typeofseq = "protein"
-        
+        elif protein:
+            typeofseq = "protein"
+            
+        elif not protein: #and too small
+            typeofseq = "dna"
+            
     return typeofseq
 
 if __name__ == "__main__":
