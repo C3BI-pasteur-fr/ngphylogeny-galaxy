@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<repositories description="Tools to launch FastME workflow">
+    <repository toolshed="http://testtoolshed.g2.bx.psu.edu" name="mafft" owner="rnateam" changeset_revision="c9affca9656a" prior_installation_required="False"/>
+    <repository toolshed="http://testtoolshed.g2.bx.psu.edu" name="noisy" owner="dcorreia" changeset_revision="dc60058d559e" prior_installation_required="False"/>
+    <repository toolshed="http://testtoolshed.g2.bx.psu.edu" name="fastme" owner="gandres" changeset_revision="df9e53f419c5" prior_installation_required="False"/>
+    <repository toolshed="http://testtoolshed.g2.bx.psu.edu" name="newick_display" owner="dcorreia" changeset_revision="ceba45fbfcb8" prior_installation_required="False"/>
+    <repository toolshed="http://testtoolshed.g2.bx.psu.edu" name="fasta_to_phylip" owner="mish" changeset_revision="1c14c7a6539f" prior_installation_required="False"/>
+    <repository toolshed="http://testtoolshed.g2.bx.psu.edu" name="dna_or_protein" owner="dcorreia" changeset_revision="b3e38ba307bc" prior_installation_required="False"/>
+    <repository toolshed="http://testtoolshed.g2.bx.psu.edu" name="phyml" owner="derepeer" changeset_revision="c23bdc214b14" prior_installation_required="False"/>
+</repositories>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<tool_dependency>
+	<package name="clustalo" version="1.2.1">
+		<install version="1.0">
+			<actions_group>
+			   <actions os="darwin" architecture="x86_64">
+                    <action type="download_by_url">http://www.clustal.org/omega/clustal-omega-1.2.0-macosx</action>
+                    <action type="move_file" rename_to="clustalo">
+                        <source>clustal-omega-1.2.0-macosx</source>
+                        <destination>$INSTALL_DIR/bin</destination>
+                    </action>
+               </actions>
+			   <actions os="linux" architecture="i386">
+                    <action type="download_by_url">http://www.clustal.org/omega/clustalo-1.2.0-Ubuntu-32-bit</action>
+                    <action type="move_file" rename_to="clustalo">
+                        <source>clustalo-1.2.0-Ubuntu-32-bit</source>
+                        <destination>$INSTALL_DIR/bin</destination>
+                    </action>
+                </actions>
+				<actions os="linux" architecture="x86_64">
+					<action type="download_by_url">http://www.clustal.org/omega/clustalo-1.2.0-Ubuntu-x86_64</action>
+                    <action type="move_file" rename_to="clustalo">
+                        <source>clustalo-1.2.0-Ubuntu-x86_64</source>
+                        <destination>$INSTALL_DIR/bin</destination>
+                    </action>
+				</actions>
+				<action type="chmod">
+                    <file mode="755">$INSTALL_DIR/bin/clustalo</file>
+                </action>
+				<action type="set_environment">
+					<environment_variable name="PHYML_ROOT_PATH" action="set_to">$INSTALL_DIR</environment_variable>
+					<environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/bin</environment_variable>
+				</action>
+			</actions_group>
+		</install>
+	</package>
+</tool_dependency>
