@@ -51,7 +51,7 @@
 
     </command>
     <inputs>
-        <param name="input" type="data" format="phylip, phy, txt" label="Fastme input" help="Phylip Alignment or Matrix file"/>
+        <param name="input" type="data" format="phylip, phy" label="Fastme input" help="Phylip Alignment or Matrix file"/>
         <param name="fileout_label" type="text" value="Newick tree" label="Output name" help="Output name for files" />
         <conditional name="typeChoice">
             <param name="datatype" type="select" display="radio" label="Data type" >
