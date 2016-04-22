@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tool_dependency>
     <package name="phyml" version="3.1">
-        <repository changeset_revision="48b0369fdb5b" name="package_phyml_3_1" owner="vlefort" toolshed="https://testtoolshed.g2.bx.psu.edu"  />
+        <repository changeset_revision="7f68b38e2be1" name="package_phyml_3_1" owner="vlefort" toolshed="https://toolshed.g2.bx.psu.edu"  />
     </package>
 </tool_dependency>

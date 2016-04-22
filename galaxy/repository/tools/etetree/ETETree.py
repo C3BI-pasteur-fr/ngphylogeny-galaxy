@@ -41,7 +41,7 @@ if __name__ == "__main__":
     if args.circular:
         ts.mode = "c"
         
-    ext=""
+    ext="svg"
     if args.ext:
        ext = args.ext
        

@@ -1,7 +1,7 @@
 <tool id="muscle" name="MUSCLE" version="3.8.31 ">
     <description>MUltiple Sequence Comparison by Log- Expectation</description>
     <version_command>
-        muscle -version 
+      <![CDATA[  muscle -version ]]>
     </version_command>
     <command>
                 muscle

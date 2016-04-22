@@ -6,31 +6,42 @@
     <command>
     <![CDATA[
         clustalo 
-        --infile=$inputSequences 
-        $dealign
-        $seqType
-        $clusteringGuideTree
-              
-        #if ($iteration.iterOptions == "true")
-            --iterations=$iteration.nbrIter
-            $iteration.clusteringIteration
-            
-            #if ($iteration.separateIters.separateIterOptions == "true")
-
-                --max-guidetree-iterations=$iteration.separateIters.maxGuideTreeIteration
-                --max-hmm-iterations=$iteration.separateIters.maxHmmIterations
-            #end if
-        #end if
-        $getTree
-        -o $output
-        --outfmt=${outputFormat}
-        --force
-        --threads \${GALAXY_SLOTS:-1}
+	        --infile=$inputSequences 
+	        $inputFormat
+	        $seqType
+	        $dealign
+	        $clusteringGuideTree
+	        
+	        #if ($iteration.iterOptions == "true")
+	            --iterations=$iteration.nbrIter
+	            $iteration.clusteringIteration
+	            
+	            #if ($iteration.separateIters.separateIterOptions == "true")
+	
+	                --max-guidetree-iterations=$iteration.separateIters.maxGuideTreeIteration
+	                --max-hmm-iterations=$iteration.separateIters.maxHmmIterations
+	            #end if
+	        #end if
+	        $getTree
+	        -o $output
+	        --outfmt=${outputFormat}
+	        --force
+	        --threads \${GALAXY_SLOTS:-1}
         ;
     ]]>
     </command>
     <inputs>
 	    <param name="inputSequences" format="fasta, clustal, msf, phylip, selex, stockholm" type="data" label="Sequences file"/>
+        <param name="inputFormat" label="Input format file" type="select">
+            <option value="" selected="true">Auto</option>
+            <option value="--infmt=fasta">FASTA</option>
+            <option value="--infmt=clustal">Clustal</option>
+            <option value="--infmt=phylip">Phylip</option>
+            <option value="--infmt=msf">Msf</option>
+            <option value="--infmt=selex">Selex</option>
+            <option value="--infmt=stockholm">Stockholm</option>
+            <option value="--infmt=vienna">Vienna</option>
+        </param>  
 	    <param name="outputname" label="Name for output files" type="text" size="50" value="alignment" />
 		<param name="seqType" type="select" label="Sequence type">
 			<option value="" selected="true">Auto</option>
