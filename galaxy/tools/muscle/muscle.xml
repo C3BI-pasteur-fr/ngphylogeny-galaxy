@@ -1,4 +1,4 @@
-<tool id="muscle" name="MUSCLE" version="3.8.31 ">
+<tool id="muscle" name="MUSCLE" version="3.8.31.1">
     <description>MUltiple Sequence Comparison by Log- Expectation</description>
     <version_command>
       <![CDATA[  muscle -version ]]>
