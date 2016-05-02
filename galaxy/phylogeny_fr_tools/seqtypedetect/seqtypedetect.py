@@ -29,10 +29,13 @@ def analyse_file( inputfile ):
                         #reduce time threshold
                         #The probability of observing a protein sequence containing
                         #only DNA Alphabet in the first twenty residues is almost null
-                        if n > (20 - nb_gap) :
+                        if n > (20 + nb_gap) :
                             nucleotid = True
+                            print nb_gap, n
                             break
-        
+            else:
+                nb_gap=0
+    
         if protein and nucleotid:
             sys.stderr.write( "Warning ! Two types of sequences detected\n")
             
