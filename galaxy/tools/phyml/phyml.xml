@@ -21,11 +21,11 @@
                 --datatype $seq.type_of_seq
                 --multiple $nb_data_set
                 
-                #if int($support_condition.branchSupport) in [0,-1,-2,-4,-5]:
+                #if int($support_condition.branchSupport.value) in [0,-1,-2,-4,-5]:
                     --bootstrap $support_condition.branchSupport
                 #else:
                     --bootstrap $support_condition.branchSupport.replicate
-                #end if   
+                #end if
                     
                 #if $seq.type_of_seq == "nt":
                     -t $seq.tstv
