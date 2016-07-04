@@ -17,38 +17,39 @@
           ln -sf $input input_tmp;
          
           phyml --input input_tmp
-                $phylip_format
-                --datatype $seq.type_of_seq
-                --multiple $nb_data_set
+                ${phylip_format}
+                --datatype ${seq.type_of_seq}
+                --multiple ${nb_data_set}
                 
-                #if int($support_condition.branchSupport.value) in [0,-1,-2,-4,-5]:
-                    --bootstrap $support_condition.branchSupport
+                #if (str($support_condition.branchSupport) in ['0','-1','-2','-4','-5']):
+                    --bootstrap ${support_condition.branchSupport}
                 #else:
-                    --bootstrap $support_condition.branchSupport.replicate
+                    --bootstrap ${support_condition.branchSupport.replicate}
                 #end if
                     
-                #if $seq.type_of_seq == "nt":
-                    -t $seq.tstv
+                #if ($seq.type_of_seq == "nt"):
+                    -t ${seq.tstv}
                 #end if
             
-                --model $seq.model
-                -f $equi_freq
-                --pinv $prop_invar
+                --model ${seq.model}
+                -f ${equi_freq}
+                --pinv ${prop_invar}
                 
-                --nclasses $nbSubstCat
-                #if $nbSubstCat != "1":
-                    --alpha $gamma
+                --nclasses ${nbSubstCat}
+                
+                #if (str($nbSubstCat) != "1"):
+                    --alpha ${gamma}
                 #end if
 
-                --search $move
-                -o $optimisationTopology
+                --search ${move}
+                -o ${optimisationTopology}
                 
-                #if $usetree.inputTree == "true" :
-                    --inputtree $inputTree.userInputTree
+                #if ($usetree.inputTree == "true"):
+                    --inputtree ${inputTree.userInputTree}
                 #end if
                 
-                #if $numStartSeed != "0":
-                    --r_seed $numStartSeed
+                #if ($numStartSeed != "0"):
+                    --r_seed ${numStartSeed}
                 #end if
                 
                 --no_memory_check
@@ -155,7 +156,7 @@
         <test>
             <param name="input" value="phylip" />
             <param name="prop_invar" value="0"/>
-            <param name="type_of_seq" value="aa" />
+            <param name="type_of_seq" value="nt" />
             <param name="numStartSeed" value="1458308600" />
             <output name="output_tree" file="phylip_phyml_tree.txt" />
             <output name="output_stats" file="phylip_phyml_stats.txt" lines_diff="4"/>
