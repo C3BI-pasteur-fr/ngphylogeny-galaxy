@@ -47,10 +47,6 @@
 			</param>
 			<when value="nt" />
 			<when value="aa" />
-			<when value="auto">
-				<param name="input_info" type="data" format="txt" multiple="false" label="sequence type info"
-					help="Precompute file containning sequence description (dna or protein)" />
-			</when>
 		</conditional>   
 		<param name="stat_crit" type="select" label="Statistical criterion to select the model">
 				<option value="aic">AIC</option>
