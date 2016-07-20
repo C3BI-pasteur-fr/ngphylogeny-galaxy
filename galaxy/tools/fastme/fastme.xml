@@ -148,6 +148,7 @@
             <param name="gamma" value="false"/>
             <param name="treeRefinement" value=""/>
             <param name="distance" value="--method=I"/>
+            <param name="supportPrecision" value="6"/>
             <output name="outputTree" file="newick" />
         </test>
         <test>
@@ -155,6 +156,7 @@
             <param name="modeldna" value="T"/>
             <param name="distance" value="--method=I"/>
             <param name="treeRefinement" value="--nni=B --spr"/>
+            <param name="supportPrecision" value="6"/>
             <param name="fileout_label" value="TreeTn93BionjSpr.nwk" />
             <output name="outputTree" file="TreeTn93BionjSpr.nwk" />
         </test>
