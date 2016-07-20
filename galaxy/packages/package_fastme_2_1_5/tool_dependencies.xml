@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tool_dependency version="1.0">
-    <package name="fastme" version="2.1.4">
+    <package name="fastme" version="2.1.5">
         <install version="1.0">
             <actions>
                 <action type="download_by_url">http://www.atgc-montpellier.fr/download/sources/fastme/fastme-2.1.5.tar.gz</action>
