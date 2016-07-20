@@ -1,7 +1,7 @@
-<tool id="fastme" name="FastME" version="2.1.4.2">
+<tool id="fastme" name="FastME" version="2.1.5.1">
     <description>Distance-based inference of phylogenetic trees</description>
     <requirements>
-        <requirement type="package" version="2.1.4">fastme</requirement>
+        <requirement type="package" version="2.1.5">fastme</requirement>
     </requirements>
     <version_command>
         <![CDATA[ fastme --version ]]>
@@ -40,6 +40,7 @@
                     $equilibrium
                     $removeGap
                     $treeRefinement
+                    -f $supportPrecision
 
                     #if $bootChoice.boot == "true"
                         --output_boot=$outputBoostrap
@@ -98,7 +99,7 @@
                 <option value="false">No</option>
             </param>
             <when value="true">
-                <param name="rate" type="float" label="Gamma distribution parameter" value="1" min="0"/>
+                <param name="rate" type="float"  value="1" min="0" label="Gamma distribution parameter"/>
             </when>
             <when value="false" />
         </conditional>
@@ -130,6 +131,7 @@
                 <param name="replicates" type="integer" value="1000" label="Number of replicates"/>
             </when>
         </conditional>
+        <param name="supportPrecision" type="integer" value="12" min="0" label="Number of digits after the dot to display branch support" />
     </inputs>
     <outputs>
         <data name="outputTree" format="nwk" label="${fileout_label}"/>
