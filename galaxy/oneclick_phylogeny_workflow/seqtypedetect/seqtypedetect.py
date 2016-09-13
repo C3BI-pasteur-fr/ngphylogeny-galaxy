@@ -1,14 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import sys
 import argparse
+import sys
+
 
 def analyse_file( inputfile ):
     """
     Take a fasta file and detect if it contain "dna" or "protein"
     """
     DNA_Alphabet = "atgcn"
-    missing_letters="_- ?\n\b\t\r"
+    missing_letters = "_- ?\n\b\t\r"
     nb_gap = 0
     protein = False
     nucleotid = False
@@ -37,12 +38,12 @@ def analyse_file( inputfile ):
                 nb_gap=0
     
         if protein and nucleotid:
-            sys.stderr.write( "Warning ! Two types of sequences detected\n")
+            sys.stderr.write("Warning ! Two types of sequences detected\n")
             
         elif protein:
             typeofseq = "protein"
             
-        elif not protein: #and too small
+        elif not protein: #or too small
             typeofseq = "dna"
             
     return typeofseq
@@ -52,5 +53,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('file', nargs='?', type=str, action="store", default="", help="input fasta file")
     args = parser.parse_args()
-    
-    print "%s"%(analyse_file(args.file))
+
+    print "%s" % (analyse_file(args.file))

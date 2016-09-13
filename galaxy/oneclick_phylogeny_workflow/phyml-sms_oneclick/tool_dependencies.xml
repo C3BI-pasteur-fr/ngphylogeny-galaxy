@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="phyml-sms" version="1.3">
+        <repository toolshed="http://127.0.0.1:9009" name="package_phyml_sms_1_3" owner="dcorreia" changeset_revision="e014ba790a9b" />
+    </package>
+</tool_dependency>

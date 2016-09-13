@@ -4,7 +4,7 @@
         <requirement type="package" version="1.66">biopython</requirement>
     </requirements>
 	<command interpreter="python">
-	   fasta_to_phylip.py -i $input -o $output
+	   fasta_to_phylip.py -i $input -o $output $format
 	</command>
 	<inputs>
 		<param name="input" format="fasta" type="data" label="Source file" help="fasta or phylip format"/>
