@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<tool_dependency>
-	<package name="gblocks" version="0.91">
-		<repository changeset_revision="" name="package_gblocks_0_91b" owner="dcorreia" toolshed="https://toolshed.g2.bx.psu.edu" />
-	</package>
-</tool_dependency>
