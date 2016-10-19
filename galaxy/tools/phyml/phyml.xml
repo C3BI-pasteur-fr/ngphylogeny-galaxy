@@ -14,9 +14,9 @@
 
     <command><![CDATA[
           ##PhyML outputs are based on input path and we need to create outputs in working_dir.
-          ln -sf $input input_tmp;
+          ln -sf $input '${input.name}';
          
-          phyml --input input_tmp
+          phyml --input '${input.name}'
                 ${phylip_format}
                 --datatype ${seq.type_of_seq}
                 --multiple ${nb_data_set}
