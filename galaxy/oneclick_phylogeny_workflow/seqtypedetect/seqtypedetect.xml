@@ -1,19 +1,23 @@
 <tool id="seqtypedetect" name="Sequence type detection" version="1.0">
-	<description>Detect sequence datatype on fasta file</description>
-	<command interpreter="python">seqtypedetect.py $input > $output</command>
-	<inputs>
-		<param name="input" format="fasta" type="data" label="Source file" help="Fasta sequence file"/>
-	</inputs>
-	<outputs>
-		<data format="txt" name="output" label="Information"/>
-	</outputs>
-	<help>
-===========
-Overview:
-===========
+    <description>Detect sequence datatype on fasta file</description>
+    <command interpreter="python">
+        <![CDATA[
+                seqtypedetect.py $input 2>&1 1>$output
+        ]]>
+    </command>
+    <inputs>
+        <param name="input" format="fasta" type="data" label="Source file" help="Fasta sequence file"/>
+    </inputs>
+    <outputs>
+        <data format="txt" name="output" label="Information"/>
+    </outputs>
+    <help>
+        ===========
+        Overview:
+        ===========
 
-Detect sequence type.
+        Detect sequence type.
 
-This tool is needed for the OneClick phylogeny workflow analysis.
-	</help>
+        This tool is needed for the OneClick phylogeny workflow analysis.
+    </help>
 </tool>
