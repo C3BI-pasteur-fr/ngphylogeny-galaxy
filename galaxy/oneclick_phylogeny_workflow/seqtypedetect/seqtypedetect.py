@@ -1,55 +1,90 @@
-#!/usr/bin/python
+# !/usr/bin/python
 # -*- coding: utf-8 -*-
 import argparse
 import sys
 
 
-def analyse_file( inputfile ):
+class SeqType(object):
+    DNA_IUPAC_letters = "agctbdhkmnrsvwxy"
+    DNA_Thymine = "t"
+    RNA_Uracile = "u"
+    missing_letters = ".nx_- ?\n\b\t\r"
+
+    @classmethod
+    def analyse(self, sequence, length_test=50):
+        """
+        Take a sequence and detect if it contain "dna" or "protein"
+        length_test : nb of letters tested to deternimate seq type (default = 50),
+        The probability of observing a protein sequence containing only DNA Alphabet in the first twenty residues is almost null
+        """
+        nb_gap = 0
+        rna = False
+        typeofseq = "dna"
+        sequence = sequence.lower()
+
+        for n, letter in enumerate(sequence):
+            if letter in self.missing_letters:
+                nb_gap += 1
+            else:
+                if not (letter in self.DNA_IUPAC_letters):
+
+                    if letter == self.RNA_Uracile:
+                        rna = True
+                    else:
+                        typeofseq = "protein"
+                        break
+
+                if rna and (letter == self.DNA_Thymine):
+                    rna = False
+                    typeofseq = "protein"
+                    break
+
+                if n > (length_test + nb_gap):
+                    break
+
+        if n + 1 == nb_gap:
+            # empty
+            return ""
+
+        if rna:
+            typeofseq = "rna"
+
+        return typeofseq
+
+
+def analyse_file(inputfile):
     """
     Take a fasta file and detect if it contain "dna" or "protein"
     """
-    DNA_Alphabet = "atgcn"
-    missing_letters = "_- ?\n\b\t\r"
-    nb_gap = 0
-    protein = False
-    nucleotid = False
-    typeofseq = "dna"
-    
+    typeofseq = ""
+
     with open(inputfile, "rU") as input_handle:
-    
+
+        sequence = ""
+        first_line = input_handle.readline()
         for line in input_handle:
             if not line.startswith('>') and not line.startswith('#'):
-                for n, letter in enumerate(line.lower()):
-                    if letter in missing_letters:
-                        nb_gap +=1 
-                    else:
-                        if not (letter in DNA_Alphabet):
-                            protein =  True
-                            break
-                        
-                        #reduce time threshold
-                        #The probability of observing a protein sequence containing
-                        #only DNA Alphabet in the first twenty residues is almost null
-                        if n > (20 + nb_gap) :
-                            nucleotid = True
-                            print nb_gap, n
-                            break
+                sequence += line.lower().strip()
+
             else:
-                nb_gap=0
-    
-        if protein and nucleotid:
-            sys.stderr.write("Warning ! Two types of sequences detected\n")
-            
-        elif protein:
-            typeofseq = "protein"
-            
-        elif not protein: #or too small
-            typeofseq = "dna"
-            
+                if sequence or (not line):
+
+                    currentSeqType = SeqType.analyse(sequence)
+
+                    if not currentSeqType:
+                        sys.stderr.write("Warning ! Your alignment contains an empty or non-informative sequence\n")
+                        currentSeqType = typeofseq
+
+                    elif typeofseq:
+                        if typeofseq != currentSeqType:
+                            sys.stderr.write("Warning ! Two types of sequences detected\n")
+                    typeofseq = currentSeqType
+                    sequence = ""
+
     return typeofseq
 
+
 if __name__ == "__main__":
-       
     parser = argparse.ArgumentParser()
     parser.add_argument('file', nargs='?', type=str, action="store", default="", help="input fasta file")
     args = parser.parse_args()
