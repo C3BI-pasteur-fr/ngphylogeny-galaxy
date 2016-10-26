@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tool_dependency>
-    <package name="phyml" version="3.1">
+    <package name="gblocks" version="0.91b">
         <install version="1.0">
             <actions_group>
                 <actions os="darwin" architecture="x86_64">
