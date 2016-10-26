@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="gblocks" version="0.91b">
+        <repository changeset_revision="" name="package_gblocks_0_91b" owner="dcorreia" toolshed="" />
+    </package>
+</tool_dependency>

@@ -1,5 +1,8 @@
 <tool id="gblocks" name="Gblocks">
     <description>cleaning aligned sequences</description>
+    <requirements>
+        <requirement type="package" version="0.91b">gblocks</requirement>
+    </requirements>
     <command>gblocks 
              $input 
              -b1=$b1
