@@ -1,7 +1,7 @@
-<tool id="rbc_mafft" name="MAFFT" version="7.221.3">
+<tool id="rbc_mafft" name="MAFFT" version="7.222.1">
     <description>Multiple alignment program for amino acid or nucleotide sequences</description>
     <requirements>
-        <requirement type="package" version="7.221">mafft</requirement>
+        <requirement type="package" version="7.222">mafft</requirement>
     </requirements>
     <stdio>
         <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool Standard Error" />
