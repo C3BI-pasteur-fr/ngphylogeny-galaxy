@@ -11,11 +11,14 @@
                source="stdrr"
                level="fatal"/>
     </stdio>
-
-    <command><![CDATA[
+    <command>
+        <![CDATA[
           ##PhyML outputs are based on input path and we need to create outputs in working_dir.
           ln -sf $input '${input.name}';
-         
+          #if ($usetree.inputTree == "true"):
+          ln -sf ${$usetree.userInputTree} ${$usetree.userInputTree.name};
+          #end if
+
           phyml --input '${input.name}'
                 ${phylip_format}
                 --datatype ${seq.type_of_seq}
@@ -45,17 +48,16 @@
                 -o ${optimisationTopology}
                 
                 #if ($usetree.inputTree == "true"):
-                    --inputtree ${inputTree.userInputTree}
+                    --inputtree ${$usetree.userInputTree.name}
                 #end if
                 
                 #if ($numStartSeed != "0"):
                     --r_seed ${numStartSeed}
                 #end if
                 
-                --no_memory_check
-                --quiet > ${output_stdout};
+                --no_memory_check > ${output_stdout};
                 grep 'failed' ${output_stdout} >&2;
-            ]]>
+        ]]>
     </command>
     <inputs>
         <param name="input" type="data" format="phylip, phy" label="Alignment file" help="phylip format"/>
@@ -148,9 +150,9 @@
         </conditional>
     </inputs>
     <outputs>
-        <data name="output_tree" format="txt" label="PhyML Newick tree" from_work_dir="*_phyml_tree.txt" />
-        <data name="output_stats" format="txt" label="PhyML Statistics" from_work_dir="*_phyml_stats.txt"/>
-        <data name="output_stdout" format="txt" label="PhyML Stdout"/>
+        <data name="output_tree" format="txt" label="PhyML Newick tree: ${input.name}.nwk" from_work_dir="*_phyml_tree.txt" />
+        <data name="output_stats" format="txt" label="PhyML Statistic: ${input.name}.stats.txt" from_work_dir="*_phyml_stats.txt"/>
+        <data name="output_stdout" format="txt" label="PhyML Stdout: ${input.name}"/>
     </outputs>
     <tests>
         <test>

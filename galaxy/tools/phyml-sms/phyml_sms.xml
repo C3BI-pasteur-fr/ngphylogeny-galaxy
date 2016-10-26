@@ -9,7 +9,7 @@
 		-o .
 		-p $output_models
 		-t
-		-d $sequence.seqtype
+		-d $seqtype
 
    		-c $stat_crit
 				
@@ -39,15 +39,10 @@
    	</command>
 	<inputs>
 		<param format="phylip" name="input" type="data" label="Alignment file" help="phylip format"/>
-		<conditional name="sequence">
-			<param name="seqtype" type="select" label="Data type">
+		<param name="seqtype" type="select" label="Data type">
 				<option value="nt">Nucleic acids</option>
 				<option value="aa">Amino acids</option>
-				<option value="auto">Auto</option>
-			</param>
-			<when value="nt" />
-			<when value="aa" />
-		</conditional>   
+		</param>
 		<param name="stat_crit" type="select" label="Statistical criterion to select the model">
 				<option value="aic">AIC</option>
 				<option value="bic">BIC</option>

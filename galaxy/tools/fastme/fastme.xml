@@ -1,5 +1,9 @@
 <tool id="fastme" name="FastME" version="2.1.5.1">
     <description>Distance-based inference of phylogenetic trees</description>
+    <edam_operations>
+        <edam_operation>operation_0540</edam_operation>
+        <edam_operation>operation_0324</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="2.1.5">fastme</requirement>
     </requirements>
@@ -9,57 +13,60 @@
     <stdio>
         <exit_code range="1:" level="fatal" />
     </stdio>
-    <command>fastme --input_data=$input
-                    --output_tree=$outputTree
-                    --output_matrix=$outputMatrix
-                    --output_info=$outputLog
-                    --nb_threads=\${GALAXY_SLOTS:-1}
+    <command>
+        <![CDATA[
+            fastme
+            --input_data=$input
+            --output_tree=$outputTree
+            --output_matrix=$outputMatrix
+            --output_info=$outputLog
+            --nb_threads=\${GALAXY_SLOTS:-1}
 
-                    #if $typeChoice.datatype =="d"
-                        --dna=$typeChoice.modeldna
+            #if ($usetree.inputTree == "true"):
+                --user_tree=${$usetree.userInputTree.name}
+            #end if
 
-                    #else if $typeChoice.datatype =="p"
-                        --protein=$typeChoice.modelprot
+            #if $typeChoice.datatype =="d"
+                --dna=$typeChoice.modeldna
 
-                    #else if $typeChoice.datatype =="cfg":
-                         ## Read information of sequence type
-                         ## read an info file to choose which option set and set a model by default
-                         #set $info = open( str($input_info) ).read()
-                         #if 'dna' in $info:
-                                --dna=T
-                         #else if 'protein' in $info:
-                               --protein=L
-                         #end if
-                    #end if
+            #else if $typeChoice.datatype =="p"
+                --protein=$typeChoice.modelprot
+            #end if
 
-                    #if $gammaChoice.gamma == "true"
-                        --gamma=$gammaChoice.rate
-                    #end if
+            #if $gammaChoice.gamma == "true"
+                --gamma=$gammaChoice.rate
+            #end if
 
-                    $distance
-                    $equilibrium
-                    $removeGap
-                    $treeRefinement
-                    -f $supportPrecision
+            $distance
+            $equilibrium
+            $removeGap
+            $treeRefinement
+            -f $supportPrecision
 
-                    #if $bootChoice.boot == "true"
-                        --output_boot=$outputBoostrap
-                        --bootstrap=$bootChoice.replicates
-                    #end if
+            #if $bootChoice.boot == "true"
+                --output_boot=$outputBoostrap
+                --bootstrap=$bootChoice.replicates
+            #end if
 
-                    >> tmp_stdout;
-                    cat tmp_stdout > $outputLog;
-
+            >> tmp_stdout;
+            cat tmp_stdout > $outputLog;
+        ]]>
     </command>
     <inputs>
         <param name="input" type="data" format="phylip, phy" label="Fastme input" help="Phylip Alignment or Matrix file"/>
+        <conditional name="usetree">
+            <param name="inputTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Use input tree guide" />
+            <when value="true">
+                <param name="userInputTree" type="data" label="Tree file" help="newick format"/>
+            </when>
+            <when value="false"/>
+        </conditional>
         <param name="fileout_label" type="text" value="Newick tree" label="Output name" help="Output name for files" />
         <conditional name="typeChoice">
             <param name="datatype" type="select" display="radio" label="Data type" >
                 <option value="d">DNA</option>
                 <option value="p">Protein</option>
                 <option value="m">Matrix</option>
-                <option value="cfg">Config file</option>
             </param>
             <when value="d">
                 <param name="modeldna" type="select" label="Evolutionary model">
@@ -88,9 +95,6 @@
                 </param>
             </when>
             <when value="m"/>
-            <when value="cfg">
-                 <param name="input_info" format="txt" type="data" multiple="false" label="Config file" help="Precompute file containning sequence description (dna or protein)"/>
-            </when>
         </conditional>
         <param name="equilibrium" type="boolean" label="Equilibrium frequencies" truevalue="--equilibrium" falsevalue="" help="By default, frequencies are globally counted from the nucleotides alignment or defined by the proteic substitution model. By checking the box, frequencies are pairwise estimated by counting the nucleotides or estimated by counting the amino-acids in the alignment."/>
         <conditional name="gammaChoice">

@@ -1,5 +1,5 @@
 <tool id="clustalo" name="Clustal Omega" version="1.2.1.1" force_history_refresh="True">
-    <description>multiple sequence alignment software</description>
+    <description>Multiple sequence alignment software</description>
     <version_command>
         <![CDATA[ clustalo --version   ]]>
     </version_command>
