@@ -1,4 +1,4 @@
-<tool id="fastmeonclick" name="FastME OneClick" version="2.1.5.1">
+<tool id="fastme_oneclick" name="FastME OneClick" version="2.1.5.1">
     <description>Distance-based inference of phylogenetic trees</description>
     <edam_operations>
         <edam_operation>operation_0540</edam_operation>
@@ -15,15 +15,6 @@
         <exit_code range="1:" level="fatal" />
     </stdio>
     <command>
-                ## Automatic sequence detection
-                #if $typeChoice.seqtype =="auto":
-                    python $__tool_directory__/seqtypedetect/seqtypedetect.py $input > $input_info ;
-                #end if
-
-                ## read an info file to choose which option set
-                #set $info = open( str($input_info) ).read()
-                #end if
-
                 fastme --input_data=$input
                     --output_tree=$outputTree
                     --output_matrix=$outputMatrix
@@ -36,10 +27,15 @@
                     #else if $typeChoice.datatype =="p"
                         --protein=$typeChoice.modelprot
 
-                    #if 'dna' in $info:
-                        --dna=T
-                    #else if 'protein' in $info:
-                       --protein=L
+                    #else if $typeChoice.datatype =="cfg":
+                         ## Read information of sequence type
+                         ## read an info file to choose which option set and set a model by default
+                         #set $info = open( str($input_info) ).read()
+                         #if 'dna' in $info:
+                                --dna=T
+                         #else if 'protein' in $info:
+                               --protein=L
+                         #end if
                     #end if
 
                     #if $gammaChoice.gamma == "true"
@@ -58,6 +54,7 @@
                     #end if
 
                     >> tmp_stdout;
+
                     cat tmp_stdout > $outputLog;
 
     </command>
@@ -66,6 +63,9 @@
         <param name="fileout_label" type="text" value="Newick tree" label="Output name" help="Output name for files" />
         <conditional name="typeChoice">
             <param name="seqtype" type="select" display="radio" label="Sequence type" >
+                <option value="d">DNA</option>
+                <option value="p">Protein</option>
+                <option value="m">Matrix</option>
                 <option value="auto">Automatic detection</option>
                 <option value="cfg">Information file</option>
             </param>

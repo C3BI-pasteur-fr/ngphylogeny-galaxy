@@ -18,7 +18,14 @@
 		-o .
 		-p $output_models
 		-t
-		-d $sequence.seqtype
+
+
+		#if 'dna' in $info:
+		 -d nt
+		#else if 'protein' in $info :
+		 -d aa
+		#
+		#end if
 
    		-c $stat_crit
 				
@@ -77,7 +84,6 @@
 			<when value="boot">
 				<param type="integer" name="boot_number" min="1" value="100" label="Number of bootstrap replicates" help="Must be a positive integer"/>
 			</when>
-			<when value="no"/>
 		</conditional>
                <conditional name="inpuTree">
                    <param name="inputtree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Use input starting tree" />

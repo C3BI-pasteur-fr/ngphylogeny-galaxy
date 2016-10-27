@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tool_dependency>
     <package name="noisy" version="1.5.12">
-        <repository toolshed="http://127.0.0.1:9009" name="package_noisy_1_5_12" owner="dcorreia" changeset_revision="3c4cbeefbe6c"  />
+        <repository toolshed="" name="package_noisy_1_5_12" owner="dcorreia" changeset_revision=""  />
     </package>
 </tool_dependency>
