@@ -138,7 +138,6 @@
             <when value="1">
                 <param name="replicate" type="integer" min="1" value="100" label="Number of bootstrap replicates" help="Must be a positive integer" />
             </when>
-            <when value="no"/>
         </conditional>
         <param name="numStartSeed" type="integer" value="0" label="Number of seed used to initiate the random number generator" help="0 to random seed"/>
         <conditional name="usetree">

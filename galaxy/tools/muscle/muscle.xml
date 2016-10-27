@@ -32,6 +32,9 @@
                 <option value="16" selected="true" >Full mode</option> 
                 <option value="custom">Custom mode</option>
             </param>
+            <when value="2" />
+            <when value="1" />
+            <when value="16" />
             <when value="custom">
                 <param name="iterations" type="integer" min='1' value="16" label="Maximum number of iterations" help="Increase the quality, increase the computing time"/>
             </when>

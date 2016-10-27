@@ -69,7 +69,7 @@
 	         </param>
             <when value="nnet"/>
             <when value="qnet"/>
-            <option value="all"/>
+            <when value="all"/>
             <when value="rand">
                 <param name="randpermut" type="integer" value="1000" label="random permutation"/>
             </when>

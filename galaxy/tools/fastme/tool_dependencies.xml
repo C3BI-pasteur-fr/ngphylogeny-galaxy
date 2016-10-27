@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <tool_dependency>
     <package name="fastme" version="2.1.4">
-        <repository changeset_revision="fbf2a5cac7e3" name="package_fastme_2_1_4" owner="gandres" toolshed="https://toolshed.g2.bx.psu.edu" />
+        <repository changeset_revision="" name="package_fastme_2_1_4" owner="gandres" toolshed="" />
     </package>
 </tool_dependency>
