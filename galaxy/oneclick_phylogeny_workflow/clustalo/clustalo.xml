@@ -1,7 +1,7 @@
 <tool id="clustalo" name="Clustal Omega" version="1.2.1.1" force_history_refresh="True">
     <description>Multiple sequence alignment software</description>
     <requirements>
-        <requirement type="package" version="1.2.1">clustalo</requirement>
+        <requirement type="package" version="1.2.1">clusral</requirement>
     </requirements>
     <version_command>
         <![CDATA[ clustalo --version   ]]>
@@ -113,18 +113,18 @@
             <filter>getTree == "--guidetree-out=guidetree.txt"</filter>
         </data> 
     </outputs>
-        <tests>
-	        <test>
-	            <param name="inputSequences" value="seqtest.fasta"/>
-	            <param name="output" value="seqtest.aln.fasta"/>
-	        </test>
-	        <test>
-	            <param name="inputSequences" value="seqtest.fasta"/>
-	            <param name="clusteringIteration" value="--full-iter"/>
-	            <param name="nbrIter" value="5"/>
-	            <param name="maxGuideTreeIteration" value="5"/>
-	            <param name="output" value="seqtest_aln2.fasta"/>
-	        </test>
+    <tests>
+        <test>
+            <param name="inputSequences" value="seqtest.fasta"/>
+            <param name="output" value="seqtest.aln.fasta"/>
+        </test>
+        <test>
+            <param name="inputSequences" value="seqtest.fasta"/>
+            <param name="clusteringIteration" value="--full-iter"/>
+            <param name="nbrIter" value="5"/>
+            <param name="maxGuideTreeIteration" value="5"/>
+            <param name="output" value="seqtest_aln2.fasta"/>
+        </test>
     </tests>
     <help>
     <![CDATA[

@@ -8,21 +8,20 @@
         <requirement type="package" version="1.5.12">noisy</requirement>
     </requirements>
     <command><![CDATA[
-                ## Automatic sequence detection
-                #if $sequence.seqtype =="auto":
-                          python $__tool_directory__/seqtypedetect/seqtypedetect.py $input > $input_info ;
-                #end if
-
-                ## read an info file to choose which option set
-                #set $info = open( str($input_info) ).read()
-
                 noisy $input
 
+                 #if $sequence.seqtype == 'cfg' :
+	                 ## Automatic sequence detection
+	                 ## read an info file to choose which option set
+	                 #set $info = open( str($input_info) ).read()
+	                 #if 'dna' in $info:
+	                        --seqtype D
+	                 #else if 'protein' in $info :
+	                        --seqtype P
+	                 #end if
 
-                 #if 'dna' in $info:
-                        --seqtype D
-                 #else if 'protein' in $info :
-                        --seqtype P
+                 #else :
+                    --seqtype $sequence.seqtype
                  #end if
 
                  --cutoff $cutoff
@@ -41,30 +40,32 @@
                  #else:
                    $orderingmethode.ordering
                  #end if
-                 
+
                  $constant
                  $gap
-                 
+
                  --shuffles $shuffles
                  --smooth $smooth
                  --silent
-                 
+
                  ]]>
     </command>
 	<inputs>
 		<param name="input" type="data" format="fasta" label="Source file" help="Fasta format" />
 		<conditional name="sequence">
 			<param name="seqtype" type="select" label="Sequence Coding">
-                <option value="auto">Automatic detection</option>
-                <option value="cfg">Information file</option>
+				<option value="D">DNA</option>
+				<option value="P">Protein</option>
+				<option value="R">RNA</option>
+				<option value="cfg">Config file</option>
 			</param>
-            <when value="auto">
-				<param name="input_info" type="data" format="txt" hidden="True"/>
-			</when>
-			<when value="cfg">
+			<when value="D"></when>
+			<when value="P"></when>
+			<when value="R"></when>
+			<when value="auto">
                 <param name="input_info" type="data" format="txt" label="info" help="Precompute file containning sequence description (dna or protein)" />
-            </when>	
-		</conditional>   
+            </when>
+		</conditional>
 		<param name="cutoff" type="float" value="0.8" min="0" max="1" label="cut-off  [ 0-1 ]" help="Columns with a score below FLOAT are removed from the output alignment." />
 		<param name="distance" type="select" label="Distance methode used by NeighbotNet">
 		    <option value="HAMMING">HAMMING</option>

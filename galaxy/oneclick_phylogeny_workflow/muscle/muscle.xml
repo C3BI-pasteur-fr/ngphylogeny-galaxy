@@ -55,6 +55,13 @@
     <outputs>
         <data name="output" format="fasta" label="MUSCLE Aligned sequencies "/>
     </outputs>
+    <tests>
+        <test>
+            <param name="input" value="seqtest.fasta"/>
+            <param name="output" value="seqtest.aln.fasta"/>
+        </test>
+    </tests>
+
     <help>
 
 .. class:: infomark
