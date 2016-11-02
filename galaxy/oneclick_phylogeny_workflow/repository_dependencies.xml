@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <repositories description="Tools to launch FastME workflow">
-    <repository toolshed="https://testtoolshed.g2.bx.psu.edu/" name="fastme" owner="gandre" changeset_revision="" prior_installation_required="False"/>
+    <repository toolshed="https://testtoolshed.g2.bx.psu.edu/" name="fastme" owner="gandres" changeset_revision="" prior_installation_required="False"/>
     <repository toolshed="https://testtoolshed.g2.bx.psu.edu/" name="noisy" owner="dcorreia" changeset_revision="" prior_installation_required="False" />
-    <repository toolshed="https://testtoolshed.g2.bx.psu.edu/" name="phyml_sms" owner="dcorreia" changeset_revision="" prior_installation_required="False" />
-    <repository toolshed="https://testtoolshed.g2.bx.psu.edu/" name="phyml" owner="drepeer" changeset_revision="" prior_installation_required="False" />
-    <repository toolshed="https://testtoolshed.g2.bx.psu.edu/" name="mafft" owner="dcorreia" changeset_revision="5e1bd9a1af10" prior_installation_required="False"/>
-    <repository toolshed="https://testtoolshed.g2.bx.psu.edu/" name="newick_display" owner="dcorreia" changeset_revision="f8e05f8218d0" prior_installation_required="False"/>
+    <repository toolshed="https://testtoolshed.g2.bx.psu.edu/" name="phyml_sms_1_3" owner="dcorreia" changeset_revision="" prior_installation_required="False" />
+    <repository toolshed="https://testtoolshed.g2.bx.psu.edu/" name="phyml" owner="dereeper" changeset_revision="" prior_installation_required="False" />
+    <repository toolshed="https://testtoolshed.g2.bx.psu.edu/" name="mafft" owner="rnateam" changeset_revision="dd4a533a0e3c" prior_installation_required="False"/>
+    <repository toolshed="https://testtoolshed.g2.bx.psu.edu/" name="newick_display" owner="dcorreia" changeset_revision="" prior_installation_required="False"/>
 </repositories>

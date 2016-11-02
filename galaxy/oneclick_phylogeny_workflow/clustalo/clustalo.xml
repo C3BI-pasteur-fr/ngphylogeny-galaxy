@@ -1,7 +1,7 @@
 <tool id="clustalo" name="Clustal Omega" version="1.2.1.1" force_history_refresh="True">
     <description>Multiple sequence alignment software</description>
     <requirements>
-        <requirement type="package" version="1.2.1">clusral</requirement>
+        <requirement type="package" version="1.2.1">clustalo</requirement>
     </requirements>
     <version_command>
         <![CDATA[ clustalo --version   ]]>
