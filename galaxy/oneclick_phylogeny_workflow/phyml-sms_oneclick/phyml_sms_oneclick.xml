@@ -2,16 +2,9 @@
 	<description>Maximum likelihood-based inference of phylogenetic trees with Smart Model Selection</description>
     <requirements>
         <requirement type="package" version="1.3">phyml-sms</requirement>
+		<requirement type="package" version="3.0.1">R</requirement>
     </requirements>
 	<command><![CDATA[
-
-		## Automatic sequence detection
-		#if $sequence.seqtype =="auto":
-				  python $__tool_directory__/seqtypedetect/seqtypedetect.py $input > $input_info ;
-		#end if
-
-		## read an info file to choose which option set
-		#set $info = open( str($input_info) ).read()
 
 		sms.sh
 		-i $input
@@ -19,13 +12,18 @@
 		-p $output_models
 		-t
 
-
-		#if 'dna' in $info:
-		 -d nt
-		#else if 'protein' in $info :
-		 -d aa
-		#
-		#end if
+        #if $sequence.seqtype == 'cfg' :
+			 ## Automatic sequence detection
+			 ## read an info file to choose which option set
+			 #set $info = open( str($input_info) ).read()
+			 #if 'dna' in $info:
+				   -d nt
+			 #else if 'protein' in $info :
+				   -d aa
+			 #end if
+        #else :
+                   -d ${sequence.seqtype}
+        #end if
 
    		-c $stat_crit
 				
@@ -59,10 +57,13 @@
 			<param name="seqtype" type="select" label="Data type">
 				<option value="nt">Nucleic acids</option>
 				<option value="aa">Amino acids</option>
-				<option value="auto">Auto</option>
+				<option value="cfg">Information file</option>
 			</param>
 			<when value="nt" />
 			<when value="aa" />
+			<when value="cfg">
+                 <param name="input_info" format="txt" type="data" multiple="false" label="Config file" help="Precompute file containning sequence description (dna or protein)"/>
+            </when>
 		</conditional>   
 		<param name="stat_crit" type="select" label="Statistical criterion to select the model">
 				<option value="aic">AIC</option>
