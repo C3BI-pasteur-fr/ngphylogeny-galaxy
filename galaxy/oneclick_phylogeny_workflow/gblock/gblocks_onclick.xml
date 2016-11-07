@@ -1,4 +1,4 @@
-<tool id="gblocks_oneclick" name="Gblocks OneClick">
+<tool id="gblocks_oneclick" name="Gblocks OneClick" version="0.91.1">
     <description>cleaning aligned sequences</description>
     <requirements>
         <requirement type="package" version="0.91b">gblocks</requirement>
