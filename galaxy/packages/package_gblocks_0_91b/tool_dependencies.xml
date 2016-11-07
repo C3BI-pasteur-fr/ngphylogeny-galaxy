@@ -7,6 +7,9 @@
                     <action type="download_by_url">
                         http://molevol.cmima.csic.es/castresana/Gblocks/Gblocks_OSX_0.91b.tar.Z
                     </action>
+                    <action type="shell_command">
+                        tar -xvzf Gblocks_OSX_0.91b.tar.Z
+                    </action>
                     <action type="move_directory_files">
                         <source_directory>.</source_directory>
                         <destination_directory>$INSTALL_DIR/bin</destination_directory>
@@ -19,6 +22,9 @@
                     <action type="download_by_url">
                         http://molevol.cmima.csic.es/castresana/Gblocks/Gblocks_Linux_0.91b.tar.Z
                     </action>
+                    <action type="shell_command">
+                        tar -xvzf Gblocks_Linux_0.91b.tar.Z
+                    </action>
                     <action type="move_directory_files">
                         <source_directory>.</source_directory>
                         <destination_directory>$INSTALL_DIR/bin</destination_directory>
@@ -30,6 +36,9 @@
                 <actions os="linux" architecture="x86_64">
                     <action type="download_by_url">
                         http://molevol.cmima.csic.es/castresana/Gblocks/Gblocks_Linux64_0.91b.tar.Z
+                    </action>
+                    <action type="shell_command">
+                        tar -xvzf Gblocks_Linux64_0.91b.tar.Z
                     </action>
                     <action type="move_directory_files">
                         <source_directory>.</source_directory>
