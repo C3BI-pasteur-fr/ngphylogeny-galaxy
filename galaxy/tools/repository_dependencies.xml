@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<repositories description="Tools to make phylogenic analyses">
+    <repository toolshed="" name="package_noisy_1_5_12" owner="dcorreia" changeset_revision=""  />
+    <repository toolshed="" name="package_gblocks_0_91b" owner="dcorreia" changeset_revision="" />
+    <repository toolshed="" name="package_mafft_7_222" owner="dcorreia" changeset_revision=""/>
+    <repository toolshed="" name="package_muscle_3_8_31" owner="dcorreia" changeset_revision="" />
+    <repository toolshed="" name="package_clustalo_1_2_1" owner="dcorreia" changeset_revision="" />
+    <repository toolshed="" name="package_fastme_2_1_5" owner="dcorreia" changeset_revision=""/>
+    <repository toolshed="" name="package_phyml_sms_1_3" owner="dcorreia" changeset_revision="" />
+    <repository toolshed="" name="package_newick_utilities_1_6" owner="dcorreia" changeset_revision="" />
+</repositories>

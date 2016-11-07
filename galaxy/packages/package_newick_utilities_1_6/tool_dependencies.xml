@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="newick_utilities" version="1.6">
+        <install version="1.0">
+            <actions>
+                <action type="download_by_url">http://cegg.unige.ch/pub/newick-utils-1.6-Linux-x86_64-disabled-extra.tar.gz</action>
+                <action type="shell_command">./configure --prefix=$INSTALL_DIR</action>
+                <action type="shell_command">make</action>
+                <action type="shell_command">make install</action>                          
+                <action type="set_environment">
+                    <environment_variable name="NEWICK_ROOT_PATH" action="set_to">$INSTALL_DIR</environment_variable>
+                    <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/bin</environment_variable>
+                </action>
+            </actions>
+            </install>
+    </package>
+</tool_dependency>
