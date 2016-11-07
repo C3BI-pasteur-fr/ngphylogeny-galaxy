@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <repositories description="Tools to launch FastME workflow">
-    <repository toolshed="http://127.0.0.1:9009" name="package_fastme_2_1_5" owner="dcorreia" changeset_revision="2090687ac158"/>
-    <repository toolshed="http://127.0.0.1:9009" name="package_noisy_1_5_12" owner="dcorreia" changeset_revision="3c4cbeefbe6c"  />
-    <repository toolshed="http://127.0.0.1:9009" name="package_phyml_sms_1_3" owner="dcorreia" changeset_revision="e014ba790a9b" />
-    <repository toolshed="http://127.0.0.1:9009" name="mafft" owner="dcorreia" changeset_revision="5e1bd9a1af10" prior_installation_required="False"/>
-    <repository toolshed="http://127.0.0.1:9009" name="newick_display" owner="dcorreia" changeset_revision="f8e05f8218d0" prior_installation_required="False"/>
+    <repository name="fastme" owner="gandres" />
+    <repository name="noisy" owner="dcorreia" />
+    <repository name="phyml_sms_1_3" owner="dcorreia"/>
+    <repository name="phyml" owner="dereeper"/>
+    <repository name="mafft" owner="rnateam" />
+    <repository name="newick_display" owner="dcorreia" />
 </repositories>

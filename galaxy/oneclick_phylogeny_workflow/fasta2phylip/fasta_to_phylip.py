@@ -104,30 +104,27 @@ class Alignment(object):
 
     def write_phylip_relaxed_interleave(self, path):
 
-        wrap_length = 80
+        wrap_length = self.name_length - 80
         nb_chunk = 0
 
         with open(path, "w") as f:
             f.write("%s %s\n" % (len(self), self.seqs_length))
 
-            while ((nb_chunk * wrap_length) - self.name_length) < self.seqs_length:
+            while (nb_chunk * wrap_length) < self.seqs_length:
                 for seq in self.sequences:
 
                     if nb_chunk == 0:
-                        chunk_seq = seq.seq[0: (wrap_length - self.name_length)]
 
-                        seq_name = seq.name[:self.name_length].replace(' ', '_')
-                        seq_name = seq_name.ljust(self.name_length)
-
-                        f.write(seq_name)
-                        f.write("%s" % chunk_seq)
-                        f.write("\n")
+                        seq_name = seq.name[:self.name_length].replace(' ', '_') #cut too long name
+                        seq_name = seq_name.ljust(self.name_length) #extend too short name
 
                     else:
-                        chunk_seq = seq.seq[((wrap_length * nb_chunk) - self.name_length): (
-                        (wrap_length * (nb_chunk + 1)) - self.name_length)]
-                        f.write("%s" % chunk_seq)
-                        f.write("\n")
+                        seq_name = "".ljust(self.name_length)
+
+                    chunk_seq = seq.seq[nb_chunk*wrap_length: wrap_length]
+                    f.write(seq_name)
+                    f.write("%s" % chunk_seq)
+                    f.write("\n")
 
                 f.write("\n")
                 nb_chunk += 1
@@ -140,6 +137,7 @@ if __name__ == "__main__":
     parser.add_option("-i", "--input")
     parser.add_option("-o", "--output")
     parser.add_option("--sequencial", action='store_true')
+    parser.add_option("--interleave", action='store_true')
     # parse
     options, args = parser.parse_args()
 

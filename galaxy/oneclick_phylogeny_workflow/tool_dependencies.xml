@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="clustalo" version="1.2.1">
+        <repository changeset_revision="" name="package_clustalo_1_2_1" owner="dcorreia" toolshed="" />
+    </package>
+    <package name="gblocks" version="0.91b">
+        <repository changeset_revision="" name="package_gblocks_0_91b" owner="dcorreia" toolshed="" />
+    </package>
+	<package name="muscle" version="3.8.31">
+		<repository changeset_revision="" name="package_muscle_3_8_31" owner="iuc" toolshed="" />
+	</package>
+    <package name="phyml-sms" version="1.3">
+        <repository toolshed="" name="package_phyml_sms_1_3" owner="dcorreia" changeset_revision="" />
+    </package>
+    <package name="R" version="3.0.1">
+        <repository toolshed="" name="package_r_3_0_1" owner="iuc" changeset_revision="" />
+    </package>
+</tool_dependency>

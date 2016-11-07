@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<tool_dependency>
-	<package name="muscle" version="3.8.31">
-		<repository changeset_revision="8f20b47725d8" name="package_muscle_3_8_31" owner="iuc" toolshed="https://toolshed.g2.bx.psu.edu" />
-	</package>
-</tool_dependency>
