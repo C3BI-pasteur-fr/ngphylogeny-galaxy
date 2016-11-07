@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<tool_dependency>
-    <package name="clustalo" version="1.2.1">
-        <repository changeset_revision="" name="package_clustalo_1_2_1" owner="dcorreia" toolshed="" />
-    </package>
-</tool_dependency>

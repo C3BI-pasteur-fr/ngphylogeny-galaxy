@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<tool_dependency>
-    <set_environment version="1.0">
-        <environment_variable name="SEQDETECTTYPE" action="set_to">$REPOSITORY_INSTALL_DIR</environment_variable>
-    </set_environment>
-    <package name="fastme" version="2.1.5">
-        <repository toolshed="" name="package_fastme_2_1_5" owner="dcorreia" changeset_revision=""/>
-    </package>
-</tool_dependency>

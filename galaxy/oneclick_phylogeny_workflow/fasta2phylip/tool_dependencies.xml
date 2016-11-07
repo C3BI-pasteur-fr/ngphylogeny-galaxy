@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<tool_dependency>
-    <package name="biopython" version="1.66">
-        <repository changeset_revision="" name="package_biopython_1_66" owner="biopython" toolshed=""  />
-    </package>
-</tool_dependency>
