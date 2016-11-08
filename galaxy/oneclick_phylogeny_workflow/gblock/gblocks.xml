@@ -3,7 +3,7 @@
     <requirements>
         <requirement type="package" version="0.91b">gblocks</requirement>
     </requirements>
-    <command>gblocks 
+    <command>Gblocks
              $input 
              -b1=$b1
              -b2=$b2

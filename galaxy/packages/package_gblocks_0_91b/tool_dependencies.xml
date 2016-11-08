@@ -10,9 +10,9 @@
                     <action type="shell_command">
                         tar -xvzf Gblocks_OSX_0.91b.tar.Z
                     </action>
-                    <action type="move_directory_files">
-                        <source_directory>.</source_directory>
-                        <destination_directory>$INSTALL_DIR/bin</destination_directory>
+                    <action type="move_file">
+                        <source>Gblocks_0.91b/Gblocks</source>
+                        <destination>$INSTALL_DIR/bin</destination>
                     </action>
                     <action type="chmod">
                         <file mode="755">$INSTALL_DIR/bin/Gblocks</file>
@@ -25,9 +25,9 @@
                     <action type="shell_command">
                         tar -xvzf Gblocks_Linux_0.91b.tar.Z
                     </action>
-                    <action type="move_directory_files">
-                        <source_directory>.</source_directory>
-                        <destination_directory>$INSTALL_DIR/bin</destination_directory>
+                    <action type="move_file">
+                        <source>Gblocks_0.91b/Gblocks</source>
+                        <destination>$INSTALL_DIR/bin</destination>
                     </action>
                     <action type="chmod">
                         <file mode="755">$INSTALL_DIR/bin/Gblocks</file>
@@ -40,9 +40,9 @@
                     <action type="shell_command">
                         tar -xvzf Gblocks_Linux64_0.91b.tar.Z
                     </action>
-                    <action type="move_directory_files">
-                        <source_directory>.</source_directory>
-                        <destination_directory>$INSTALL_DIR/bin</destination_directory>
+                    <action type="move_file">
+                        <source>Gblocks_0.91b/Gblocks</source>
+                        <destination>$INSTALL_DIR/bin</destination>
                     </action>
                     <action type="chmod">
                         <file mode="755">$INSTALL_DIR/bin/Gblocks</file>
