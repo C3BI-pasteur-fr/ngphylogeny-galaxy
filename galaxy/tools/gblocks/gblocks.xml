@@ -1,4 +1,4 @@
-<tool id="gblocks_oneclick" name="Gblocks OneClick" version="0.91.1">
+<tool id="gblocks" name="Gblocks">
     <description>cleaning aligned sequences</description>
     <requirements>
         <requirement type="package" version="0.91b">gblocks</requirement>
@@ -10,21 +10,8 @@
              -b3=$b3
              -b4=$b4
              -b5=$b5
-
-            #if $typeChoice.datatype =="cfg":
-                 ## Read information of sequence type
-                 ## read an info file to choose which option set and set a model by default
-                 #set $info = open( str($input_info) ).read()
-                 #if 'dna' in $info:
-                        -t=d
-                 #else if 'protein' in $info:
-                       -t=p
-                 #end if
-            #else
-                $typeChoice.datatype
-
-            #end if
-
+             $datatype 
+             
              > $gblocks_log;
              
              mv ${input}-gb $output_aln;
@@ -33,21 +20,12 @@
     </command>
     <inputs>
         <param name="input" type="data" format="fasta" label="Source file" help="Fasta format"/>
-        <conditional name="typeChoice">
-            <param name="datatype" type="select" label="Data type">
-                <option value="-t=d">DNA</option>
-                <option value="-t=c">Codon</option>
-                <option value="-t=p">Protein</option>
-                <option value="cfg">Config file</option>
-            </param>
-            <when value="-t=d"/>
-            <when value="-t=c"/>
-            <when value="-t=p"/>
-            <when value="cfg">
-                <param name="input_info" format="txt" type="data" multiple="false" label="Config file"
-                       help="Precompute file containning sequence description (dna or protein)"/>
-            </when>
-        </conditional>
+        <param name="datatype" type="select" label="Data type">
+            <option value="">Auto</option>
+            <option value="-t=d">DNA</option>
+            <option value="-t=c">Codon</option>
+            <option value="-t=p">Protein</option>
+        </param>
         <param name="b1" type="text" value="default" label="Minimum number of sequences for a conserved position, must be BIGGER than half the number" help="By default, = 50% of the number of sequences +1." />
         <param name="b2" type="text" value="default" label="Minimum number of Sequences for a flank position, SMALLER than Minimum Number Of Sequences For A Conserved Position" help="By default, = 85% of the number of sequences"/>
         
@@ -61,19 +39,12 @@
         <param name="display_gblocks_log" type="boolean" checked="False" label="Display gblocks standard output" />       
     </inputs>
     <outputs>
-        <data format="text" name="gblocks_log" label="Gblocks log: ${input.name}" >
+        <data format="text" name="gblocks_log" label="Gblocks log" >
             <filter>display_gblocks_log == True</filter>
         </data>   
-        <data format="fasta" name="output_aln" label="Gblocks Cleaned sequencies: ${input.name}" />
-        <data format="html" name="output_htm" label="Gblocks Sequencies information: ${input.name}" />
+        <data format="fasta" name="output_aln" label="Gblocks Cleaned sequencies" />
+        <data format="html" name="output_htm" label="Gblocks Sequencies information" />
     </outputs>
-    <tests>
-        <test>
-            <param name="input" value="nad3.pir"/>
-            <param name="output_aln" value="nad3.pir-gb"/>
-            <param name="output_htm" value="nad3.pir-gb.htm"/>
-        </test>
-    </tests>
     <help>
     
 .. class:: infomark
