@@ -153,7 +153,7 @@
         </conditional>
     </inputs>
     <outputs>
-        <data name="output_tree" format="txt" label="PhyML Newick tree: ${input.name}.nwk" from_work_dir="*_phyml_tree.txt" />
+        <data name="output_tree" format="nhx" label="PhyML Newick tree: ${input.name}.nwk" from_work_dir="*_phyml_tree.txt" />
         <data name="output_stats" format="txt" label="PhyML Statistic: ${input.name}.stats.txt" from_work_dir="*_phyml_stats.txt"/>
         <data name="output_stdout" format="txt" label="PhyML Stdout: ${input.name}"/>
     </outputs>
