@@ -1,8 +1,12 @@
 <tool id="phyml-sms_oneclick" name="PhyML-SMS OneClick" version="1.3.1">
-	<description>Maximum likelihood-based inference of phylogenetic trees with Smart Model Selection</description>
+    <description>Maximum likelihood-based inference of phylogenetic trees with Smart Model Selection</description>
+    <edam_operations>
+        <edam_operation>operation_0540</edam_operation>
+        <edam_operation>operation_0324</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="1.3">phyml-sms</requirement>
-		<requirement type="package" version="3.0.1">R</requirement>
+        <requirement type="package" version="3.0.1">R</requirement>
     </requirements>
 	<command><![CDATA[
 
@@ -62,7 +66,7 @@
 			<when value="nt" />
 			<when value="aa" />
 			<when value="cfg">
-                 <param name="input_info" format="txt" type="data" multiple="false" label="Config file" help="Precompute file containning sequence description (dna or protein)"/>
+                 <param name="input_info" format="txt" type="data" multiple="false" label="Information file" help="Precompute file containning sequence description (dna or protein)"/>
             </when>
 		</conditional>   
 		<param name="stat_crit" type="select" label="Statistical criterion to select the model">
@@ -85,6 +89,7 @@
 			<when value="boot">
 				<param type="integer" name="boot_number" min="1" value="100" label="Number of bootstrap replicates" help="Must be a positive integer"/>
 			</when>
+			<when value="no"/>
 		</conditional>
                <conditional name="inpuTree">
                    <param name="inputtree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Use input starting tree" />

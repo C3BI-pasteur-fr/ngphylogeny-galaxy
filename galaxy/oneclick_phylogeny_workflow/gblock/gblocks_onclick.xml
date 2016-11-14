@@ -1,5 +1,8 @@
 <tool id="gblocks_oneclick" name="Gblocks OneClick" version="0.91.1">
     <description>cleaning aligned sequences</description>
+    <edam_operations>
+        <edam_operation>operation_0368</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="0.91b">gblocks</requirement>
     </requirements>
@@ -44,7 +47,7 @@
             <when value="-t=c"/>
             <when value="-t=p"/>
             <when value="cfg">
-                <param name="input_info" format="txt" type="data" multiple="false" label="Config file"
+                <param name="input_info" format="txt" type="data" multiple="false" label="Information file"
                        help="Precompute file containning sequence description (dna or protein)"/>
             </when>
         </conditional>

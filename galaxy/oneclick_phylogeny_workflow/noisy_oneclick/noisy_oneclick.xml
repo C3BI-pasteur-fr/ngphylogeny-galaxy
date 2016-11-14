@@ -61,8 +61,8 @@
 			<when value="D"></when>
 			<when value="P"></when>
 			<when value="R"></when>
-			<when value="auto">
-                <param name="input_info" type="data" format="txt" label="info" help="Precompute file containning sequence description (dna or protein)" />
+			<when value="cfg">
+                <param name="input_info" type="data" format="txt" label="Information file" help="Precompute file containning sequence description (dna or protein)" />
             </when>
 		</conditional>
 		<param name="cutoff" type="float" value="0.8" min="0" max="1" label="cut-off  [ 0-1 ]" help="Columns with a score below FLOAT are removed from the output alignment." />
@@ -94,7 +94,7 @@
 	         </param>
             <when value="nnet"/>
             <when value="qnet"/>
-            <option value="all"/>
+            <when value="all"/>
             <when value="rand">
                 <param name="randpermut" type="integer" value="1000" label="random permutation"/>
             </when>

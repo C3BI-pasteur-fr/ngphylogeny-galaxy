@@ -47,14 +47,25 @@
             <option value="upgmb" selected="true" >UPGMB</option> 
             <option value="neighborjoining">Neighbor Joining</option>
         </param>
-        <param name="outputFormat" type="select" label="Output format" help="Either FASTA or ClustalW">
-            <option value="" selected="true">FASTA</option>
+        <param name="outputFormat" type="select" label="Output format" help="Either Fasta, Phylip">
+            <option value="" selected="true">Fasta</option>
             <option value="‑phyi">Phylip interleaved format</option>
         </param>
     </inputs>
     <outputs>
-        <data name="output" format="fasta" label="MUSCLE Aligned sequencies "/>
+        <data name="output" format="fasta" label="MUSCLE Aligned sequencies ">
+            <change_format>
+                <when input="outputFormat" value="" format="fasta"/>
+                <when input="outputFormat" value="-phyi" format="phylip"/>
+            </change_format>
+        </data>
     </outputs>
+    <tests>
+        <test>
+            <param name="input" value="seqtest.fasta"/>
+            <param name="output" value="seqtest_aln.fasta"/>
+        </test>
+    </tests>
     <help>
 
 .. class:: infomark

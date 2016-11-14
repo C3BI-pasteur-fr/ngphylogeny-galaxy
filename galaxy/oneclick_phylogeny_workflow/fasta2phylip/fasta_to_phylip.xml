@@ -9,7 +9,7 @@
 	<inputs>
 		<param name="input" format="fasta" type="data" label="Source file" help="fasta or phylip format"/>
 		<param name="format" type="select" label="format" help="Sequencial: sequences are one one line">
-		  <option value="">Interleave</option>
+		  <option value="--interleave">Interleave</option>
 		  <option value="--sequencial">Sequencial</option>
 		</param>
 	</inputs>

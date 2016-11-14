@@ -1,5 +1,9 @@
 <tool id="phyml" name="PhyML" version="3.1">
     <description>Phylogeny software based on the maximum-likelihood</description>
+    <edam_operations>
+        <edam_operation>operation_0540</edam_operation>
+        <edam_operation>operation_0324</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="3.1">phyml</requirement>
     </requirements>
@@ -22,6 +26,7 @@
           phyml --input '${input.name}'
                 ${phylip_format}
                 --datatype ${seq.type_of_seq}
+                --model ${seq.model}
                 --multiple ${nb_data_set}
                 
                 #if (str($support_condition.branchSupport) in ['0','-1','-2','-4','-5']):
@@ -34,7 +39,6 @@
                     -t ${seq.tstv}
                 #end if
             
-                --model ${seq.model}
                 -f ${equi_freq}
                 --pinv ${prop_invar}
                 
@@ -100,7 +104,7 @@
                     <option value="HIVw">HIVw</option>
                     <option value="HIVb">HIVb</option>
                 </param>            
-           </when>
+            </when>
         </conditional>
         <param name="prop_invar" type="text" value="e" label="Proportion of invariant sites" help="Can be a fixed value in the [0,1] range or 'e' to get the maximum likelihood estimate, 0 to ignore this parameter"/>
         <param name="equi_freq" type="select" label="Equilibrium frequencies" help="Empirical: frequencies are estimated by counting the occurences in the alignment. ML/Model: frequencies are estimated using ML for nucleotides or defined by the proteic substitution model.">

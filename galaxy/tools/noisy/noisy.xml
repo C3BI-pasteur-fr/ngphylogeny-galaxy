@@ -1,9 +1,12 @@
 <tool id="noisy" name="Noisy" version="1.5.12.1">
     <description>Cleaning aligned sequences</description>
+    <edam_operations>
+        <edam_operation>operation_0368</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="1.5.12">noisy</requirement>
     </requirements>
-    <command><![CDATA[ 
+    <command><![CDATA[
                 noisy $input
 
                  --seqtype $seqtype
@@ -23,14 +26,14 @@
                  #else:
                    $orderingmethode.ordering
                  #end if
-                 
+
                  $constant
                  $gap
-                 
+
                  --shuffles $shuffles
                  --smooth $smooth
                  --silent
-                 
+
                  ]]>
     </command>
 	<inputs>

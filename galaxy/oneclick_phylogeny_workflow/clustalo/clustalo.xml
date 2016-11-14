@@ -1,5 +1,9 @@
 <tool id="clustalo" name="Clustal Omega" version="1.2.1.1">
     <description>Multiple sequence alignment software</description>
+    <edam_operations>
+        <edam_operation>operation_0499</edam_operation>
+        <edam_operation>operation_0492</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="1.2.1">clustalo</requirement>
     </requirements>

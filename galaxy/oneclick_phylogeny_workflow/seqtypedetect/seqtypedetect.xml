@@ -1,5 +1,6 @@
 <tool id="seqtypedetect" name="Sequence type detection" version="1.0">
     <description>Detect sequence datatype on fasta file</description>
+
     <command interpreter="python">
         <![CDATA[
                 seqtypedetect.py $input 2>&1 1>$output
