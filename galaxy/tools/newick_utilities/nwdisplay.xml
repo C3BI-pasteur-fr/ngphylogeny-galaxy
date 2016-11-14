@@ -1,5 +1,8 @@
 <tool id="nwdisplay" name="Newick Display" version="1">
     <description>Display a phylogenetic tree as SVG</description>
+    <edam_operations>
+        <edam_operation>operation_0567</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="1.6">newick_utilities</requirement>
     </requirements>

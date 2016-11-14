@@ -1,9 +1,12 @@
-<tool id="gblocks" name="Gblocks">
+<tool id="gblocks" name="Gblocks" version="0.91.1">
     <description>cleaning aligned sequences</description>
+    <edam_operations>
+        <edam_operation>operation_0368</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="0.91b">gblocks</requirement>
     </requirements>
-    <command>gblocks 
+    <command>Gblocks
              $input 
              -b1=$b1
              -b2=$b2
@@ -21,7 +24,6 @@
     <inputs>
         <param name="input" type="data" format="fasta" label="Source file" help="Fasta format"/>
         <param name="datatype" type="select" label="Data type">
-            <option value="">Auto</option>
             <option value="-t=d">DNA</option>
             <option value="-t=c">Codon</option>
             <option value="-t=p">Protein</option>
@@ -39,12 +41,19 @@
         <param name="display_gblocks_log" type="boolean" checked="False" label="Display gblocks standard output" />       
     </inputs>
     <outputs>
-        <data format="text" name="gblocks_log" label="Gblocks log" >
+        <data format="text" name="gblocks_log" label="Gblocks log: ${input.name}" >
             <filter>display_gblocks_log == True</filter>
         </data>   
-        <data format="fasta" name="output_aln" label="Gblocks Cleaned sequencies" />
-        <data format="html" name="output_htm" label="Gblocks Sequencies information" />
+        <data format="fasta" name="output_aln" label="Gblocks Cleaned sequencies: ${input.name}" />
+        <data format="html" name="output_htm" label="Gblocks Sequencies information: ${input.name}" />
     </outputs>
+    <tests>
+        <test>
+            <param name="input" value="nad3.pir"/>
+            <param name="output_aln" value="nad3.pir-gb"/>
+            <param name="output_htm" value="nad3.pir-gb.htm"/>
+        </test>
+    </tests>
     <help>
     
 .. class:: infomark
