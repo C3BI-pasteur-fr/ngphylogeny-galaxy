@@ -56,7 +56,7 @@ def fasta_parse(path):
                 name = line.rstrip('\n').lstrip('>')
                 seq = ""
             else:
-                seq += line.rstrip('\n')
+                seq += line.rstrip('\n').replace(" ","")
 
         yield Sequence(name, seq)
 
