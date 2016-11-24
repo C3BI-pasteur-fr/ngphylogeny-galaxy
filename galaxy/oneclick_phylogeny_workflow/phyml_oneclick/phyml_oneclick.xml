@@ -1,11 +1,11 @@
-<tool id="phyml_oneclick" name="PhyML Oneclick" version="3.1">
+<tool id="phyml_oneclick" name="PhyML Oneclick" version="3.0_360-500M">
     <description>Phylogeny software based on the maximum-likelihood</description>
     <edam_operations>
         <edam_operation>operation_0540</edam_operation>
         <edam_operation>operation_0324</edam_operation>
     </edam_operations>
     <requirements>
-        <requirement type="package" version="3.1">phyml</requirement>
+        <requirement type="package" version="3.0_360-500M">phyml</requirement>
     </requirements>
     <version_command>
         <![CDATA[ phyml --version ]]>
@@ -38,7 +38,7 @@
 
                          #else if 'protein' in $info:
                               --datatype aa
-                              --model LG
+                              --model WAG
 
                          #end if
                 #else

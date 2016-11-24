@@ -15,6 +15,9 @@
     <package name="phyml" version="3.1">
         <repository name="package_phyml_3_1" owner="vlefort" />
     </package>
+    <package name="phyml" version="3.0_360-500M">
+        <repository name="package_phyml_3_0" owner="dcorreia" />
+    </package>
     <package name="R" version="3.0.1">
         <repository name="package_r_3_0_1" owner="iuc" />
     </package>
