@@ -6,32 +6,37 @@
     <requirements>
         <requirement type="package" version="0.91b">gblocks</requirement>
     </requirements>
-    <command>Gblocks
-             $input 
-             -b1=$b1
-             -b2=$b2
-             -b3=$b3
-             -b4=$b4
-             -b5=$b5
+    <command>
+        ln -s ${input} input.fasta;
+        Gblocks
+        input.fasta
+        #if not 'default' in $b1:
+            -b1=$b1
+        #end if
+        #id not 'default' in $b2:
+            -b2=$b2
+        #end if
+        -b3=$b3
+        -b4=$b4
+        -b5=$b5
 
-            #if $typeChoice.datatype =="cfg":
-                 ## Read information of sequence type
-                 ## read an info file to choose which option set and set a model by default
-                 #set $info = open( str($input_info) ).read()
-                 #if 'dna' in $info:
-                        -t=d
-                 #else if 'protein' in $info:
-                       -t=p
-                 #end if
-            #else
-                $typeChoice.datatype
+        #if $typeChoice.datatype =="cfg":
+             ## Read information of sequence type
+             ## read an info file to choose which option set and set a model by default
+             #set $info = open( str($input_info) ).read()
+             #if 'dna' in $info:
+                    -t=d
+             #else if 'protein' in $info:
+                   -t=p
+             #end if
+        #else
+            $typeChoice.datatype
 
-            #end if
+        #end if
 
-             > $gblocks_log;
-             
-             mv ${input}-gb $output_aln;
-             mv ${input}-gb.htm $output_htm;
+        > $gblocks_log;
+        mv input.fasta-gb $output_aln;
+        mv input.fasta-gb.htm $output_htm;
     
     </command>
     <inputs>

@@ -6,19 +6,25 @@
     <requirements>
         <requirement type="package" version="0.91b">gblocks</requirement>
     </requirements>
-    <command>Gblocks
-             $input 
-             -b1=$b1
-             -b2=$b2
-             -b3=$b3
-             -b4=$b4
-             -b5=$b5
-             $datatype 
-             
-             > $gblocks_log;
-             
-             mv ${input}-gb $output_aln;
-             mv ${input}-gb.htm $output_htm;
+    <command>
+        ln -s ${input} input.fasta;
+        Gblocks
+        input.fasta
+        #if not 'default' in $b1:
+            -b1=$b1
+        #end if
+        #id not 'default' in $b2:
+            -b2=$b2
+        #end if
+        -b3=$b3
+        -b4=$b4
+        -b5=$b5
+
+        $datatype
+
+        > $gblocks_log;
+        mv input.fasta-gb $output_aln;
+        mv input.fasta-gb.htm $output_htm;
     
     </command>
     <inputs>
