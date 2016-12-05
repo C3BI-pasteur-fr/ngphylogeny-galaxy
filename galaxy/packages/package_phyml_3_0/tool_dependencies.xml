@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<tool_dependency>
+	<package name="phyml" version="3.0_360-500M">
+		<install version="1.0">
+			<actions_group>
+			   <actions os="darwin" architecture="x86_64">
+                    <action type="download_by_url">http://www.atgc-montpellier.fr/download/binaries/phyml/phyml_v3.0.tar.gz</action>
+                    <action type="move_directory_files">
+                        <source_directory>.</source_directory>
+                        <destination_directory>$INSTALL_DIR/bin</destination_directory>
+                    </action>
+                    <action type="chmod">
+                        <file mode="755">$INSTALL_DIR/bin/PhyML_3.0_macOS_i386</file>
+                    </action>
+                    <action type="shell_command">ln -s $INSTALL_DIR/bin/PhyML_3.0_macOS_i386 $INSTALL_DIR/bin/phyml</action>
+               </actions>
+			   <actions os="linux" architecture="i386">
+                    <action type="download_by_url">http://www.atgc-montpellier.fr/download/binaries/phyml/phyml_v3.0.tar.gz</action>
+                    <action type="move_directory_files">
+                        <source_directory>.</source_directory>
+                        <destination_directory>$INSTALL_DIR/bin</destination_directory>
+                    </action>
+                    <action type="chmod">
+                        <file mode="755">$INSTALL_DIR/bin/PhyML_3.0_linux32</file>
+                    </action>
+                    <action type="shell_command">ln -s $INSTALL_DIR/bin/PhyML_3.0_linux32 $INSTALL_DIR/bin/phyml</action>
+                </actions>
+				<actions os="linux" architecture="x86_64">
+					<action type="download_by_url">http://www.atgc-montpellier.fr/download/binaries/phyml/phyml_v3.0.tar.gz</action>
+					<action type="move_directory_files">
+						<source_directory>.</source_directory>
+						<destination_directory>$INSTALL_DIR/bin</destination_directory>
+					</action>
+					<action type="chmod">
+						<file mode="755">$INSTALL_DIR/bin/PhyML_3.0_linux64</file>
+					</action>
+					<action type="shell_command">ln -s $INSTALL_DIR/bin/PhyML_3.0_linux64 $INSTALL_DIR/bin/phyml</action>
+				</actions>
+				<action type="set_environment">
+					<environment_variable name="PHYML_ROOT_PATH" action="set_to">$INSTALL_DIR</environment_variable>
+					<environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/bin</environment_variable>
+				</action>
+			</actions_group>
+		</install>
+	</package>
+</tool_dependency>

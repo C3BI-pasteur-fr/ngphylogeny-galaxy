@@ -35,15 +35,19 @@
                          #if 'dna' in $info:
                               --datatype nt
                               --model HKY85
+                              -f e
 
                          #else if 'protein' in $info:
                               --datatype aa
                               --model WAG
+                              -f m
 
                          #end if
                 #else
                     --datatype ${seq.type_of_seq}
                     --model ${seq.model}
+                    -f ${equi_freq}
+
                 #end if
 
                 --multiple ${nb_data_set}
@@ -58,7 +62,7 @@
                     -t ${seq.tstv}
                 #end if
             
-                -f ${equi_freq}
+
                 --pinv ${prop_invar}
                 
                 --nclasses ${nbSubstCat}
@@ -78,7 +82,7 @@
                     --r_seed ${numStartSeed}
                 #end if
                 
-                --no_memory_check > ${output_stdout};
+                > ${output_stdout};
                 grep 'failed' ${output_stdout} >&2;
         ]]>
     </command>
@@ -194,12 +198,12 @@
     <![CDATA[ 
 .. class:: infomark
 
-**PhyML version 3.1, 2013**
+**PhyML version 3.0 **
 
 -----
 
 #########
-PhyML 3.1
+PhyML 3.0
 #########
 
 A simple, fast, and accurate algorithm to estimate
@@ -327,8 +331,6 @@ OPTIONS
       This option may be useful when running simulations involving PhyML. 
   --quiet  
       No interactive question (for running in batch mode) and quiet output.
-  --no_memory_check  
-      No interactive question for memory usage (for running in batch mode). Normal ouput otherwise.
   --alias_subpatt  
       Site aliasing is generalized at the subtree level. Sometimes lead to faster calculations.
       See Kosakovsky Pond SL, Muse SV, Sytematic Biology (2004) for an example.

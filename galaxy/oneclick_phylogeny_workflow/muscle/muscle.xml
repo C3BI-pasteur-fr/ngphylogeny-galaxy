@@ -52,7 +52,8 @@
         </param>
         <param name="outputFormat" type="select" label="Output format" help="Either Fasta, Phylip">
             <option value="" selected="true">Fasta</option>
-            <option value="‑phyi">Phylip interleaved format</option>
+            <option value="-phyi">Phylip Interleaved format</option>
+            <option value="-phys">Phylip Sequential format</option>
         </param>
     </inputs>
     <outputs>
@@ -60,6 +61,7 @@
             <change_format>
                 <when input="outputFormat" value="" format="fasta"/>
                 <when input="outputFormat" value="-phyi" format="phylip"/>
+                <when input="outputFormat" value="-phys" format="phylip"/>
             </change_format>
         </data>
     </outputs>

@@ -27,7 +27,7 @@
              #if 'dna' in $info:
                     -t=d
              #else if 'protein' in $info:
-                   -t=p
+                    -t=p
              #end if
         #else
             $typeChoice.datatype
