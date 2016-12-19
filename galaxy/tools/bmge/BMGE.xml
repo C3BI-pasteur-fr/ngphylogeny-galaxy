@@ -3,14 +3,14 @@
 	<requirements>
         <requirement type="package" version="1.12">BMGE</requirement>
     </requirements>
-	<command>BMGE.jar -i $input 
+	<command>BMGE     -i $input
 					  -t $dataType.codeSeq 
                       -m $dataType.matrice$dataType.estimated 
 					  -w $windowsSize 
 					  -g $rateCutOff
 					  -h $entropy_threshold
-					  -b $minBlock 
-					   	 $sbtrimming
+					  -b $minBlock
+
 					  $outputFormat  $output
 	</command>
 
@@ -39,10 +39,8 @@
            help="sliding window size (must be odd; ranges from 1 to alignment length; if
                  set to 1, then entropy-like values are not smoothed; default: 3)"/>
     <param name="entropy_threshold" type="float" label="Maximum entropy threshold" value="0.5" min="0" max="1"/>                  
-	<param name="rateCutOff" type="float" label="Gap Rate cut-off  [ 0-1 ]" value="0.2" min="0" max="1"/>   
+	<param name="rateCutOff" type="float" label="Gap Rate cut-off  [ 0-1 ]" value="0.5" min="0" max="1"/>
 	<param name="minBlock" type="integer" label="Minimum Block Size" value="5"/>
-	<param name="sbtrimming" type="boolean" truevalue="-s YES" falsevalue="-s NO" checked="False" label="stationarity-based trimming of the multiple
-                 sequence alignement" help='(default: NO)' />
 	<param name="outputFormat" type="select" label="Output format">
             <option value="-op" selected="true">Phylip</option>
             <option value="-of">Fasta</option>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="BMGE" version="1.12">
+        <repository changeset_revision="" name="package_bmge_1_12" owner="dcorreia" toolshed="" />
+    </package>
+</tool_dependency>

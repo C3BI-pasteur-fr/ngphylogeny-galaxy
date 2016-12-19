@@ -3,13 +3,16 @@
     <package name="BMGE" version="1.12">
         <install version="1.0">
             <actions>
-                <action type="download_by_url">ftp://ftp.pasteur.fr/pub/GenSoft/projects/BMGE/BMGE-1.12.tar.gz</action>
+                <action type="download_by_url">http://ftp.pasteur.fr/pub/gensoft/projects/BMGE/BMGE-1.12.tar.gz</action>
                 
                 <action type="move_directory_files">
                     <source_directory>.</source_directory>
                     <destination_directory>$INSTALL_DIR/bin</destination_directory>
                 </action>
+                <action type="shell_command">echo "#! /bin/bash" > $INSTALL_DIR/bin/BMGE</action>
+                <action type="shell_command">echo "java -jar $INSTALL_DIR/bin/BMGE.jar \$*" >> $INSTALL_DIR/bin/BMGE</action>
                 <action type="chmod"><file mode="755">$INSTALL_DIR/bin/BMGE.jar</file></action>
+                <action type="chmod"><file mode="755">$INSTALL_DIR/bin/BMGE</file></action>
                 <action type="set_environment">
                     <environment_variable name="BMGE_ROOT_PATH" action="set_to">$INSTALL_DIR</environment_variable>
                     <environment_variable name="PATH" action="prepend_to">$INSTALL_DIR/bin</environment_variable>
