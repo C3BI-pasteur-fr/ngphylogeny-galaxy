@@ -61,7 +61,7 @@
 			<param name="seqtype" type="select" label="Data type">
 				<option value="nt">Nucleic acids</option>
 				<option value="aa">Amino acids</option>
-				<option value="cfg">Type information file<</option>
+				<option value="cfg">Type information file</option>
 			</param>
 			<when value="nt" />
 			<when value="aa" />

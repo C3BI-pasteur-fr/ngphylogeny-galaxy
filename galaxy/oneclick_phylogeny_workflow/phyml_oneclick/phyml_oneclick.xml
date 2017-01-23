@@ -97,7 +97,7 @@
             <param name="type_of_seq" type="select"  label="Data type" display="radio">
                 <option value="nt">Nucleic acids</option>
                 <option value="aa">Amino acids</option>
-                <option value="cfg">Type information file<</option>
+                <option value="cfg">Type information file</option>
             </param>
             <when value="nt">
                <param name="tstv" type="text" value="e" label="Transition/transversion ratio" help="Must be a positive integer, 'e' if you want PhyML to estimate it"  />
