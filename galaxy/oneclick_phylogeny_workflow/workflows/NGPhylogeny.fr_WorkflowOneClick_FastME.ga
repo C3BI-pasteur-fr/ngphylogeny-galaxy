@@ -1,8 +1,8 @@
 {
     "a_galaxy_workflow": "true", 
-    "annotation": "toolshed", 
+    "annotation": "", 
     "format-version": "0.1", 
-    "name": "OneClick_FastMe_PhylogenyAnalysis", 
+    "name": "NGPhylogeny.fr_WorkflowOneClick_FastME", 
     "steps": {
         "0": {
             "annotation": "", 
@@ -19,22 +19,16 @@
             "name": "Input dataset", 
             "outputs": [], 
             "position": {
-                "left": 205.5, 
-                "top": 318.5
+                "left": 155, 
+                "top": 328
             }, 
             "tool_errors": null, 
             "tool_id": null, 
             "tool_state": "{\"name\": \"Input Dataset\"}", 
             "tool_version": null, 
             "type": "data_input", 
-            "uuid": "3c6c9c92-0d91-45d2-8bbd-64005ef779ed", 
-            "workflow_outputs": [
-                {
-                    "label": null, 
-                    "output_name": "output", 
-                    "uuid": "6988a34d-271d-47b1-b9ca-3e6257f5ee49"
-                }
-            ]
+            "uuid": "1013abfa-a54c-49f3-8199-ed1a5feacd2c", 
+            "workflow_outputs": []
         }, 
         "1": {
             "annotation": "", 
@@ -60,8 +54,8 @@
                 }
             ], 
             "position": {
-                "left": 420, 
-                "top": 200
+                "left": 366, 
+                "top": 269
             }, 
             "post_job_actions": {}, 
             "tool_errors": null, 
@@ -69,19 +63,8 @@
             "tool_state": "{\"__page__\": 0, \"outputFormat\": \"\\\"\\\"\", \"getTree\": \"\\\"False\\\"\", \"inputSequences\": \"null\", \"datatype\": \"\\\"\\\"\", \"cond_flavour\": \"{\\\"flavourType\\\": \\\"mafft-fftns\\\", \\\"__current_case__\\\": 0}\", \"matrix_condition\": \"{\\\"matrix\\\": \\\"\\\", \\\"__current_case__\\\": 0}\", \"__rerun_remap_job_id__\": null, \"adjustdirection\": \"\\\" \\\"\", \"ep\": \"\\\"0.123\\\"\", \"reorder\": \"\\\"False\\\"\", \"op\": \"\\\"1.53\\\"\"}", 
             "tool_version": "7.221.3", 
             "type": "tool", 
-            "uuid": "a32bc078-ccf9-4f55-8b0d-6ec0df697ef2", 
-            "workflow_outputs": [
-                {
-                    "label": null, 
-                    "output_name": "outputAlignment", 
-                    "uuid": "314687d4-48f5-4ec5-9625-8c18b6bf87d1"
-                }, 
-                {
-                    "label": null, 
-                    "output_name": "outputTree", 
-                    "uuid": "989b1ed9-d052-4106-8b4c-136207ca5f59"
-                }
-            ]
+            "uuid": "4a48d397-1d8e-4abc-90e0-90599af035b4", 
+            "workflow_outputs": []
         }, 
         "2": {
             "annotation": "", 
@@ -103,27 +86,21 @@
                 }
             ], 
             "position": {
-                "left": 424.5, 
-                "top": 427.5
+                "left": 374.5, 
+                "top": 418
             }, 
-            "post_job_actions": {
-                "HideDatasetActionoutput": {
-                    "action_arguments": {}, 
-                    "action_type": "HideDatasetAction", 
-                    "output_name": "output"
-                }
-            }, 
+            "post_job_actions": {}, 
             "tool_errors": null, 
             "tool_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/phylogeny_tools/seqtypedetect/1.0", 
             "tool_state": "{\"input\": \"null\", \"__rerun_remap_job_id__\": null, \"__page__\": 0}", 
             "tool_version": "1.0", 
             "type": "tool", 
-            "uuid": "4e5b5fa3-4f80-4dcf-b9ce-fd607b1fdb7f", 
+            "uuid": "4d8ab108-6452-4c1e-9cd8-ec70b90aba4a", 
             "workflow_outputs": []
         }, 
         "3": {
             "annotation": "", 
-            "content_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/noisy/noisy/1.5.12.1", 
+            "content_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/phylogeny_tools/noisy_oneclick/1.5.12.1", 
             "id": 3, 
             "input_connections": {
                 "input": {
@@ -137,7 +114,7 @@
             }, 
             "inputs": [], 
             "label": null, 
-            "name": "Noisy", 
+            "name": "Noisy OneClick", 
             "outputs": [
                 {
                     "name": "output1", 
@@ -153,38 +130,21 @@
                 }
             ], 
             "position": {
-                "left": 775, 
-                "top": 224
+                "left": 682, 
+                "top": 272
             }, 
-            "post_job_actions": {
-                "HideDatasetActionoutput2": {
-                    "action_arguments": {}, 
-                    "action_type": "HideDatasetAction", 
-                    "output_name": "output2"
-                }, 
-                "HideDatasetActionoutput3": {
-                    "action_arguments": {}, 
-                    "action_type": "HideDatasetAction", 
-                    "output_name": "output3"
-                }
-            }, 
+            "post_job_actions": {}, 
             "tool_errors": null, 
-            "tool_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/noisy/noisy/1.5.12.1", 
-            "tool_state": "{\"cutoff\": \"\\\"0.4\\\"\", \"orderingmethode\": \"{\\\"ordering\\\": \\\"nnet\\\", \\\"__current_case__\\\": 0}\", \"constant\": \"\\\"True\\\"\", \"missingchar\": \"{\\\"setmissingchar\\\": \\\"False\\\", \\\"__current_case__\\\": 0}\", \"sequence\": \"{\\\"input_info\\\": null, \\\"seqtype\\\": \\\"cfg\\\", \\\"__current_case__\\\": 3}\", \"__page__\": 0, \"__rerun_remap_job_id__\": null, \"smooth\": \"\\\"1\\\"\", \"gap\": \"\\\"True\\\"\", \"shuffles\": \"\\\"1000\\\"\", \"input\": \"null\", \"usematrix\": \"{\\\"matrix\\\": \\\"False\\\", \\\"__current_case__\\\": 0}\", \"distance\": \"\\\"HAMMING\\\"\"}", 
+            "tool_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/phylogeny_tools/noisy_oneclick/1.5.12.1", 
+            "tool_state": "{\"cutoff\": \"\\\"0.8\\\"\", \"orderingmethode\": \"{\\\"ordering\\\": \\\"nnet\\\", \\\"__current_case__\\\": 0}\", \"constant\": \"\\\"True\\\"\", \"missingchar\": \"{\\\"setmissingchar\\\": \\\"False\\\", \\\"__current_case__\\\": 0}\", \"sequence\": \"{\\\"input_info\\\": null, \\\"seqtype\\\": \\\"cfg\\\", \\\"__current_case__\\\": 3}\", \"__page__\": 0, \"__rerun_remap_job_id__\": null, \"smooth\": \"\\\"1\\\"\", \"gap\": \"\\\"True\\\"\", \"shuffles\": \"\\\"0\\\"\", \"input\": \"null\", \"usematrix\": \"{\\\"matrix\\\": \\\"False\\\", \\\"__current_case__\\\": 0}\", \"distance\": \"\\\"HAMMING\\\"\"}", 
             "tool_version": "1.5.12.1", 
             "type": "tool", 
-            "uuid": "5ceb2522-01a7-4cf5-a85c-5d0c516b7d63", 
-            "workflow_outputs": [
-                {
-                    "label": null, 
-                    "output_name": "output1", 
-                    "uuid": "43650c9e-6d12-4823-babe-641c1b268a5b"
-                }
-            ]
+            "uuid": "76c208d3-d81b-4896-a781-cfe86e91e79a", 
+            "workflow_outputs": []
         }, 
         "4": {
             "annotation": "", 
-            "content_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/phylogeny_tools/fasta_to_phylip/1.0.0", 
+            "content_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/phylogeny_tools/fasta_to_phylip/1.0", 
             "id": 4, 
             "input_connections": {
                 "input": {
@@ -202,27 +162,21 @@
                 }
             ], 
             "position": {
-                "left": 784, 
-                "top": 413.5
+                "left": 888, 
+                "top": 274
             }, 
-            "post_job_actions": {
-                "HideDatasetActionoutput": {
-                    "action_arguments": {}, 
-                    "action_type": "HideDatasetAction", 
-                    "output_name": "output"
-                }
-            }, 
+            "post_job_actions": {}, 
             "tool_errors": null, 
-            "tool_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/phylogeny_tools/fasta_to_phylip/1.0.0", 
-            "tool_state": "{\"__page__\": 0, \"input\": \"null\", \"__rerun_remap_job_id__\": null, \"format\": \"\\\"\\\"\"}", 
-            "tool_version": "1.0.0", 
+            "tool_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/phylogeny_tools/fasta_to_phylip/1.0", 
+            "tool_state": "{\"input\": \"null\", \"__rerun_remap_job_id__\": null, \"__page__\": 0}", 
+            "tool_version": "1.0", 
             "type": "tool", 
-            "uuid": "e47321fd-5d3e-4386-8c1e-8c0b0692c924", 
+            "uuid": "71ec4990-0071-4e32-8b72-aabea5c3ac4b", 
             "workflow_outputs": []
         }, 
         "5": {
             "annotation": "", 
-            "content_id": "testtoolshed.g2.bx.psu.edu/repos/gandres/fastme/fastme/2.1.4.2", 
+            "content_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/phylogeny_tools/fastme_oneclick/2.1.5.1", 
             "id": 5, 
             "input_connections": {
                 "input": {
@@ -236,7 +190,7 @@
             }, 
             "inputs": [], 
             "label": null, 
-            "name": "FastME", 
+            "name": "FastME OneClick", 
             "outputs": [
                 {
                     "name": "outputTree", 
@@ -256,8 +210,8 @@
                 }
             ], 
             "position": {
-                "left": 784.9166870117188, 
-                "top": 538.9166870117188
+                "left": 885.5, 
+                "top": 415
             }, 
             "post_job_actions": {
                 "ChangeDatatypeActionoutputTree": {
@@ -266,36 +220,15 @@
                     }, 
                     "action_type": "ChangeDatatypeAction", 
                     "output_name": "outputTree"
-                }, 
-                "HideDatasetActionoutputBoostrap": {
-                    "action_arguments": {}, 
-                    "action_type": "HideDatasetAction", 
-                    "output_name": "outputBoostrap"
-                }, 
-                "HideDatasetActionoutputLog": {
-                    "action_arguments": {}, 
-                    "action_type": "HideDatasetAction", 
-                    "output_name": "outputLog"
-                }, 
-                "HideDatasetActionoutputMatrix": {
-                    "action_arguments": {}, 
-                    "action_type": "HideDatasetAction", 
-                    "output_name": "outputMatrix"
                 }
             }, 
             "tool_errors": null, 
-            "tool_id": "testtoolshed.g2.bx.psu.edu/repos/gandres/fastme/fastme/2.1.4.2", 
-            "tool_state": "{\"distance\": \"\\\"--method=I\\\"\", \"__page__\": 0, \"equilibrium\": \"\\\"False\\\"\", \"__rerun_remap_job_id__\": null, \"bootChoice\": \"{\\\"boot\\\": \\\"false\\\", \\\"__current_case__\\\": 0}\", \"gammaChoice\": \"{\\\"rate\\\": \\\"1.0\\\", \\\"gamma\\\": \\\"true\\\", \\\"__current_case__\\\": 0}\", \"treeRefinement\": \"\\\"--spr\\\"\", \"fileout_label\": \"\\\"Newick tree\\\"\", \"input\": \"null\", \"typeChoice\": \"{\\\"datatype\\\": \\\"cfg\\\", \\\"input_info\\\": null, \\\"__current_case__\\\": 3}\", \"removeGap\": \"null\"}", 
-            "tool_version": "2.1.4.2", 
+            "tool_id": "testtoolshed.g2.bx.psu.edu/repos/dcorreia/phylogeny_tools/fastme_oneclick/2.1.5.1", 
+            "tool_state": "{\"distance\": \"\\\"--method=I\\\"\", \"usetree\": \"{\\\"inputTree\\\": \\\"False\\\", \\\"__current_case__\\\": 1}\", \"supportPrecision\": \"\\\"12\\\"\", \"treeRefinement\": \"\\\"--spr\\\"\", \"__page__\": 0, \"__rerun_remap_job_id__\": null, \"bootChoice\": \"{\\\"boot\\\": \\\"false\\\", \\\"__current_case__\\\": 0}\", \"gammaChoice\": \"{\\\"rate\\\": \\\"1.0\\\", \\\"gamma\\\": \\\"true\\\", \\\"__current_case__\\\": 0}\", \"removeGap\": \"\\\"\\\"\", \"fileout_label\": \"\\\"Newick tree\\\"\", \"input\": \"null\", \"typeChoice\": \"{\\\"datatype\\\": \\\"cfg\\\", \\\"input_info\\\": null, \\\"__current_case__\\\": 3}\", \"equilibrium\": \"\\\"False\\\"\"}", 
+            "tool_version": "2.1.5.1", 
             "type": "tool", 
-            "uuid": "ec00afbd-0b74-4946-b36e-d391453fb1a9", 
-            "workflow_outputs": [
-                {
-                    "label": null, 
-                    "output_name": "outputTree", 
-                    "uuid": "7a0e2140-00fc-41a3-b015-463e1ff3644c"
-                }
-            ]
+            "uuid": "f1cd5b7b-3409-479d-b7bb-64b08acec155", 
+            "workflow_outputs": []
         }, 
         "6": {
             "annotation": "", 
@@ -317,8 +250,8 @@
                 }
             ], 
             "position": {
-                "left": 1043, 
-                "top": 386
+                "left": 1124, 
+                "top": 272
             }, 
             "post_job_actions": {}, 
             "tool_errors": null, 
@@ -326,15 +259,9 @@
             "tool_state": "{\"__page__\": 0, \"condbranchlength\": \"{\\\"branchlength\\\": \\\"false\\\", \\\"__current_case__\\\": 1}\", \"leafPolice\": \"\\\"sans-serif\\\"\", \"scalebar\": \"\\\"True\\\"\", \"__rerun_remap_job_id__\": null, \"width\": \"\\\"800\\\"\", \"leafSize\": \"\\\"10px\\\"\", \"radial\": \"\\\"False\\\"\", \"fileNewick\": \"null\", \"condbranchsupport\": \"{\\\"branchsupport\\\": \\\"false\\\", \\\"__current_case__\\\": 1}\", \"legend\": \"\\\"\\\"\"}", 
             "tool_version": "1", 
             "type": "tool", 
-            "uuid": "81ba3d82-c684-4e41-8366-625b240b2d3f", 
-            "workflow_outputs": [
-                {
-                    "label": null, 
-                    "output_name": "output", 
-                    "uuid": "315742d7-e9e3-450e-b9ee-e26f96dee822"
-                }
-            ]
+            "uuid": "a4826951-e6e0-407a-b87d-333e715ebcd6", 
+            "workflow_outputs": []
         }
     }, 
-    "uuid": "17a16b44-5977-4861-b46d-d04f4e2e5876"
+    "uuid": "0f7c19a8-c291-47d1-8005-ba5eaa2fcffd"
 }
