@@ -78,7 +78,7 @@
                 <option value="d">DNA</option>
                 <option value="p">Protein</option>
                 <option value="m">Matrix</option>
-                <option value="cfg">Information file</option>
+                <option value="cfg">Type information file</option>
             </param>
             <when value="d">
                 <param name="modeldna" type="select" label="Evolutionary model">

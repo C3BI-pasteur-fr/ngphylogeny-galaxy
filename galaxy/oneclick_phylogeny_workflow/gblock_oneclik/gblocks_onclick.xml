@@ -46,7 +46,7 @@
                 <option value="-t=d">DNA</option>
                 <option value="-t=c">Codon</option>
                 <option value="-t=p">Protein</option>
-                <option value="cfg">Config file</option>
+                <option value="cfg">Type information file<</option>
             </param>
             <when value="-t=d"/>
             <when value="-t=c"/>

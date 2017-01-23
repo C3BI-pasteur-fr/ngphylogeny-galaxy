@@ -56,7 +56,7 @@
 				<option value="D">DNA</option>
 				<option value="P">Protein</option>
 				<option value="R">RNA</option>
-				<option value="cfg">Config file</option>
+				<option value="cfg">Type information file<</option>
 			</param>
 			<when value="D"></when>
 			<when value="P"></when>

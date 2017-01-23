@@ -10,15 +10,14 @@
         <param name="input" format="fasta" type="data" label="Source file" help="Fasta sequence file"/>
     </inputs>
     <outputs>
-        <data format="txt" name="output" label="Information"/>
+        <data format="txt" name="output" label="Type information file {input.name}"/>
     </outputs>
     <help>
         ===========
         Overview:
         ===========
 
-        Detect sequence type.
-
+        Detect sequence type and create a type information file
         This tool is needed for the OneClick phylogeny workflow analysis.
     </help>
 </tool>
