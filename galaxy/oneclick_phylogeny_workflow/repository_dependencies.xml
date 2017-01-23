@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
-<repositories description="Tools to launch FastME workflow">
+<repositories description="Phylogenetics Tools">
     <repository name="fastme" owner="gandres" />
     <repository name="noisy" owner="dcorreia" />
+    <repository name="gblocks" owner="dcorreia" />
     <repository name="phyml_sms_1_3" owner="dcorreia"/>
     <repository name="phyml" owner="dereeper"/>
     <repository name="mafft" owner="rnateam" />
