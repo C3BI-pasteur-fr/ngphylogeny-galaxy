@@ -1,17 +1,11 @@
-<tool id="fasta_to_phylip" name="Fasta to Phylip" >
-	<description>file conversion</description>
-	<requirements>
-        <requirement type="package" version="1.66">biopython</requirement>
-    </requirements>
-	<command interpreter="python">
-	   fasta_to_phylip.py -i $input -o $output $format
+<tool id="fasta_to_phylip" name="Fasta to Phylip" version="1.0">
+	<description>Convert fasta alignment file into phylip sequential format</description>
+	<command><![CDATA[
+            fasta_to_phylip.sh  $input > $output
+	   ]]>
 	</command>
 	<inputs>
 		<param name="input" format="fasta" type="data" label="Source file" help="fasta or phylip format"/>
-		<param name="format" type="select" label="format" help="Sequencial: sequences are one one line">
-		  <option value="--interleave">Interleave</option>
-		  <option value="--sequencial">Sequencial</option>
-		</param>
 	</inputs>
 	<outputs>
 		<data name="output" format="phylip" label="${input.name}"></data>
@@ -20,6 +14,7 @@
 ===========
 Overview:
 ===========
-Convert fasta file to phylip Extended format, using Biopython library if possible
+Convert fasta alignment file into phylip sequential format
+
 	</help>
 </tool>
