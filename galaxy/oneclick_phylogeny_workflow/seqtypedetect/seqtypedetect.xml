@@ -10,7 +10,7 @@
         <param name="input" format="fasta" type="data" label="Source file" help="Fasta sequence file"/>
     </inputs>
     <outputs>
-        <data format="txt" name="output" label="Type information file {input.name}"/>
+        <data format="txt" name="output" label="Type information file ${input.name}"/>
     </outputs>
     <help>
         ===========
