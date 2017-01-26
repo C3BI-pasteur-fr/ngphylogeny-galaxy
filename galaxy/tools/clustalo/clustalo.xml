@@ -120,7 +120,7 @@
     <tests>
         <test>
             <param name="inputSequences" value="seqtest.fasta"/>
-            <param name="output" value="seqtest.aln.fasta"/>
+            <param name="output" value="seqtest_aln.fasta"/>
         </test>
         <test>
             <param name="inputSequences" value="seqtest.fasta"/>

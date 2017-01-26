@@ -19,6 +19,12 @@
         <repository name="package_phyml_3_0" owner="dcorreia" />
     </package>
     <package name="R" version="3.2.1">
-        <repository name="package_r_3_2_1" owner="iuc" />
+        <repository name="package_r_3_0_1" owner="iuc" />
+    </package>
+    <package name="noisy" version="1.5.12">
+        <repository name="package_noisy_1_5_12" owner="dcorreia" />
+    </package>
+    <package name="fastme" version="2.1.5">
+        <repository name="package_fastme_2_1_5" owner="dcorreia" />
     </package>
 </tool_dependency>
