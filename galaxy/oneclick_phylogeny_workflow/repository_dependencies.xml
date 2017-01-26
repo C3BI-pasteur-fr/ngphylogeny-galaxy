@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <repositories description="Phylogenetics Tools">
-    <repository name="fastme" owner="gandres" />
+    <repository name="clustalo" owner="dcorreia" />
+    <repository name="mafft" owner="rnateam" />
+    <repository name="muscle" owner="dcorreia" />
     <repository name="noisy" owner="dcorreia" />
     <repository name="gblocks" owner="dcorreia" />
+    <repository name="fastme" owner="gandres" />
     <repository name="phyml_sms_1_3" owner="dcorreia"/>
     <repository name="phyml" owner="dereeper"/>
-    <repository name="mafft" owner="rnateam" />
     <repository name="newick_display" owner="dcorreia" />
 </repositories>
