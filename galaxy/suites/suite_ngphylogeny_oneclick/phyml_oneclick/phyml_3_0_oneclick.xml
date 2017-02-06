@@ -1,4 +1,4 @@
-<tool id="phyml_oneclick" name="PhyML Oneclick" version="3.0_360-500M">
+<tool id="phyml_oneclick_3_0" name="PhyML Oneclick 3.0" version="3.0_360-500M">
     <description>Phylogeny software based on the maximum-likelihood</description>
     <edam_operations>
         <edam_operation>operation_0540</edam_operation>

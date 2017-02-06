@@ -5,8 +5,9 @@
     <repository name="muscle" owner="dcorreia" />
     <repository name="noisy" owner="dcorreia" />
     <repository name="gblocks" owner="dcorreia" />
+    <repository name="bmge" owner="dcorreia" />
     <repository name="fastme" owner="gandres" />
-    <repository name="phyml_sms_1_3" owner="dcorreia"/>
+    <repository name="phyml_sms_1_7" owner="dcorreia"/>
     <repository name="phyml" owner="dereeper"/>
     <repository name="newick_display" owner="dcorreia" />
 </repositories>

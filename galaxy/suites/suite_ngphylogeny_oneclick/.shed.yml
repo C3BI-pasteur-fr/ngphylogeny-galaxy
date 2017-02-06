@@ -1,0 +1,6 @@
+name: suite_ngphylogeny_oneclick
+owner: dcorreia
+description: "NGPhylogeny tools and workflows oneclick"
+type: unrestricted
+categories:
+  - "Phylogenetics"

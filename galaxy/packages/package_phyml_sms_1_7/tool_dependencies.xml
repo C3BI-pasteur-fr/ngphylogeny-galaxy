@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <tool_dependency>
-	<package name="phyml-sms" version="1.3">
+	<package name="phyml-sms" version="1.7">
 		<install version="1.0">
 			<actions>
-				<action type="download_by_url">http://www.atgc-montpellier.fr/download/sources/sms/sms-1.3.zip</action>
+				<action type="download_by_url">http://www.atgc-montpellier.fr/download/sources/sms/sms-1.7.zip</action>
                 <action type="shell_command">make</action>
                 <action type="chmod"><file mode="755">$INSTALL_DIR/sms.sh</file></action>
                 <action type="chmod"><file mode="755">$INSTALL_DIR/phyml-src/phyml</file></action>
                 <action type="move_directory_files">
-                    <source_directory>$TMP_WORK_DIR/sms-1.3</source_directory>
+                    <source_directory>$TMP_WORK_DIR/sms-1.7</source_directory>
                     <destination_directory>$INSTALL_DIR/sources</destination_directory>
                 </action>
 				<action type="set_environment">

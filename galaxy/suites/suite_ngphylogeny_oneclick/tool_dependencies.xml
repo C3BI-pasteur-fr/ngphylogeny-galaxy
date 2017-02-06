@@ -9,8 +9,8 @@
     <package name="noisy" version="1.5.12">
         <repository name="package_noisy_1_5_12" owner="dcorreia" />
     </package>
-    <package name="phyml-sms" version="1.3">
-        <repository name="package_phyml_sms_1_3" owner="dcorreia" />
+    <package name="phyml-sms" version="1.7">
+        <repository name="package_phyml_sms_1_7" owner="dcorreia" />
     </package>
     <package name="phyml" version="3.1">
         <repository name="package_phyml_3_1" owner="vlefort" />
@@ -18,7 +18,7 @@
     <package name="phyml" version="3.0_360-500M">
         <repository name="package_phyml_3_0" owner="dcorreia" />
     </package>
-    <package name="R" version="3.0.1">
+    <package name="R_3_0_1" version="3.0.1">
         <repository name="package_r_3_0_1" owner="iuc" />
     </package>
 </tool_dependency>
