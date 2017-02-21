@@ -1,0 +1,220 @@
+<tool id="clustalo" name="Clustal Omega" version="1.2.1.1">
+    <description>Multiple sequence alignment software</description>
+    <edam_operations>
+        <edam_operation>operation_0499</edam_operation>
+        <edam_operation>operation_0492</edam_operation>
+    </edam_operations>
+    <requirements>
+        <requirement type="package" version="1.2.1">clustalo</requirement>
+    </requirements>
+    <version_command>
+        <![CDATA[ clustalo --version   ]]>
+    </version_command>
+    <command>
+    <![CDATA[
+        clustalo 
+	        --infile=$inputSequences 
+	        $inputFormat
+	        $seqType
+	        $dealign
+	        $clusteringGuideTree
+	        
+	        #if ($iteration.iterOptions == "true")
+	            --iterations=$iteration.nbrIter
+	            $iteration.clusteringIteration
+	            
+	            #if ($iteration.separateIters.separateIterOptions == "true")
+	
+	                --max-guidetree-iterations=$iteration.separateIters.maxGuideTreeIteration
+	                --max-hmm-iterations=$iteration.separateIters.maxHmmIterations
+	            #end if
+	        #end if
+	        $getTree
+	        -o $output
+	        --outfmt=${outputFormat}
+	        --force
+	        --threads \${GALAXY_SLOTS:-1}
+        ;
+    ]]>
+    </command>
+    <inputs>
+	    <param name="inputSequences" format="fasta, clustal, msf, phylip, selex, stockholm" type="data" label="Sequences file"/>
+        <param name="inputFormat" label="Input format file" type="select">
+            <option value="" selected="true">Auto</option>
+            <option value="--infmt=fasta">FASTA</option>
+            <option value="--infmt=clustal">Clustal</option>
+            <option value="--infmt=phylip">Phylip</option>
+            <option value="--infmt=msf">Msf</option>
+            <option value="--infmt=selex">Selex</option>
+            <option value="--infmt=stockholm">Stockholm</option>
+            <option value="--infmt=vienna">Vienna</option>
+        </param>  
+	    <param name="outputname" label="Name for output files" type="text" size="50" value="alignment" />
+		<param name="seqType" type="select" label="Sequence type">
+			<option value="" selected="true">Auto</option>
+			<option value="--seqtype=DNA">DNA</option>
+			<option value="--seqtype=RNA">RNA</option>
+			<option value="--seqtype=Protein">Protein</option>
+		</param>        
+        <param name="dealign" type="boolean" falsevalue="" truevalue="--dealign" checked="false"  label="Dealign input sequences" help="If given already aligned sequences, by default Clustal Omega use the existing alignment to guide creation of the new alignment, by constructing a HMM from the existing alignment. Check this box to realign aligned sequences from scratch."/>     
+        <param name="clusteringGuideTree" type="select" label="Clustering guide-tree" help="By default, only a fraction of the distance matrix is calculated, for speed. Calculate full matrix may be more accurate under some circumstances but is slower and needs more memory.">
+            <option value="" selected="true">mBed-like</option>
+            <option value="--full">Use full distance matrix</option>
+        </param>   
+        <conditional name="iteration">
+	        <param name="iterOptions" type="select" label="Use iteration" help="Redo the alignment multiple times to improve accuracy. Both the HMM and the guide tree will be recalculated each time.">
+	            <option value="false" selected="true">Do not use iteration</option>
+	            <option value="true">Use iteration</option>
+	        </param>
+            <when value="false"/>
+            <when value="true"/>
+                <param name="clusteringIteration" type="select" label="Calculate full distance matrix during iteration">
+                    <option value="" selected="true">No</option>
+                    <option value="--full-iter">Yes</option>
+                </param>
+                <param name="nbrIter" type="integer" value="1" min='0' max='5' label="Number of iterations (combined guide-tree/HMM)"/>
+                <conditional name="separateIters">
+                    <param name="separateIterOptions" type="select" label="Different number of guide tree, HMM iterations" help="Normally, if iteration is specified, a new guide tree and HMM will be calculated for each iteration. Use this option to restrict the number of iterations for either.">
+                        <option value="false" selected="true">No</option>
+                        <option value="true">Yes</option>
+                    </param>
+                        <when value="false"/>
+                        <when value="true"/>
+                            <param name="maxGuideTreeIteration" type="integer" value="1" min="0" max="5" label="Maximum guide tree iterations"/>
+                            <param name="maxHmmIterations" type="integer"  value="1" min="0" max="5" label="Maximum number of HMM iterations"/>
+                </conditional>
+        </conditional>
+        <param name="outputOrder" type="select" label="MSA output order">
+            <option value="input-order">Input order</option>
+            <option value="tree-order" >Guide tree order</option>  
+        </param>
+        <param name="getTree" type="select" label="Display tree guide">
+            <option value="" selected="true">No</option>
+            <option value="--guidetree-out=guidetree.txt">Yes</option>  
+        </param>
+        <param name="outputFormat" type="select" label="Alignment Output format">
+            <option value="fasta" selected="true">FASTA</option>
+            <option value="clustal">Clustal</option>
+            <option value="phylip">Phylip</option>
+            <option value="msf">Msf</option>
+            <option value="selex">Selex</option>
+            <option value="stockholm">Stockholm</option>
+            <option value="vienna">Vienna</option>
+        </param>
+    </inputs>
+    <outputs>
+         <data name="output" format="fasta" label="${outputname}">
+            <change_format>
+                  <when input="outputFormat" value="clustal" format="clustal"/>
+                  <when input="outputFormat" value="phylip" format="phylip"/>
+                  <when input="outputFormat" value="msf" format="msf"/>
+                  <when input="outputFormat" value="selex" format="selex"/>
+                  <when input="outputFormat" value="stockholm"  format="stockholm"/>
+                  <when input="outputFormat" value="vienna" format="vienna" />                 
+             </change_format>
+        </data>    
+        <data name="guideTree" format="txt" label="${outputname} Guide tree" from_work_dir="guidetree.txt">
+            <filter>getTree == "--guidetree-out=guidetree.txt"</filter>
+        </data> 
+    </outputs>
+    <tests>
+        <test>
+            <param name="inputSequences" value="seqtest.fasta"/>
+            <param name="output" value="seqtest_aln.fasta"/>
+        </test>
+        <test>
+            <param name="inputSequences" value="seqtest.fasta"/>
+            <param name="clusteringIteration" value="--full-iter"/>
+            <param name="nbrIter" value="5"/>
+            <param name="maxGuideTreeIteration" value="5"/>
+            <param name="output" value="seqtest_aln2.fasta"/>
+        </test>
+    </tests>
+    <help>
+    <![CDATA[
+   
+.. class:: infomark
+
+**Clustal omega version 1.2.1** 
+
+**What it does**
+
+Clustal-Omega is a general purpose multiple sequence alignment (MSA) program for protein and DNA/RNA. It produces high quality MSAs and is capable of handling data-sets of hundreds of thousands of sequences in reasonable time.
+
+-----
+
+For further informations, please visite the ClustalOmega_ website.
+
+.. _ClustalOmega: http://www.clustal.org/omega/
+
+-----
+
+**OPTIONS**
+
+Sequence Input:
+  -i, --infile=<file>       Multiple sequence input file (- for stdin)
+  --hmm-in=<file>           HMM input files
+  --dealign                 Dealign input sequences
+  --profile1, --p1=<file>   Pre-aligned multiple sequence file (aligned columns will be kept fix)
+  --profile2, --p2=<file>   Pre-aligned multiple sequence file (aligned columns will be kept fix)
+  --is-profile              Disable check if profile, force profile (default no)
+  -t, --seqtype             *Protein, RNA, DNA* Force a sequence type (default: auto)
+  --infmt                   *fa[sta], clu[stal], msf, phy[lip], selex, st[ockholm], vie[nna]*. Forced sequence input file format (default: auto)
+
+-----    
+
+Clustering:
+  --distmat-in=<file>       Pairwise distance matrix input file (skips distance computation)
+  --distmat-out=<file>      Pairwise distance matrix output file
+  --guidetree-in=<file>     Guide tree input file (skips distance computation and guide-tree clustering step)
+  --guidetree-out=<file>    Guide tree output file
+  --pileup                  Sequentially align sequences
+  --full                    Use full distance matrix for guide-tree calculation (might be slow; mBed is default)
+  --full-iter               Use full distance matrix for guide-tree calculation during iteration (might be slowish; mBed is default)
+  --cluster-size=<n>        soft maximum of sequences in sub-clusters
+  --clustering-out=<file>   Clustering output file
+  --trans=<n>               Use transitivity (default: 0)
+  --posterior-out=<file>    Posterior probability output file
+  --use-kimura              Use Kimura distance correction for aligned sequences (default no)
+  --percent-id              convert distances into percent identities (default no)
+
+----       
+
+Alignment Output:
+  -o, --outfile=<file>      Multiple sequence alignment output file (default: stdout)
+  --outfmt                  *fa[sta], clu[stal], msf, phy[lip], selex, st[ockholm], vie[nna]* MSA output file format (default: fasta)
+  --residuenumber, --resno  in Clustal format print residue numbers (default no)
+  --wrap=<n>                number of residues before line-wrap in output
+  --output-order            *input-order, tree-order* MSA output order like in input/guide-tree
+      
+----
+
+Iteration:
+  --iterations, --iter=<n>  Number of (combined guide-tree/HMM) iterations
+  --max-guidetree-iterations=<n>  Maximum number of guidetree iterations
+  --max-hmm-iterations=<n>  Maximum number of HMM iterations
+
+----
+                            
+Limits (will exit early, if exceeded):
+  --maxnumseq=<n>           Maximum allowed number of sequences
+  --maxseqlen=<l>           Maximum allowed sequence length
+
+----
+     
+Miscellaneous:
+  --auto                    Set options automatically (might overwrite some of your options)
+  --threads=<n>             Number of processors to use
+  --pseudo=<file>           Input file for pseudo-count parameters
+  -l, --log=<file>          Log all non-essential output to this file
+  -h, --help                Print this help and exit
+  -v, --verbose             Verbose output (increases if given multiple times)
+  --version                 Print version information and exit
+  --long-version            Print long version information and exit
+  --force                   Force file overwriting 
+         ]]>
+    </help>    
+    <citations>
+        <citation type="doi">10.1038/msb.2011.75</citation>
+    </citations>
+</tool>

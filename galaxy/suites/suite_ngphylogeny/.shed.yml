@@ -1,0 +1,29 @@
+owner: dcorreia
+suite:
+  name: "suite_ngphylogeny"
+  description: "NGPhylogeny Tools"
+  type: repository_suite_definition
+  categories:
+    - "Phylogenetics"
+  include_repositories:
+    - name: "clustalo"
+      owner: "dcorreia"
+    - name: "mafft"
+      owner: "fmareuil"
+    - name: "muscle"
+      owner: "fmareuil"
+    - name: "noisy"
+      owner: "fmareuil"
+    - name: "gblocks"
+      owner: "fmareuil"
+    - name: "bmge"
+      owner: "dcorreia"
+    - name: "fastme"
+      owner: "fmareuil"
+    - name: "phyml_sms_1_7"
+      owner: "fmareuil"
+    - name: "phyml"
+      owner: "fmareuil"
+    - name: "newick_display"
+      owner: "fmareuil"
+

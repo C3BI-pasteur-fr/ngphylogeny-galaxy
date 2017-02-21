@@ -1,0 +1,20 @@
+<tool id="fasta_to_phylip" name="Fasta to Phylip" version="1.0">
+	<description>Convert fasta alignment file into phylip sequential format</description>
+	<command>
+		<![CDATA[
+            $__tool_directory__/fasta_to_phylip.sh  $input > $output
+	   	]]>
+	</command>
+	<inputs>
+		<param name="input" format="fasta" type="data" label="Source file" help="fasta or phylip format"/>
+	</inputs>
+	<outputs>
+		<data name="output" format="phylip" label="${input.name}"></data>
+	</outputs>
+	<help>
+===========
+Overview:
+===========
+Convert fasta alignment file into phylip sequential format
+	</help>
+</tool>
