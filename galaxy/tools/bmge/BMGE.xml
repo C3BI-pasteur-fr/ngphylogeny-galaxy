@@ -6,7 +6,9 @@
     <requirements>
         <requirement type="package" version="1.12">BMGE</requirement>
     </requirements>
-    <command>BMGE   -i $input
+    <command>
+		<![CDATA[
+		BMGE   -i $input
 				    -t $dataType.codeSeq
 				    -m $dataType.matrix$dataType.estimated
 				    -w $windowsSize
@@ -18,6 +20,7 @@
                             -$output file$output
                         #end if
                     #end for
+        ]]>
 	</command>
 
 	<inputs>
@@ -93,7 +96,7 @@
 		<data name="outputof" format="fasta" label="BMGE Cleaned sequences Fasta"  from_work_dir="fileof">
 			<filter>'of' in outputFormat</filter>
 		</data>
-		<data name="outputon" format="nexus" label="BMGE Cleaned sequences Nexus" from_work_dir="fileon">
+		<data name="outputon" format="nex" label="BMGE Cleaned sequences Nexus" from_work_dir="fileon">
 			<filter>'on' in outputFormat</filter>
 		</data>
 		<data name="outputoh" format="html" label="BMGE Cleaned sequences Html" from_work_dir="fileoh">
