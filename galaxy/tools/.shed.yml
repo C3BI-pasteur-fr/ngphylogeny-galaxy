@@ -1,19 +1,17 @@
 categories:
-  - "Phylogenetics"
+  - "phylogeny"
 repositories:
   noisy:
     owner: fmareuil
     description: "Noisy: identification of phylogenetically uninformative sites in a multiple sequence alignment"
     include:
       - noisy/noisy.xml
-      - noisy/tool_dependencies.xml
       - noisy/test-data/**
   muscle:
     owner: fmareuil
     description: "MUSCLE: MUltiple Sequence Comparison by Log-Expectation is computer software for multiple sequence alignment of protein and nucleotide sequences."
     include:
       - muscle/muscle.xml
-      - muscle/tool_dependencies.xml
       - muscle/test-data/**
   clustalo:
     owner: dcorreia
@@ -25,7 +23,6 @@ repositories:
       benchmarks."
     include:
       - clustalo/clustalo.xml
-      - clustalo/tool_dependencies.xml
       - clustalo/test-data/**
   gblocks:
     owner: fmareuil
@@ -38,7 +35,6 @@ repositories:
       analysis by other researchers."
     include:
       - gblocks/gblocks.xml
-      - gblocks/tool_dependencies.xml
       - gblocks/test-data/**
   bmge:
     owner: dcorreia
@@ -48,24 +44,21 @@ repositories:
        a new software for selection of phylogenetic informative regions from multiple sequence alignments"
     include:
       - bmge/bmge.xml
-      - bmge/tool_dependencies.xml
-  phyml_sms_1_7:
-    owner: fmareuil
+  phyml_sms:
+    owner: dcorreia
     description: "PhyML with Smart Model Selection version 1.7"
     include:
       - phyml-sms/phyml_sms.xml
-      - phyml-sms/tool_dependencies.xml
       - phyml-sms/test-data/**
-  newick_display:
+  newick_utilities:
     owner: fmareuil
     description: "Newick display from Newick utilities"
     include:
       - newick_utilities/nwdisplay.xml
-      - newick_utilities/tool_dependencies.xml
       - newick_utilities/test-data/**
   mrbayes:
     owner: dcorreia
     description: "MrBayes MrBayes is a program for Bayesian inference and model choice across a wide range of phylogenetic and evolutionary models."
     include:
-      - mrbayes/mrbates.xml
+      - mrbayes/mrbayes.xml
       - mrbayes/test-data/**
