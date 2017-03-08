@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+----------------
+<p>
+    <b>Input</b>:
+    <i>multi-FASTA file</i><br>
+    FASTA is text-file format for representing nucleotide sequences or amino acids sequences. The sequence name starts
+    with ">" and the following lines contain sequences. A multi-FASTA file contains multiple FASTA format sequences.
+</p>
+----------------
+<p>
+    <a href="/root?tool_id=toolshed.pasteur.fr%2Frepos%2Ffmareuil%2Fmafft%2Frbc_mafft%2F7.273.1">
+        <h4><span class="fa fa-info-circle"></span> MAFFT:</h4>
+    </a>
+    <br>
+    - <b>Input</b>: <i>Multifasta file</i> from <b>Step 1</b>
+    <br>
+    - <b>Output:</b> <i>Mutli-Fasta file with aligned sequences</i>
+    <br><br>
+    <u><i>parameters:</i></u>
+    <br><br>
+    - <b>Mafft flavour:</b> <i>auto</i><br>Automatically selects an appropriate strategy from L-INS-i, FFT-NS-i and
+    FFT-NS-2, according to data size.<br>
+    - <b>Gap Extension:</b>
+    <i>(--ep 0.0)</i> allows longer indels and thus is more robust to unusual evolutionary
+    events, such as domain-level indels.
+    <br>
+</p>
+-----------------
+<p>Analyse fasta file to detect witch type of sequences is contained in the file (dna or protein)</p>
+-----------------
+<p>
+    <a href="/root?tool_id=toolshed.pasteur.fr%2Frepos%2Ffmareuil%2Fnoisy%2Fnoisy%2F1.5.12.1">
+        <h4><span class="fa fa-info-circle"></span> Noisy:</h4>
+    </a>
+    <br>
+    - <b>Input</b>: <i>Aligned sequences in Fasta file </i>(from <b>Step 2</b>)
+    <br>
+    - <b>Output</b>:
+    Multifasta aligned sequences file
+    <br><br>
+    <u><i>parameters:</i></u>
+    <br><br>
+    - <b>cut-off</b>:
+    <i>0.4</i>
+    <br>Ensure to removing most noisy sites and without loosing to much phylogenetic signal
+    <br>
+    - <b>Ordering method</b>: <i>Neigthbor-Net</i><br> Fast method that grouping taxa close to each other that have a
+    short
+    distance
+    <br>
+    - <b>Distance method</b>:
+    <i>Hamming</i><br>
+    Use distance matrix calculated by hamming method. (Distance between two strings of equal length is the number of
+    positions at which the corresponding symbols are different)
+</p>
+-----------------
+<p>
+    <a href="/root?tool_id=toolshed.pasteur.fr%2Frepos%2Fdcorreia%2Fsuite_ngphylogeny_oneclick%2Ffasta_to_phylip%2F1.0">
+        <b>Convertion Fasta to Phylip</b><br>
+    </a>
+    <b>Input</b>: <i>Aligned sequences in Fasta file </i>(from <b>Step 4</b>)
+    <br>
+    <b>Output</b>:
+    <i>Sequential sequences Phylip File</i>
+</p>
+-----------------
+<p>
+    <a href="/root?tool_id=toolshed.pasteur.fr%2Frepos%2Ffmareuil%2Ffastme%2Ffastme%2F2.1.5.1">
+        <h4><span class="fa fa-info-circle"></span> FastME:</h4>
+    </a>
+    <br>
+    <b>Input</b>: <i>Phylip file </i>(from <b>Step 5</b>)
+    <br>
+    <b>Output</b>:
+    Tree Newick file
+    <br><br>
+    <u><i>parameters:</i></u>
+    <br><br>
+    - <b>Evolutionary model</b>
+    <i>Use HKY85 or GTR according to sequences type</i><br>
+<ul>
+    <li>DNA: HKY85</li>
+    <li>Protein: GTR</li>
+</ul>
+- <b>Equilibrium frequencies</b>: <i>Yes</i>Frequencies are globally counted from the nucleotides alignment or defined
+by the proteic substitution model. By checking the box, frequencies are pairwise estimated by counting the nucleotides
+or estimated by counting the amino-acids in the alignment.<br>
+- <b>Gamma distributed rates across sites</b>: <i>Yes</i> Use gamma parameter<br>
+- <b>Gamma distribution</b>: <i>1</i><br>
+- <b>Remove gap strategy</b>: <i>Pairwise deletion of gaps</i><br>
+- <b>Distance algorithm</b>: <i>BoiNJ</i> Use BioNJ algorithm to calculate distances<br>
+- <b>Tree refinement</b>: <i>BalME SPR</i> Search optimized tree topology with Subtree-Pruning-Regrafting (SPR)<br>
+</p>
+----------------
+<p>
+    <a href="/root?tool_id=toolshed.pasteur.fr%2Frepos%2Ffmareuil%2Fphyml%2Fphyml%2F3.1">
+        <h4><span class="fa fa-info-circle"></span> PhyML:</h4>
+    </a>
+    <br>
+    <b>Input</b>: <i>Phylip file </i>(from <b>Step 5</b>)
+    <br>
+    <b>Output</b>:
+    Tree Newick file
+    <br><br>
+    <u><i>parameters:</i></u>
+    <br><br>
+    - <b>Substitution model</b>:<br>
+    <i>Use HKY85 or GTR according to sequences type</i><br>
+<ul>
+    <li>DNA: HKY85</li>
+    <li>Protein: GTR</li>
+</ul>
+- <b>Proportion of invariable sites</b>: <i>Estimated</i><br>
+- <b>Equilibrium frequencies</b>: <i>ML/Model</i><br>
+- <b>Transition/transversion ratio (DNA models)</b>: <i>Estimated</i><br>
+- <b>Parameter of the gamma model</b>: <i>Estimated</i><br>
+- <b>Distance algorithm</b>: <i>BoiNJ</i> Use BioNJ algorithm to calculate distances<br>
+- <b>Tree topology search</b>: <i>SPR</i> Search optimized tree topology with Subtree-Pruning-Regrafting (SPR)<br>
+- <b>Optimise topology</b>: <i>Tree topology, Branch length, Rate parameter</i>
+- <b>Statistical tests for branch support</b>: <i>SH-like</i>
+</p>
+----------------
+<p>
+    <a href="/root?tool_id=toolshed.pasteur.fr%2Frepos%2Ffmareuil%2Fnewick_utilities%2Fnwdisplay%2F1.6">
+        <h4><span class="fa fa-info-circle"></span> Newick display:</h4>
+    </a>
+    <br>
+    <b>Input</b>: <i>Newick tree </i>(from <b>Step 6</b>)
+    <br>
+    <b>Output</b>:
+    <i>SVG (Scalable Vector Graphics) </i> All major modern web browsers and some graphic applications
+    such as Inkscape, Adobe Illustrator, GIMP can display it.
+</p>
+</body>
+</html>

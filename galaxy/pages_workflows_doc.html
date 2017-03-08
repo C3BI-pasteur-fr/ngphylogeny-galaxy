@@ -1,0 +1,110 @@
+<html dir="ltr" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>0</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/wymeditor/iframe/galaxy/wymiframe.css">
+    <link href="/static/style/base.css?v=1488883419" media="screen" rel="stylesheet" type="text/css">
+    <link href="/static/style/autocomplete_tagging.css?v=1488883419" media="screen" rel="stylesheet" type="text/css">
+    <link href="/static/style/embed_item.css?v=1488883419" media="screen" rel="stylesheet" type="text/css">
+</head>
+<body class="wym_iframe text-content"><h1>NGPhylogeny.fr OneClick Workflows</h1>
+<p></p>
+<p>We designed several oneclick workflows to address different kind of analyses. They all include the same steps:</p>
+<ol>
+    <li>Sequence Alignment</li>
+    <li>Alignment curation/filtering</li>
+    <li>Tree inference</li>
+    <li>Tree visualisation</li>
+</ol>
+<p>Theses workflows integrate the gold standard software for each step:</p>
+<p>1 - MAFFT <a href="#pub_1">[1]</a> is used to align sequences and get a Multiple Sequences Alignment (MSA). The
+    choosen options provide an excellent compromise between speed and accuracy(see:
+    Pais,P.<i>al</i>, 2014)<a href="#pub_2">[2]</a>.
+</p>
+<p>2 - Noisy <a href="#pub_3">[3]</a> is used to remove poorly aligned regions within the MSA. The options are set
+    according to (Tan et al., 2015)<a href="#pub_4">[4]</a>.
+</p>
+<p>3 - PhyML<a href="#pub_5">[5]</a>and FastME<a href="#pub_6">[6]</a> are available to infer a tree. PhyML is very
+    accurate but is a very CPU consuming while FastME runs very fast at the cost of accuracy. FastME is relevant only
+    for the biggest datasets.
+<p>4 - The Newick utilities <a href="#pub_7">[7]</a> are used to draw the trees and provide nice pictures in SVG format.
+</p>
+<p>Each workflow takes as input a fasta file containing the sequences (DNA or proteins). Each run will produce several
+    files:
+</p>
+<ul>
+    <li>MSA in <a href="http://evolution.genetics.washington.edu/phylip/doc/sequence.html">PHYLIP</a> format</li>
+    <li>Cleaned MSA</li>
+    <li>Tree in <a href="http://evolution.gs.washington.edu/phylip/newicktree.html">Newick</a> format</li>
+    <li>Tree picture in SVG format.</li>
+</ul>
+<br>
+<p>From the following sections, you can retrieve the workflows and install them in your galaxy.pasteur.fr account
+    and analyse your data.</p>
+<h3>I. Fast workflow (distance based : FastME)</h3>
+<br>
+<ul>
+    <li>MAFFT</li>
+    <li>Noisy</li>
+    <li><b>FastME</b></li>
+    <li>Newick utilities</li>
+</ul>
+<p></p>
+<div class="embedded-item workflow placeholder" id="StoredWorkflow-5cce5798358a057c"><p class="title">Embedded Galaxy
+    Workflow 'NGPhylogeny.fr OneClick Workflow FastME'</p>
+    <p class="content">[Do not edit this block; Galaxy will fill it in with the annotated workflow when it is
+        displayed.]</p></div>
+<br>
+<h3>II. Accurate workflow (Maximum Likelihood based : PhyML)</h3>
+<p>More accurate workflow with Maximum-Likelihood phylogeny inference</p>
+<ul>
+    <li>MAFFT</li>
+    <li>Noisy</li>
+    <li><b>PhyML</b></li>
+    <li>Newick utilities</li>
+</ul>
+<p></p>
+<div class="embedded-item workflow placeholder" id="StoredWorkflow-fd44b1596efcdb84">
+    <p class="title">Embedded Galaxy Workflow 'NGPhylogeny.fr OneClick Workflow PhyML'</p>
+    <p class="content">[Do not edit this block; Galaxy will fill it in with the annotated workflow when it is
+        displayed.]
+    </p>
+</div>
+<br>
+<br>
+<p>
+    <span class="selectable" id="pub_1">[1] Katoh, K. and Standley, D. (2016). A simple method to control over-alignment
+        in the MAFFT multiple sequence alignment program. <i>Bioinformatics</i>, 32(13), pp.1933-1942.
+    </span>
+    <br>
+    <span class="selectable" id="pub_2">[2] Pais, F., Ruy, P., Oliveira, G. and Coimbra, R. (2014). Assessing the
+        efficiency of multiple sequence alignment programs. <i>Algorithms for Molecular Biology</i>, 9(1), p.4.
+    </span>
+    <br>
+    <span class="selectable" id="pub_3">[3] Dress, A., Flamm, C., Fritzsch, G., Grünewald, S., Kruspe, M., Prohaska, S.
+        and Stadler, P. (2008). Noisy: Identification of problematic columns in multiple sequence alignments.
+        <i>Algorithms for Molecular Biology</i>, 3(1), p.7.
+    </span>
+    <br>
+    <span class="selectable" id="pub_4">[4] Tan, G., Muffato, M., Ledergerber, C., Herrero, J., Goldman, N., Gil, M. and
+        Dessimoz, C. (2015). Current Methods for Automated Filtering of Multiple Sequence Alignments Frequently Worsen
+        Single-Gene Phylogenetic Inference. <i>Systematic Biology</i>, 64(5), pp.778-791.
+    </span>
+    <br>
+    <span class="selectable" id="pub_5">[5] Guindon, S., Dufayard, J., Lefort, V., Anisimova, M., Hordijk, W. and
+        Gascuel, O. (2010). New Algorithms and Methods to Estimate Maximum-Likelihood Phylogenies: Assessing the
+        Performance of PhyML 3.0. <i>Systematic Biology</i>, 59(3), pp.307-321.
+    </span>
+    <br>
+    <span class="selectable" id="pub_6">[6] Lefort, V., Desper, R. and Gascuel, O. (2015). FastME 2.0: A Comprehensive,
+        Accurate, and Fast Distance-Based Phylogeny Inference Program. <i>Molecular Biology and Evolution</i>, 32(10),
+        pp.2798-2800.
+    </span>
+    <br>
+    <span class="selectable" id="pub_7">[7] Junier, T. and Zdobnov, E. (2010). The Newick utilities: high-throughput
+        phylogenetic tree processing in the UNIX shell. <i>Bioinformatics</i>, 26(13), pp.1669-1670.
+    </span>
+</p>
+<p></p></body>
+</html>
+
