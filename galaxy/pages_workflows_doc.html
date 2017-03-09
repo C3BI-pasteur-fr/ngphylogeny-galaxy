@@ -9,28 +9,31 @@
 </head>
 <body class="wym_iframe text-content"><h1>NGPhylogeny.fr OneClick Workflows</h1>
 <p></p>
-<p>We designed several oneclick workflows to address different kind of analyses. They all include the same steps:</p>
+<p>We have designed several oneclick workflows to address different kinds of analysis. They all include the same steps:</p>
 <ol>
-    <li>Sequence Alignment</li>
+    <li>Sequence alignment</li>
     <li>Alignment curation/filtering</li>
     <li>Tree inference</li>
     <li>Tree visualisation</li>
 </ol>
-<p>Theses workflows integrate the gold standard software for each step:</p>
-<p>1 - MAFFT <a href="#pub_1">[1]</a> is used to align sequences and get a Multiple Sequences Alignment (MSA). The
-    choosen options provide an excellent compromise between speed and accuracy(see:
-    Pais,P.<i>al</i>, 2014)<a href="#pub_2">[2]</a>.
+<p>These workflows integrate the gold-standard software for each step:</p>
+<p>1 - Sequence alignment is performed using MAFFT <a href="#pub_1">[1]</a> which Sequence alignment produces a Multiple
+    Sequence Alignment (MSA). By default options have been set following recommendations of Pais, P. et <i>al</i>., 2014
+    <a href="#pub_2">[2]</a> to provide an excellent compromise between speed and accuracy.
 </p>
-<p>2 - Noisy <a href="#pub_3">[3]</a> is used to remove poorly aligned regions within the MSA. The options are set
-    according to (Tan et al., 2015)<a href="#pub_4">[4]</a>.
+<p>2 - Alignment curation is performed using Noisy <a href="#pub_3">[3]</a>which is able to remove poorly aligned
+    regions within the MSA. By default options have been set following recommendations of Tan, G. et <i>al</i>., 2015
+    <a href="#pub_4">[4]</a>.
 </p>
-<p>3 - PhyML<a href="#pub_5">[5]</a>and FastME<a href="#pub_6">[6]</a> are available to infer a tree. PhyML is very
-    accurate but is a very CPU consuming while FastME runs very fast at the cost of accuracy. FastME is relevant only
-    for the biggest datasets.
-<p>4 - The Newick utilities <a href="#pub_7">[7]</a> are used to draw the trees and provide nice pictures in SVG format.
+<p>3 - Tree inference is performed using PhyML <a href="#pub_5">[5]</a> or FastME <a href="#pub_6">[6]</a>. PhyML should
+    be preferred to get results with a high level of accuracy while FastME should be preferred to get results in a short
+    amount of time (in particular FastME can be preferred to deal with very big data sets although the results obtained
+    will have lower accuracy).
+<p>4 - Tree visualization is obtained using the Newick utilities <a href="#pub_7">[7]</a> both to draw the trees and
+    provide pictures in SVG format.
 </p>
-<p>Each workflow takes as input a fasta file containing the sequences (DNA or proteins). Each run will produce several
-    files:
+<p>Each workflow run (i) takes as input a fasta file containing the sequences (DNA or proteins) and (ii) produces
+    several output files :
 </p>
 <ul>
     <li>MSA in <a href="http://evolution.genetics.washington.edu/phylip/doc/sequence.html">PHYLIP</a> format</li>
@@ -41,21 +44,8 @@
 <br>
 <p>From the following sections, you can retrieve the workflows and install them in your galaxy.pasteur.fr account
     and analyse your data.</p>
-<h3>I. Fast workflow (distance based : FastME)</h3>
 <br>
-<ul>
-    <li>MAFFT</li>
-    <li>Noisy</li>
-    <li><b>FastME</b></li>
-    <li>Newick utilities</li>
-</ul>
-<p></p>
-<div class="embedded-item workflow placeholder" id="StoredWorkflow-5cce5798358a057c"><p class="title">Embedded Galaxy
-    Workflow 'NGPhylogeny.fr OneClick Workflow FastME'</p>
-    <p class="content">[Do not edit this block; Galaxy will fill it in with the annotated workflow when it is
-        displayed.]</p></div>
-<br>
-<h3>II. Accurate workflow (Maximum Likelihood based : PhyML)</h3>
+<h3>I. Accurate workflow (Maximum Likelihood based : PhyML)</h3>
 <p>More accurate workflow with Maximum-Likelihood phylogeny inference</p>
 <ul>
     <li>MAFFT</li>
@@ -71,6 +61,19 @@
     </p>
 </div>
 <br>
+<h3>II. Fast workflow (distance based : FastME)</h3>
+<br>
+<ul>
+    <li>MAFFT</li>
+    <li>Noisy</li>
+    <li><b>FastME</b></li>
+    <li>Newick utilities</li>
+</ul>
+<p></p>
+<div class="embedded-item workflow placeholder" id="StoredWorkflow-5cce5798358a057c"><p class="title">Embedded Galaxy
+    Workflow 'NGPhylogeny.fr OneClick Workflow FastME'</p>
+    <p class="content">[Do not edit this block; Galaxy will fill it in with the annotated workflow when it is
+        displayed.]</p></div>
 <br>
 <p>
     <span class="selectable" id="pub_1">[1] Katoh, K. and Standley, D. (2016). A simple method to control over-alignment

@@ -4,7 +4,7 @@ suite:
   description: "NGPhylogeny Tools"
   type: repository_suite_definition
   categories:
-    - "Phylogenetics"
+    - "phylogeny"
   include_repositories:
     - name: "clustalo"
       owner: "dcorreia"
@@ -20,10 +20,10 @@ suite:
       owner: "dcorreia"
     - name: "fastme"
       owner: "fmareuil"
-    - name: "phyml_sms_1_7"
-      owner: "fmareuil"
+    - name: "phyml_sms"
+      owner: "dcorreia"
     - name: "phyml"
       owner: "fmareuil"
-    - name: "newick_display"
+    - name: "newick_utilities"
       owner: "fmareuil"
 
