@@ -111,9 +111,9 @@
          <param name="shuffles" type="integer" value="0" min="0" max="1000" label="Perform INT random shuffles per column of the MSA"/>
 	</inputs>
 	<outputs>
-		<data name="output1" format="fasta" label="Noisy Cleaned sequencies"  from_work_dir="*_out.fas" />
-		<data name="output2" format="eps" label="Noisy Cleaned sequencies image"  from_work_dir="*_typ.eps" />
-		<data name="output3" format="txt" label="Noisy Cleaned sequencies information"  from_work_dir="*_sta.gr" />
+		<data name="output1" format="fasta" label="Noisy Cleaned sequences"  from_work_dir="*_out.fas" />
+		<data name="output2" format="eps" label="Noisy Cleaned sequences image"  from_work_dir="*_typ.eps" />
+		<data name="output3" format="txt" label="Noisy Cleaned sequences information"  from_work_dir="*_sta.gr" />
 	</outputs>
 	<tests>
         <test>
