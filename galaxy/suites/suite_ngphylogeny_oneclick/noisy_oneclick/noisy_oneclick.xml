@@ -108,7 +108,7 @@
          <param name="gap" type="boolean" truevalue="" falsevalue="--nogap" checked="True" label="Count gap symbol as character state? "/>
          <param name="smooth" type="integer" value="1" min="0" max="1000" label="Running average over X columns"
                 help="Calculate a running average over the reliability score of X columns and use this smoothed values to remove unreliable columns from the MSA" />
-         <param name="shuffles" type="integer" value="0" min="0" max="1000" label="Perform INT random shuffles per column of the MSA"/>
+         <param name="shuffles" type="integer" value="1000" min="0" max="2000" label="Perform INT random shuffles per column of the MSA"/>
 	</inputs>
 	<outputs>
 		<data name="output1" format="fasta" label="Noisy Cleaned sequences"  from_work_dir="*_out.fas" />
@@ -154,7 +154,7 @@ Options::
                     all          all permutations, If all is used than for all possible permutations of the TAXA the reliability score is calculated (Note that for more than 8 TAXA this can become rather time consuming!).
 
  --shuffles INT     Perform INT random shuffles per column.
-                     (default is >0<)
+                     (default is >1000<)
  -s, --silent       Turn off status bar
                      (default is >0<)
  --smooth INT       Running avarage over INT columns.
