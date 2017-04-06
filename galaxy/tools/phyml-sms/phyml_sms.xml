@@ -100,19 +100,24 @@
 
 This script runs SMS to select the substitution model which best fits the input data.
 It may also run PhyML with the selected model.
+
 SMS options :
-	 -h = Help
-	 -i = **Mandatory** Input alignment file in PHYLIP format
-	 -d = **Mandatory** Data type : 'aa' or 'nt'
-	 -o = Output directory
-	 -p = Output CSV filename
-	 -c = Statistical criterion to select the model : 'AIC' (default) or 'BIC'
-	 -u = Input starting tree (Newick format)
-	 -t = Use this option if you want SMS to infer a tree with PhyML using the SMS selected model
- PhyML options :
-	 -s = Type of tree improvement : 'NNI (default)' or 'SPR'
-	 -r = Number of random starting trees : 0 (default)
-	 -b = Branch Support : >0 for bootstraps, -4 for aLRT, 0 (default)
+
+ -h  Help
+ -i  **Mandatory** Input alignment file in PHYLIP format
+ -d  **Mandatory** Data type : 'aa' or 'nt'
+ -o  Output directory
+ -p  Output CSV filename
+ -c  Statistical criterion to select the model : 'AIC' (default) or 'BIC'
+ -u  Input starting tree (Newick format)
+ -t  Use this option if you want SMS to infer a tree with PhyML using the SMS selected model
+
+PhyML options :
+
+ -s  Type of tree improvement : 'NNI (default)' or 'SPR'
+ -r  Number of random starting trees : 0 (default)
+ -b  Branch Support : >0 for bootstraps, -4 for aLRT, 0 (default)
+
 
 **PhyML 20120412**
 
