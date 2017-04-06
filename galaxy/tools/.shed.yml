@@ -1,18 +1,15 @@
 categories:
   - "phylogeny"
 repositories:
-  noisy:
-    owner: fmareuil
-    description: "Noisy: identification of phylogenetically uninformative sites in a multiple sequence alignment"
+  bmge:
+    owner: dcorreia
+    description: "BMGE (Block Mapping and Gathering with Entropy): Selection of phylogenetic informative regions"
+    long_description: >
+      "BMGE (Block Mapping and Gathering with Entropy)
+      a new software for selection of phylogenetic informative regions from multiple sequence alignments"
     include:
-      - noisy/noisy.xml
-      - noisy/test-data/**
-  muscle:
-    owner: fmareuil
-    description: "MUSCLE: MUltiple Sequence Comparison by Log-Expectation is computer software for multiple sequence alignment of protein and nucleotide sequences."
-    include:
-      - muscle/muscle.xml
-      - muscle/test-data/**
+      - bmge/bmge.xml
+
   clustalo:
     owner: dcorreia
     description: "Clustal Omega wrapper"
@@ -24,6 +21,14 @@ repositories:
     include:
       - clustalo/clustalo.xml
       - clustalo/test-data/**
+
+  fasttree:
+    owner: dcorreia
+    description: "FastTree infers approximately-maximum-likelihood phylogenetic trees from alignments of nucleotide or protein sequences."
+    include:
+      - fasttree/fasttree.xml
+      - fasttree/test-data/**
+
   gblocks:
     owner: fmareuil
     description: "Gblocks: automatic cleaning of alignments"
@@ -36,29 +41,38 @@ repositories:
     include:
       - gblocks/gblocks.xml
       - gblocks/test-data/**
-  bmge:
-    owner: dcorreia
-    description: "BMGE (Block Mapping and Gathering with Entropy): Selection of phylogenetic informative regions"
-    long_description: >
-      "BMGE (Block Mapping and Gathering with Entropy):
-       a new software for selection of phylogenetic informative regions from multiple sequence alignments"
-    include:
-      - bmge/bmge.xml
-  phyml_sms:
-    owner: dcorreia
-    description: "PhyML with Smart Model Selection version 1.7"
-    include:
-      - phyml-sms/phyml_sms.xml
-      - phyml-sms/test-data/**
-  newick_utilities:
-    owner: fmareuil
-    description: "Newick display from Newick utilities"
-    include:
-      - newick_utilities/nwdisplay.xml
-      - newick_utilities/test-data/**
+
   mrbayes:
     owner: dcorreia
     description: "MrBayes MrBayes is a program for Bayesian inference and model choice across a wide range of phylogenetic and evolutionary models."
     include:
       - mrbayes/mrbayes.xml
       - mrbayes/test-data/**
+
+  muscle:
+    owner: fmareuil
+    description: "MUSCLE: MUltiple Sequence Comparison by Log-Expectation is computer software for multiple sequence alignment of protein and nucleotide sequences."
+    include:
+      - muscle/muscle.xml
+      - muscle/test-data/**
+
+  newick_utilities:
+    owner: fmareuil
+    description: "Newick display from Newick utilities"
+    include:
+      - newick_utilities/nwdisplay.xml
+      - newick_utilities/test-data/**
+
+  noisy:
+    owner: fmareuil
+    description: "Noisy: identification of phylogenetically uninformative sites in a multiple sequence alignment"
+    include:
+      - noisy/noisy.xml
+      - noisy/test-data/**
+
+  phyml_sms:
+    owner: dcorreia
+    description: "PhyML with Smart Model Selection version 1.7"
+    include:
+      - phyml-sms/phyml_sms.xml
+      - phyml-sms/test-data/**
