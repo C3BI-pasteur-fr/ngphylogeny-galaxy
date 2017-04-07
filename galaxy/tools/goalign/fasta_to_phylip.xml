@@ -1,0 +1,29 @@
+<tool id="goalign_fasta_to_phylip" name="Fasta to Phylip" version="1.0">
+	<description>Convert fasta alignment file into phylip sequential format with goAlign</description>
+    <edam_operations>
+        <edam_operation>operation_0335</edam_operation>
+    </edam_operations>
+    <requirements>
+        <requirement type="package" version="0.1.6">goalign</requirement>
+    </requirements>
+	<command>
+		<![CDATA[
+            goalign reformat phylip -i $input -o $output
+	   	]]>
+	</command>
+	<inputs>
+		<param name="input" format="fasta" type="data" label="Source file" help="fasta or phylip format"/>
+	</inputs>
+	<outputs>
+		<data name="output" format="phylip" label="${input.name}"></data>
+	</outputs>
+	<help>
+===========
+Overview:
+===========
+Convert fasta alignment file into phylip sequential format with goAlign*
+
+*Author: Frederic Lemoine
+
+	</help>
+</tool>
