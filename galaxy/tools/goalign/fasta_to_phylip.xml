@@ -4,7 +4,7 @@
         <edam_operation>operation_0335</edam_operation>
     </edam_operations>
     <requirements>
-        <requirement type="package" version="0.1.6">goalign</requirement>
+        <requirement type="package" version="0.1.9">goalign</requirement>
     </requirements>
 	<command>
 		<![CDATA[
