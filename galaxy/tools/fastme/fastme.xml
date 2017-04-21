@@ -41,7 +41,7 @@
             $equilibrium
             $removeGap
             $treeRefinement
-            -f $supportPrecision
+            -f $decimalPrecision
 
             #if $bootChoice.boot == "true"
                 --output_boot=$outputBoostrap
@@ -96,7 +96,9 @@
             </when>
             <when value="m"/>
         </conditional>
-        <param name="equilibrium" type="boolean" label="Equilibrium frequencies" truevalue="--equilibrium" falsevalue="" help="By default, frequencies are globally counted from the nucleotides alignment or defined by the proteic substitution model. By checking the box, frequencies are pairwise estimated by counting the nucleotides or estimated by counting the amino-acids in the alignment."/>
+        <param name="equilibrium" type="boolean" label="Equilibrium frequencies" truevalue="--equilibrium" falsevalue=""
+               help="By default, frequencies are globally counted from the nucleotides alignment or defined by the proteic substitution model.
+               By checking the box, frequencies are pairwise estimated by counting the nucleotides or estimated by counting the amino-acids in the alignment."/>
         <conditional name="gammaChoice">
             <param name="gamma" type="select" label="Gamma distributed rates across sites">
                 <option value="true">Yes</option>
@@ -111,7 +113,7 @@
             <option value="">Pairwise deletion of gaps</option>
             <option value="--remove_gap">Remove all sites with gap</option>
         </param>
-        <param name="distance" type="select" label="Distance algorithm">
+        <param name="distance" type="select" label="Starting tree (distance algorithm used)">
             <option value="--method=I">BIONJ</option>
             <option value="--method=B --branch_length=B">TaxAdd BalME</option>
             <option value="--method=O --branch_length=O">TaxAdd OLSME</option>
@@ -135,7 +137,7 @@
                 <param name="replicates" type="integer" value="1000" label="Number of replicates"/>
             </when>
         </conditional>
-        <param name="supportPrecision" type="integer" value="12" min="0" label="Number of digits after the dot to display branch support" />
+        <param name="decimalPrecision" type="integer" value="12" min="0" label="Decimal precision for branch lengths" />
     </inputs>
     <outputs>
         <data name="outputTree" format="nwk" label="${fileout_label}"/>

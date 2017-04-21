@@ -17,12 +17,13 @@
     <li>Tree visualisation</li>
 </ol>
 <p>These workflows integrate the gold-standard software for each step:</p>
-<p>1 - Sequence alignment is performed using MAFFT <a href="#pub_1">[1]</a> which Sequence alignment produces a Multiple
-    Sequence Alignment (MSA). By default options have been set following recommendations of Pais, P. et <i>al</i>., 2014
-    <a href="#pub_2">[2]</a> to provide an excellent compromise between speed and accuracy.
+<p>1 - Multiple Sequence alignment (MSA) is performed using MAFFT <a href="#pub_1">[1]</a>
+    It's an excellent compromise between speed and accuracy. Pais, P. et <i>al</i>., 2014
+    <a href="#pub_2">[2]</a>
 </p>
-<p>2 - Alignment curation is performed using Noisy <a href="#pub_3">[3]</a>which is able to remove poorly aligned
-    regions within the MSA. By default options have been set following recommendations of Tan, G. et <i>al</i>., 2015
+<p>2 - Alignment curation is performed using Noisy <a href="#pub_3">[3]</a> which is able to remove homoplastic
+    or otherwise corrupted sites from putative phylogenetically informative sites.
+    By default options have been set following recommendations of Tan, G. et <i>al</i>., 2015
     <a href="#pub_4">[4]</a>.
 </p>
 <p>3 - Tree inference is performed using PhyML <a href="#pub_5">[5]</a> or FastME <a href="#pub_6">[6]</a>. PhyML should

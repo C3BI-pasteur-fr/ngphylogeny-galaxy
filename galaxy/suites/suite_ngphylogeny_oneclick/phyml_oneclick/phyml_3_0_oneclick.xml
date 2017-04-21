@@ -17,13 +17,13 @@
     </stdio>
     <command>
         <![CDATA[
-          ##PhyML outputs are based on input path and we need to create outputs in working_dir.
-          ln -sf $input '${input.name}';
-          #if ($usetree.inputTree == "true"):
-          ln -sf ${$usetree.userInputTree} ${$usetree.userInputTree.name};
-          #end if
+            ##PhyML outputs are based on input path and we need to create outputs in working_dir.
+            ln -sf $input '${input.name}';
+            #if ($usetree.inputTree == "true"):
+            ln -sf ${$usetree.userInputTree} ${$usetree.userInputTree.name};
+            #end if
 
-          phyml --input '${input.name}'
+            phyml --input '${input.name}'
                 ${phylip_format}
 
                 #if $seq.type_of_seq == "cfg"
@@ -46,7 +46,7 @@
                 #else
                     --datatype ${seq.type_of_seq}
                     --model ${seq.model}
-                    -f ${equi_freq}
+                    -f ${seq.equi_freq}
 
                 #end if
 
@@ -59,16 +59,28 @@
                 #end if
                     
                 #if ($seq.type_of_seq == "nt"):
-                    -t ${seq.tstv}
+                    #if str($seq.tstv).startswith('e'):
+                        -t e
+                    #else
+                        -t ${seq.tstv}
+                    #end if
                 #end if
-            
 
-                --pinv ${prop_invar}
-                
+                #if str($prop_invar).startswith('e'):
+                        --pinv e
+                #else
+                        --pinv ${prop_invar}
+                #end if
+
                 --nclasses ${nbSubstCat}
                 
                 #if (str($nbSubstCat) != "1"):
-                    --alpha ${gamma}
+
+                    #if str($gamma).startswith('e'):
+                        --alpha e
+                    #else
+                        --alpha ${gamma}
+                    #end if
                 #end if
 
                 --search ${move}
@@ -100,20 +112,27 @@
                 <option value="cfg">Type information file</option>
             </param>
             <when value="nt">
-               <param name="tstv" type="text" value="e" label="Transition/transversion ratio" help="Must be a positive integer, 'e' if you want PhyML to estimate it"  />
+               <param name="tstv" type="text" value="estimated" label="Transition/transversion ratio"
+                      help="Must be a positive integer, 'e' if you want PhyML to estimate it"  />
                <param name="model" type="select" label="Substitution model">
-                    <option value="HKY85">HKY85</option>
+                    <option value="HKY85" selected="true">HKY85</option>
                     <option value="JC69">JC69</option>
                     <option value="K80">K80</option>
                     <option value="F81">F81</option>
                     <option value="F84">F84</option>
                     <option value="TN93">TN93</option>
                     <option value="GTR">GTR</option>
-                </param>
+               </param>
+               <param name="equi_freq" type="select" label="Equilibrium frequencies"
+                       help="Empirical: frequencies are estimated by counting the occurences in the alignment.
+                       ML/Model:frequencies are estimated using ML for nucleotides or defined by the proteic substitution model.">
+                    <option value="m">ML/Model</option>
+                    <option value="e" selected="true">Empirical</option>
+               </param>
             </when>
             <when value="aa">
                 <param name="model" type="select" label="Evolution model">
-                    <option value="LG">LG</option>
+                    <option value="LG" selected="true">LG</option>
                     <option value="WAG">WAG</option>
                     <option value="JTT">JTT</option>
                     <option value="MtREV">MtREV</option>
@@ -127,25 +146,31 @@
                     <option value="MtArt">MtArt</option>
                     <option value="HIVw">HIVw</option>
                     <option value="HIVb">HIVb</option>
-                </param>            
+                </param>
+                <param name="equi_freq" type="select" label="Equilibrium frequencies"
+                       help="Empirical: frequencies are estimated by counting the occurences in the alignment.
+                       ML/Model:frequencies are estimated using ML for nucleotides or defined by the proteic substitution model.">
+                    <option value="m" selected="true">ML/Model</option>
+                    <option value="e">Empirical</option>
+                </param>
             </when>
             <when value="cfg">
-                 <param name="input_info" format="txt" type="data" multiple="false" label="Config file" help="Precompute file containning sequence description (dna or protein)"/>
+                 <param name="input_info" format="txt" type="data" multiple="false" label="Config file"
+                        help="Precompute file containning sequence description (dna or protein)"/>
             </when>
         </conditional>
-        <param name="prop_invar" type="text" value="e" label="Proportion of invariant sites" help="Can be a fixed value in the [0,1] range or 'e' to get the maximum likelihood estimate, 0 to ignore this parameter"/>
-        <param name="equi_freq" type="select" label="Equilibrium frequencies" help="Empirical: frequencies are estimated by counting the occurences in the alignment. ML/Model: frequencies are estimated using ML for nucleotides or defined by the proteic substitution model.">
-            <option value="m">ML/Model</option>
-            <option value="e">Empirical</option>
-        </param>
-        <param name="nbSubstCat" type="integer" min="1" value="4" label="Number of categories for the discrete gamma model" help="1 means no gamma model"  />
-        <param name="gamma"  type="text" value="e" label="Parameter of the gamma model" help="'e' if you want PhyML to estimate it"/>
+        <param name="prop_invar" type="text" value="estimated" label="Proportion of invariant sites"
+               help="Can be a fixed value in the [0,1] range or 'e' to get the maximum likelihood estimate, 0 to ignore this parameter"/>
+        <param name="nbSubstCat" type="integer" min="1" value="4" label="Number of categories for the discrete gamma model"
+               help="1 means no gamma model" />
+        <param name="gamma"  type="text" value="estimated" label="Parameter of the gamma model"
+               help="'e' if you want PhyML to estimate it"/>
         <param name="move" type="select" label="Tree topology search" display="radio">
             <option value="NNI">NNI (Nearest Neighbor Interchange)</option>
             <option value="SPR">SPR (Subtree Pruning and Regraphing)</option>
             <option value="BEST">Best of NNI and SPR</option>
         </param>
-        <param name="optimisationTopology" type="select" label="Optimise topology">
+        <param name="optimisationTopology" type="select" label="Optimise parameters">
             <option value="tlr">Tree topology, Branch length, Rate parameter</option>
             <option value="tl">Tree topology, Branch length</option>
             <option value="l">Branch length</option>
@@ -153,7 +178,8 @@
             <option value="n">No parameter is optimized</option>
         </param>
            <conditional name="support_condition">
-               <param name="branchSupport" type="select" label="Statistical tests for branch support" help="Use aLRT or aBayes to save computing time">
+               <param name="branchSupport" type="select" label="Statistical test for branch support"
+                      help="Use aLRT or aBayes to save computing time">
                 <option value="0">No bootstrap</option>
                 <option value="1">Bootstrap</option>
                 <option value="-1">likelihood aLRT statistics</option>
@@ -167,12 +193,14 @@
             <when value="-4"/>
             <when value="-5"/>
             <when value="1">
-                <param name="replicate" type="integer" min="1" value="100" label="Number of bootstrap replicates" help="Must be a positive integer" />
+                <param name="replicate" type="integer" min="1" value="100" label="Number of bootstrap replicates"
+                       help="Must be a positive integer" />
             </when>
         </conditional>
-        <param name="numStartSeed" type="integer" value="0" label="Number of seed used to initiate the random number generator" help="0 to random seed"/>
+        <param name="numStartSeed" type="integer" value="0" label="Seed value used to initiate the random number"
+               help="0 to random seed"/>
         <conditional name="usetree">
-            <param name="inputTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Use input tree guide" />
+            <param name="inputTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="User starting tree" />
             <when value="true">
                 <param name="userInputTree" type="data" label="Tree file" help="newick format"/>
             </when>
