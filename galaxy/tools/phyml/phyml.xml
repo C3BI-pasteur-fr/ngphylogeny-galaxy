@@ -142,23 +142,23 @@
             <option value="SPR">SPR (Subtree Pruning and Regraphing)</option>
             <option value="BEST">Best of NNI and SPR</option>
         </param>
-        <param name="optimisationTopology" type="select" label="Optimise parameters">
-            <option value="tlr">Tree topology, Branch length, Rate parameter</option>
+        <param name="optimisationTopology" type="select" label="Optimise parameter">
+            <option value="tlr">Tree topology, Branch length, Model parameter</option>
             <option value="tl">Tree topology, Branch length</option>
             <option value="l">Branch length</option>
-            <option value="r">Rate parameter</option>
+            <option value="r">Model parameter</option>
             <option value="n">No parameter is optimized</option>
         </param>
-           <conditional name="support_condition">
-               <param name="branchSupport" type="select" label="Statistical test for branch support"
-                      help="Use aLRT or aBayes to save computing time">
-                <option value="0">No bootstrap</option>
+        <conditional name="support_condition">
+            <param name="branchSupport" type="select" label="Statistical test for branch support"
+                  help="Use aLRT or aBayes to save computing time">
+                <option value="0">No support</option>
                 <option value="1">Bootstrap</option>
-                <option value="-1">likelihood aLRT statistics</option>
-                <option value="-2">likelihood Chi2-based</option>
+                <option value="-1">Likelihood aLRT statistics</option>
+                <option value="-2">Likelihood Chi2-based</option>
                 <option value="-4" selected='true'>SH-like</option>
                 <option value="-5">Approximate Bayes branch supports</option>
-            </param>  
+            </param>
             <when value="0"/>
             <when value="-1"/>
             <when value="-2"/>
@@ -169,7 +169,7 @@
                        help="Must be a positive integer" />
             </when>
         </conditional>
-        <param name="numStartSeed" type="integer" value="0" label="Seed value used to initiate the random number"
+        <param name="numStartSeed" type="integer" value="0" label="Seed value used to initiate the random number generator "
                help="0 to random seed"/>
         <conditional name="usetree">
             <param name="inputTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="User starting tree" />

@@ -82,12 +82,12 @@
             </param>
             <when value="d">
                 <param name="modeldna" type="select" label="Evolutionary model">
-                    <option value="4" selected="true">F84</option>
+                    <option value="4">F84</option>
                     <option value="R">RY</option>
                     <option value="1">F81</option>
                     <option value="J">JC69</option>
                     <option value="K">K2P</option>
-                    <option value="T">TN93</option>
+                    <option value="T" selected="true">TN93</option>
                     <option value="p">p-distance</option>
                 </param>
             </when>
