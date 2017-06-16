@@ -76,3 +76,12 @@ repositories:
     include:
       - phyml-sms/phyml_sms.xml
       - phyml-sms/test-data/**
+
+  phyml:
+    owner: fmareuil
+    description: "Phylogeny software based on the maximum-likelihood"
+    long_description: >
+     "A simple, fast, and accurate algorithm to estimate large phylogenies by maximum likelihood"
+    include:
+      - phyml/phyml.xml
+      - phyml/test-data/**

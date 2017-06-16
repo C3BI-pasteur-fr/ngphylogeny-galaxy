@@ -7,14 +7,14 @@
     <requirements>
         <requirement type="package" version="3.1">phyml</requirement>
     </requirements>
+    <stdio>
+        <regex match="*"
+               source="stderr"
+               level="fatal"/>
+    </stdio>
     <version_command>
         <![CDATA[ phyml --version ]]>
     </version_command>
-    <stdio>
-        <regex match="*"
-               source="stdrr"
-               level="fatal"/>
-    </stdio>
     <command>
         <![CDATA[
             ##PhyML outputs are based on input path and we need to create outputs in working_dir.
@@ -174,7 +174,7 @@
         <conditional name="usetree">
             <param name="inputTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="User starting tree" />
             <when value="true">
-                <param name="userInputTree" type="data" label="Tree file" help="newick format"/>
+                <param name="userInputTree" type="data" format="nhw, nwk" label="Tree file" help="newick format"/>
             </when>
             <when value="false"/>
         </conditional>
