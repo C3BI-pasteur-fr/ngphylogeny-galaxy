@@ -28,18 +28,18 @@
     
     </command>
     <inputs>
-        <param name="input" type="data" format="fasta" label="Source file" help="Fasta format"/>
+        <param name="input" type="data" format="fasta" label="Fasta file" help="Fasta format"/>
         <param name="datatype" type="select" label="Data type">
             <option value="-t=d">DNA</option>
             <option value="-t=c">Codon</option>
             <option value="-t=p">Protein</option>
         </param>
-        <param name="b1" type="text" value="default" label="Minimum number of sequences for a conserved position, must be BIGGER than half the number" help="By default, = 50% of the number of sequences +1." />
-        <param name="b2" type="text" value="default" label="Minimum number of Sequences for a flank position, SMALLER than Minimum Number Of Sequences For A Conserved Position" help="By default, = 85% of the number of sequences"/>
-        
-        <param name="b3" type="integer" value="8" label="Maximum number of contiguous non-conserved positions" help="All segment with contiguous non-conserved positions bigger than this value is rejected" />
-        <param name="b4" type="integer" value="10" label="Minimum length of a block" help="Any integer >1" />
-        <param name="b5" type="select" label="Allowed gap positions">
+        <param name="b1" type="text" value="default" label="Minimum number of sequences for a conserved position (b1)" help="By default, = 50% of the number of sequences +1." />
+        <param name="b2" type="text" value="default" label="Minimum number of sequences for a flank position (b2)" help="By default, = 85% of the number of sequences"/>
+
+        <param name="b3" type="integer" value="8" label="Maximum number of contiguous non-conserved positions (b3)" help="All segment with contiguous non-conserved positions bigger than this value is rejected" />
+        <param name="b4" type="integer" value="10" label="Minimum length of a block (b4)" help="Any integer >1" />
+        <param name="b5" type="select" label="Allowed gap positions (b5)">
             <option value="n">None</option>
             <option value="h">With half</option>
             <option value="a">All</option>

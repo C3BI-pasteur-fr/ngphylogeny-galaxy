@@ -32,12 +32,12 @@
                     --missing $missingchar.chars
                  #end if
                  --ordering
-                 #if $orderingmethode.ordering == "rand":
-                   RAND[,$orderingmethode.randpermut]
-                 #else if $orderingmethode.ordering == "list":
-                   $orderingmethode.randpermutlist
+                 #if $orderingmethod.ordering == "rand":
+                   RAND[,$orderingmethod.randpermut]
+                 #else if $orderingmethod.ordering == "list":
+                   $orderingmethod.randpermutlist
                  #else:
-                   $orderingmethode.ordering
+                   $orderingmethod.ordering
                  #end if
 
                  $constant
@@ -65,13 +65,15 @@
                 <param name="input_info" type="data" format="txt" label="Information file" help="Precompute file containning sequence description (dna or protein)" />
             </when>
 		</conditional>
-		<param name="cutoff" type="float" value="0.8" min="0" max="1" label="cut-off  [ 0-1 ]" help="Columns with a score below FLOAT are removed from the output alignment." />
-		<param name="distance" type="select" label="Distance methode used by NeighbotNet">
+
+        <param name="cutoff" type="float" value="0.8" min="0" max="1" label="cut-off  [ 0-1 ]"
+               help="Columns with a score below the cut-off are removed from the output alignment." />
+		<param name="distance" type="select" label="Distance method used by Neighbor-Net">
 		    <option value="HAMMING">HAMMING</option>
             <option value="GTR">GTR</option>
         </param>
         <conditional name="usematrix">
-         <param name="matrix" type="boolean"  truevalue="true" falsevalue="" checked="False" label="Use matrix file" help="default is calculate distances with nnet"/>
+         <param name="matrix" type="boolean"  truevalue="true" falsevalue="" checked="False" label="Use matrix file?" help="default is calculate distances with Neighbor-Net"/>
          <when value=""/>
          <when value="true">
             <param name="matrixfile" format="text" type="data" label="matrix file"/>
@@ -84,8 +86,8 @@
                 <param name="chars" type="text" label="Missing chars list"/>
             </when>
         </conditional>
-        <conditional name="orderingmethode">
-	        <param name="ordering" type="select" display="radio" label="Choose ordering method">
+        <conditional name="orderingmethod">
+	        <param name="ordering" type="select" display="radio" label="Ordering method">
 	            <option value="nnet">NeighborNet</option>
 	            <option value="qnet">QNet</option>
 	            <option value="rand">Sample INT random permutation</option>
@@ -96,21 +98,22 @@
             <when value="qnet"/>
             <when value="all"/>
             <when value="rand">
-                <param name="randpermut" type="integer" value="1000" label="random permutation"/>
+                <param name="randpermut" type="integer" value="1000" label="Number of random permutation"/>
             </when>
             <when value="list">
-                <param name="randpermutlist" type="text" label="Comma-seperated string of INT"/>
+                <param name="randpermutlist" type="text" label="Comma-seperated string of integer"/>
             </when>
          </conditional>
-         <param name="constant" type="boolean" truevalue="" falsevalue="--noconstant" checked="True" label="Constant columns in output alignment" />
-         <param name="gap" type="boolean" truevalue="" falsevalue="--nogap" checked="True" label="Count gap symbol as character state"/>
-         <param name="smooth" type="integer" value="1" min="0" max="1000" label="Running average over INT columns" help="Calculate a running average over the reliability score of INT columns and use this smoothed values to remove unreliable columns from the MAS.s" />
-         <param name="shuffles" type="integer" value="0" min="0" max="1000" label="Perform INT random shuffles per column of the MSA"/>
+         <param name="constant" type="boolean" truevalue="" falsevalue="--noconstant" checked="True" label="Constant columns in output alignment? " />
+         <param name="gap" type="boolean" truevalue="" falsevalue="--nogap" checked="True" label="Count gap symbol as character state? "/>
+         <param name="smooth" type="integer" value="1" min="0" max="1000" label="Running average over X columns"
+                help="Calculate a running average over the reliability score of X columns and use this smoothed values to remove unreliable columns from the MSA" />
+         <param name="shuffles" type="integer" value="1000" min="0" max="2000" label="Perform INT random shuffles per column of the MSA"/>
 	</inputs>
 	<outputs>
-		<data name="output1" format="fasta" label="Noisy Cleaned sequencies"  from_work_dir="*_out.fas" />
-		<data name="output2" format="eps" label="Noisy Cleaned sequencies image"  from_work_dir="*_typ.eps" />
-		<data name="output3" format="txt" label="Noisy Cleaned sequencies information"  from_work_dir="*_sta.gr" />
+		<data name="output1" format="fasta" label="Noisy Cleaned sequences"  from_work_dir="*_out.fas" />
+		<data name="output2" format="eps" label="Noisy Cleaned sequences image"  from_work_dir="*_typ.eps" />
+		<data name="output3" format="txt" label="Noisy Cleaned sequences information"  from_work_dir="*_sta.gr" />
 	</outputs>
 	<tests>
         <test>
@@ -129,10 +132,10 @@ Options::
 
  --cutoff FLOAT     Set cutoff value to FLOAT. Columns with a score below FLOAT are removed from the output alignment.
                      (default is >0.80<)
- --distance STRING  Distance methode used by NeighbotNet.
+ --distance STRING  Distance method used by Neighbor-Net.
                      (default is >HAMMING< [HAMMING|GTR])
  -h, --help         Print usage message for noisy.
- --matrix FILE      Use distance matrix for NeighbotNet from FILE.
+ --matrix FILE      Use distance matrix for Neighbor-Net from FILE.
                      (default is >calculate distances with nnet<)
  --missing STRING   Set list of missing characters to STRING.
                      (default is >N<)
@@ -143,7 +146,7 @@ Options::
  --ordering STRING
                     Choose ordering method.
                      (default is >nnet<)
-                    nnet         NeighborNet
+                    nnet         Neighbor-Net
                     qnet         QNet algorithm is O(n^4) both in time and memory, be careful when you use this option.
                     rand[,INT]   sample INT random permutation. With rand a random sample of all possible orderings of the TAXA can be specified for which the reliability score is calculated
                                 (default is >1000<)
@@ -151,7 +154,7 @@ Options::
                     all          all permutations, If all is used than for all possible permutations of the TAXA the reliability score is calculated (Note that for more than 8 TAXA this can become rather time consuming!).
 
  --shuffles INT     Perform INT random shuffles per column.
-                     (default is >0<)
+                     (default is >1000<)
  -s, --silent       Turn off status bar
                      (default is >0<)
  --smooth INT       Running avarage over INT columns.

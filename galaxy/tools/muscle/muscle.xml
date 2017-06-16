@@ -9,13 +9,12 @@
     <version_command>
       <![CDATA[  muscle -version ]]>
     </version_command>
-    <command>
+    <command><![CDATA[
                 muscle
                 ##Do not display progress messages
                 -quiet
-                -in $input 
-                -out $output 
-                    
+                -in $input
+
                 #if $mode.run == "custom" :
                     -maxiters $mode.iterations
                 #else:
@@ -24,51 +23,70 @@
                 
                 -cluster1 $cluster
                 $diags
-                $outputFormat      
+                $outputFormat
+                #for $output in $outputFormat.value
+                    #if $output
+                        -${output}out file_$output
+                    #end if
+                #end for
+            ]]>
     </command>
     <inputs>
-        <param name="input" type="data" format="fasta" label="Source file" help="Fasta sequence file"/>
+        <param name="input" type="data" format="fasta" label="Fasta file" help="Input file in FASTA format"/>
         <conditional name="mode">
-            <param name="run" type="select" label="Run mode">
-                <option value="2">Progressive mode (faster)</option>
-                <option value="1">Fastest mode</option>
-                <option value="16" selected="true" >Full mode</option> 
+            <param name="run" type="select" label="Run options" help="The number of iterations is predefined to allow to select between accuracy or speed options">
+                <option value="16" selected="true" >Most accurate, maxiters=16</option>
+                <option value="2">Compromise options for large datasets, maxiters=2 </option>
+                <option value="1">Fastest mode, maxiters=1 </option>
                 <option value="custom">Custom mode</option>
             </param>
             <when value="2" />
             <when value="1" />
             <when value="16" />
             <when value="custom">
-                <param name="iterations" type="integer" min='1' value="16" label="Maximum number of iterations" help="Increase the quality, increase the computing time"/>
+                <param name="iterations" type="integer" min='1' value="16" label="Maximum number of iterations (-maxiters)"
+                       help="Increase the quality, increase the computing time"/>
             </when>
         </conditional>
         
-        <param name="diags" type="boolean" truevalue="-diags" falsevalue="" checked="False" label="Find diagonals" help="Faster for similar sequences" />
+        <param name="diags" type="boolean" truevalue="-diags" falsevalue="" checked="False" label="Find diagonals (-diags)"
+               help="Use diagonal optimization. This can significantly improve speed with closely-related sequences." />
         
-        <param name="cluster" type="select" label="Clustering method">
+        <param name="cluster" type="select" label="Clustering (tree-building) options"
+               help="Algorithm use to build guide trees for progressive alignment">
             <option value="upgma">UPGMA</option>
             <option value="upgmb" selected="true" >UPGMB</option> 
             <option value="neighborjoining">Neighbor Joining</option>
         </param>
-        <param name="outputFormat" type="select" label="Output format" help="Either Fasta, Phylip">
-            <option value="" selected="true">Fasta</option>
-            <option value="-phyi">Phylip Interleaved format</option>
-            <option value="-phys">Phylip Sequential format</option>
-        </param>
-    </inputs>
-    <outputs>
-        <data name="output" format="fasta" label="MUSCLE Aligned sequencies ">
-            <change_format>
-                <when input="outputFormat" value="" format="fasta"/>
-                <when input="outputFormat" value="-phyi" format="phylip"/>
-                <when input="outputFormat" value="-phys" format="phylip"/>
-            </change_format>
+	<param name="outputFormat" type="select" multiple="true" label="Output file(s)">
+            <option value="fasta" selected="true">Fasta</option>
+            <option value="phys">Phylip sequential</option>
+            <option value="phyi">Phylip interleave</option>
+            <option value="clw">Clustalw</option>
+            <option value="html">HTML (colored web page)</option>
+    </param>
+	</inputs>
+	<outputs>
+		<data name="outputfasta" format="fasta" label="Muscle alignment fasta" from_work_dir="file_fasta">
+			<filter>'fasta' in outputFormat</filter>
+		</data>
+		<data name="outputphys" format="phylip" label="Muscle alignment Phylip sequential"  from_work_dir="file_phys">
+			<filter>'phys' in outputFormat</filter>
+		</data>
+		<data name="outputphyi" format="phylip" label="Muscle alignment Phylip interleave" from_work_dir="file_phyi">
+			<filter>'phyi' in outputFormat</filter>
+		</data>
+        <data name="outputclw" format="clw" label="Muscle alignment Clustalw format" from_work_dir="file_clw">
+            <filter>'clw' in outputFormat</filter>
+        </data>
+        <data name="outputhtml" format="html" label="Muscle alignment Html" from_work_dir="file_html">
+            <filter>'html' in outputFormat</filter>
         </data>
     </outputs>
     <tests>
         <test>
             <param name="input" value="seqtest.fasta"/>
-            <param name="output" value="seqtest_aln.fasta"/>
+            <output name="outputfasta" value="seqtest_aln.fasta"/>
         </test>
     </tests>
     <help>
@@ -78,31 +96,7 @@
 **MUSCLE version 3.8.31, 2004**
    
 -----
-   
-==============
- Please cite: 
-==============
-    
-"MUSCLE: multiple sequence_ alignment with high accuracy and high throughput."
 
-
-.. _sequence: http://nar.oxfordjournals.org/content/32/5/1792.long
-
-**Edgar R.C.**
-
-Nucleic Acids Res. 32(5):1792-1797, doi:10.1093/nar/gkh340, 2004.
-
-"MUSCLE: a multiple sequence alignment_ method with reduced time and space complexity."
-
-
-.. _alignment: http://www.biomedcentral.com/1471-2105/5/113/
-
-**Edgar R.C.**
-
-BMC Bioinformatics, (5) 113, 2004.
-
------    
-    
 ==========
  Overview
 ==========    
@@ -114,7 +108,26 @@ MUSCLE is a program for creating multiple alignments of amino acid or nucleotide
 For further informations, please visite the MUSCLE_ website.
 
 .. _MUSCLE: http://www.drive5.com/muscle/
-	
-    </help>
 
+**Basic usage:**
+
+    muscle -in <inputfile> -out <outputfile>
+
+**Common options (for a complete list please see the User Guide):**
+
+  :-in: *<inputfile>*    Input file in FASTA format (default stdin)
+  :-out: *<outputfile>*  Output alignment in FASTA format (default stdout)
+  :-diags:               Find diagonals (faster for similar sequences)
+  :-maxiters: *<n>*      Maximum number of iterations (integer, default 16)
+  :-html:                Write output in HTML format (default FASTA)
+  :-phys:                 Write output in Phylip sequencial format (default FASTA)
+  :-phyi:                 Write output in Phylip interleave format (default FASTA)
+  :-clw:                 Write output in CLUSTALW format (default FASTA)
+  :-quiet:             Do not write progress messages to stderr
+
+    </help>
+	<citations>
+        <citation type="doi">10.1093/nar/gkh340</citation>
+        <citation type="doi">10.1186/1471-2105-5-113</citation>
+    </citations>
 </tool>
