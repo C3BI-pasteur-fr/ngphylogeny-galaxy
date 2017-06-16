@@ -1,1 +1,4 @@
-# phylogeny.fr_v2
+# NGPhylogeny Galaxy
+
+Phylogeny Suite tools
+=====================

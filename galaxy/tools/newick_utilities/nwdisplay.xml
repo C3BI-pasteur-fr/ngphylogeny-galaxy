@@ -1,4 +1,4 @@
-<tool id="nwdisplay" name="Newick Display" version="1">
+<tool id="nwdisplay" name="Newick Display" version="1.6">
     <description>Display a phylogenetic tree as SVG</description>
     <edam_operations>
         <edam_operation>operation_0567</edam_operation>
@@ -29,7 +29,7 @@
                  "visibility:hidden;"
             #end if			
 			
-			-l "font-family:$leafPolice;font-size:$leafSize;"
+			-l "font-family:$leafFont;font-size:$leafSize;"
 			-d "stroke:grey;fill:none;stroke-width:2;stoke-linecap:round;"
 			-w  $width
 			$radial
@@ -41,7 +41,7 @@
 		<param name="fileNewick" format="txt,nw,nwk,nhx" type="data" label="Newick file" />
 		<param name="scalebar" type="boolean" truevalue="" falsevalue="-S"	checked="True" label="Display scale bar" />
 		<param name="legend" type="text" value="" label="Unit name scale" />
-		<param name="leafPolice" type="text" value="sans-serif" label="Leaf police" />
+		<param name="leafFont" type="text" value="sans-serif" label="Leaf font" />
 		<param name="leafSize" type="text" value="10px" label="Leaf font-size" />
 		<conditional name="condbranchsupport">
 			<param name="branchsupport" type="select" label="Branch support">
@@ -49,7 +49,7 @@
                 <option value="false" selected="true">Hide branch support</option>
             </param>
 			<when value="true">
-				<param name="supcolor" type="text" value="red" label="color" />
+				<param name="supcolor" type="color" value="red" label="color" />
 				<param name="supfontsize" type="text" value="10px" label="font-size" />
 				<param name="suptransform" type="text" value="translateY(1.5em)" label="move" />
 			</when>
@@ -61,7 +61,7 @@
 				<option value="false" selected="true">Hide branch length</option>
 			</param>
 			<when value="true">
-				<param name="lencolor" type="text" value="blue" label="color" />
+				<param name="lencolor" type="color" value="blue" label="color" />
 				<param name="lenfontsize" type="text" value="10px" label="font-size" />
 				<param name="lentransform" type="text" value="translate(-1.5em,0em)" label="move" />
 			</when>
@@ -77,7 +77,7 @@
 		<test>
 		    <param name="fileNewick" value="tree.nwk"/>
 		    <param name="width" value="400"/>
-		    <param name="leafPolice" value="courier"/>
+		    <param name="leafFont" value="courier"/>
             <output name="output" file="tree.svg" lines_diff="2"/>
 		</test>
 		<test>

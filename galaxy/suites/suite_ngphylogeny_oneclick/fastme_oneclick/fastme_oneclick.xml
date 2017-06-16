@@ -52,7 +52,7 @@
             $equilibrium
             $removeGap
             $treeRefinement
-            -f $supportPrecision
+            -f $decimalPrecision
 
             #if $bootChoice.boot == "true"
                 --output_boot=$outputBoostrap
@@ -66,7 +66,7 @@
     <inputs>
         <param name="input" type="data" format="phylip, phy" label="Fastme input" help="Phylip Alignment or Matrix file"/>
         <conditional name="usetree">
-            <param name="inputTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Use input tree guide" />
+            <param name="inputTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Use a starting tree" />
             <when value="true">
                 <param name="userInputTree" type="data" label="Tree file" help="newick format"/>
             </when>
@@ -93,7 +93,7 @@
             </when>
             <when value="p">
                 <param name="modelprot" type="select" label="Evolutionary model">
-                    <option value="L">LG</option>
+                    <option value="L" selected="true">LG</option>
                     <option value="W">WAG</option>
                     <option value="J">JTT</option>
                     <option value="h">Day off</option>
@@ -111,7 +111,9 @@
                 <param name="input_info" format="txt" type="data" multiple="false" label="Config file" help="Precompute file containning sequence description (dna or protein)"/>
             </when>
         </conditional>
-        <param name="equilibrium" type="boolean" label="Equilibrium frequencies" truevalue="--equilibrium" falsevalue="" help="By default, frequencies are globally counted from the nucleotides alignment or defined by the proteic substitution model. By checking the box, frequencies are pairwise estimated by counting the nucleotides or estimated by counting the amino-acids in the alignment."/>
+        <param name="equilibrium" type="boolean" label="Equilibrium frequencies" truevalue="--equilibrium" falsevalue=""
+               help="By default, frequencies are globally counted from the nucleotides alignment or defined by the proteic substitution model.
+               By checking the box, frequencies are pairwise estimated by counting the nucleotides or estimated by counting the amino-acids in the alignment."/>
         <conditional name="gammaChoice">
             <param name="gamma" type="select" label="Gamma distributed rates across sites">
                 <option value="true">Yes</option>
@@ -126,7 +128,7 @@
             <option value="">Pairwise deletion of gaps</option>
             <option value="--remove_gap">Remove all sites with gap</option>
         </param>
-        <param name="distance" type="select" label="Distance algorithm">
+        <param name="distance" type="select" label="Starting tree (distance algorithm used)">
             <option value="--method=I">BIONJ</option>
             <option value="--method=B --branch_length=B">TaxAdd BalME</option>
             <option value="--method=O --branch_length=O">TaxAdd OLSME</option>
@@ -134,7 +136,7 @@
             <option value="--method=U">UNJ</option>
         </param>
         <param name="treeRefinement" type="select" display="radio" label="Tree Refinement" help='(NNI) Nearest Neighbor Interchanges,(SPR) Subtree Pruning and Regrafting '>
-            <option value="">None</option>
+            <option value="">No Refinement</option>
             <option value="--nni=O">OLS NNI</option>
             <option value="--nni=B">BalME NNI</option>
             <option value="--spr" selected="true">BalME SPR</option>
@@ -150,10 +152,10 @@
                 <param name="replicates" type="integer" value="1000" label="Number of replicates"/>
             </when>
         </conditional>
-        <param name="supportPrecision" type="integer" value="12" min="0" label="Number of digits after the dot to display branch support" />
+        <param name="decimalPrecision" type="integer" value="12" min="0" label="Decimal precision for branch lengths" />
     </inputs>
     <outputs>
-        <data name="outputTree" format="nwk" label="${fileout_label}"/>
+        <data name="outputTree" format="nhx" label="${fileout_label}"/>
         <data name="outputLog" format="txt" label="FastME Information"/>
         <data name="outputBoostrap" format="nwk" label="FastME Bootstrap trees">
             <filter>bootChoice['boot'] == "true"</filter>
