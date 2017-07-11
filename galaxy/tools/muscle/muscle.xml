@@ -111,14 +111,14 @@ For further informations, please visite the MUSCLE_ website.
 
 **Basic usage:**
 
-    muscle -in <inputfile> -out <outputfile>
+    muscle -in *inputfile* -out *outputfile*
 
 **Common options (for a complete list please see the User Guide):**
 
-  :-in: *<inputfile>*    Input file in FASTA format (default stdin)
-  :-out: *<outputfile>*  Output alignment in FASTA format (default stdout)
+  :-in: *inputfile*    Input file in FASTA format (default stdin)
+  :-out: *outputfile*  Output alignment in FASTA format (default stdout)
   :-diags:               Find diagonals (faster for similar sequences)
-  :-maxiters: *<n>*      Maximum number of iterations (integer, default 16)
+  :-maxiters: *n*      Maximum number of iterations (integer, default 16)
   :-html:                Write output in HTML format (default FASTA)
   :-phys:                 Write output in Phylip sequencial format (default FASTA)
   :-phyi:                 Write output in Phylip interleave format (default FASTA)
