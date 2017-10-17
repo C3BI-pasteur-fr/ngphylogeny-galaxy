@@ -13,11 +13,10 @@
         <data format="txt" name="output" label="Type information file ${input.name}"/>
     </outputs>
     <help>
-        ===========
-        Overview:
-        ===========
+Overview:
+===========
 
-        Detect sequence type and create a type information file
-        This tool is needed for the OneClick phylogeny workflow analysis.
+Detect sequence type and create a type information file
+This tool is needed for the OneClick phylogeny workflow analysis.
     </help>
 </tool>
