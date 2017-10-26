@@ -5,6 +5,8 @@
 </head>
 <body>
 ----------------
+INPUT
+----------------
 <p>
     <b>Input</b>:
     <i>multi-FASTA file</i><br>
@@ -13,7 +15,7 @@
 </p>
 ----------------
 MAFFT
-________________
+----------------
 <p>
     <a href="/root?tool_id=toolshed.pasteur.fr%2Frepos%2Ffmareuil%2Fmafft%2Frbc_mafft%2F7.273.1">
         <h4><span class="fa fa-info-circle"></span> MAFFT:</h4>
@@ -33,11 +35,12 @@ ________________
     <br>
 </p>
 -----------------
+Sequence type detection
 -----------------
 <p>Analyse fasta file to detect which type of sequences is contained in the file (dna or protein)</p>
 -----------------
 Noisy
-_________________
+-----------------
 <p>
     <a href="/root?tool_id=toolshed.pasteur.fr%2Frepos%2Ffmareuil%2Fnoisy%2Fnoisy%2F1.5.12.1">
         <h4><span class="fa fa-info-circle"></span> Noisy:</h4>
@@ -80,38 +83,38 @@ FastME
     <a href="/root?tool_id=toolshed.pasteur.fr%2Frepos%2Ffmareuil%2Ffastme%2Ffastme%2F2.1.5.1">
         <h4><span class="fa fa-info-circle"></span> FastME:</h4>
     </a>
-    <br>
+    <br />
     <b>Input</b>: <i>Phylip file </i>(from <b>Step 5</b>)
-    <br>
+    <br />
     <b>Output</b>:
     Tree Newick file
-    <br><br>
+    <br /><br />
     <u><i>parameters:</i></u>
-    <br><br>
+    <br /><br />
     - <b>Evolutionary model</b>
-    <i>Use TN93 or LG according to sequences type</i><br>
+    <i>Use F84 or LG according to sequences type</i><br />
     <ul>
-        <li>DNA: TN93</li>
+        <li>DNA: F84</li>
         <li>Protein: LG</li>
     </ul>
-- <b>Equilibrium frequencies</b>: <i>Yes</i> Frequencies are globally counted from the nucleotides alignment or defined
-by the proteic substitution model. By checking the box, frequencies are pairwise estimated by counting the nucleotides
-or estimated by counting the amino-acids in the alignment.<br>
-- <b>Gamma distributed rates across sites</b>: <i>Yes</i> Use gamma parameter<br>
-- <b>Gamma distribution</b>: <i>1</i><br>
-- <b>Remove gap strategy</b>: <i>Pairwise deletion of gaps</i><br>
-- <b>Distance algorithm</b>: <i>BoiNJ</i> Use BioNJ algorithm to calculate distances<br>
-- <b>Tree refinement</b>: <i>BalME SPR</i> Search optimized tree topology with Subtree-Pruning-Regrafting (SPR)<br>
+- <b>Equilibrium frequencies</b>: <i>Yes</i>. Frequencies are globally counted from the nucleotides alignment or defined
+by the proteic substitution model. Frequencies are pairwise estimated by counting the nucleotides
+or estimated by counting the amino-acids in the alignment.<br />
+- <b>Gamma distributed rates across sites</b>: <i>Yes</i>. Use gamma parameter<br />
+- <b>Gamma distribution</b>: <i>1</i><br />
+- <b>Remove gap strategy</b>: <i>Pairwise deletion of gaps</i><br />
+- <b>Distance algorithm</b>: <i>BoiNJ</i>. Use BioNJ algorithm to calculate distances<br />
+- <b>Tree refinement</b>: <i>BalME SPR</i>. Search optimized tree topology with Subtree-Pruning-Regrafting (SPR)<br />
 </p>
 ----------------
 PhyML
-________________
+----------------
 <p>
     <a href="/root?tool_id=toolshed.pasteur.fr%2Frepos%2Ffmareuil%2Fphyml%2Fphyml%2F3.1">
         <h4><span class="fa fa-info-circle"></span> PhyML:</h4>
     </a>
     <br>
-    <b>Input</b>: <i>Phylip file </i>(from <b>Step 5</b>)
+    <b>Input</b>: <i>Phylip file</i> (from <b>Noisy</b>)
     <br>
     <b>Output</b>:
     Tree Newick file
@@ -132,6 +135,22 @@ ________________
 - <b>Tree topology search</b>: <i>SPR</i> Search optimized tree topology with Subtree-Pruning-Regrafting (SPR)<br>
 - <b>Optimise parameters</b>: <i>Tree topology, Branch length, Rate parameter</i><br>
 - <b>Statistical test for branch support</b>: <i>SH-like</i>
+</p>
+
+----------------
+PhyML - SMS
+----------------
+<p>
+    <a href="">
+        <h4><span class="fa fa-info-circle"></span> PhyML-SMS:</h4>
+    </a>
+    <br />
+    <b>Input</b>: <i>Phylip file </i>
+    <br />
+    <b>Output</b>: <i>Tree Newick file</i>
+    <br /><br />
+    The SMS software tool determines the evolutionary model that best fits the input sequences
+    in a tree inference context.
 </p>
 ----------------
 Newick Display
