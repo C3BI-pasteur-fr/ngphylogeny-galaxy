@@ -76,10 +76,11 @@
                 
                 --no_memory_check > ${output_stdout};
 
-                #if $bootstrap == "true"
+                #if $support_condition.branchSupport == "1"
                     ##Compute BOOSTER bootstrap supports
                     gotree compute support $support_condition.algorithm -i  *_phyml_tree.txt -b *_phyml_boot_trees.txt -o $booster_support_tree -t \${GALAXY_SLOTS} --out-raw $avgdist --moved-taxa --highest-per-branches -l $boosterlog --dist-cutoff 0.3 --silent
                 #end if
+
         ]]>
     </command>
     <inputs>
