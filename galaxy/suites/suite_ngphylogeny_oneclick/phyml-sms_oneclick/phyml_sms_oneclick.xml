@@ -6,9 +6,9 @@
     </edam_operations>
     <requirements>
         <requirement type="package" version="1.7">phyml-sms</requirement>
-        <requirement type="package" version="3.0.1">R_3_0_1</requirement>
+        <requirement type="package" version="0.2.4">gotree</requirement>
     </requirements>
-	<command><![CDATA[
+    <command><![CDATA[
 
 		sms.sh
 		-i $input
@@ -49,90 +49,124 @@
 		#if $randstart.value != 0 and $move.value == "SPR" :
 		    -r $randstart
 		#end if
-		> $output_stdout
-		;
-		mv *_phyml_tree.txt $output_tree;
-		mv *_phyml_stats.txt $output_stats;
+		> ${output_stdout};
+
+		#if $support_condition.support == "boot"
+            ##Compute BOOSTER bootstrap supports
+            gotree compute support $support_condition.algorithm -i *_phyml_tree.txt
+                                                                -b *_phyml_boot_trees.txt
+                                                                -o booster_output_tree.nhx
+                                                                -l $boosterlog
+                                                                -t \${GALAXY_SLOTS}
+                                                                --out-raw $avgdist
+                                                                --moved-taxa --highest-per-branches
+                                                                --dist-cutoff 0.3 --silent;
+        #end if
 			]]>
-   	</command>
-	<inputs>
-		<param format="phylip" name="input" type="data" label="Alignment file" help="phylip format"/>
-		<conditional name="sequence">
-			<param name="seqtype" type="select" label="Data type">
-				<option value="nt">Nucleic acids</option>
-				<option value="aa">Amino acids</option>
+    </command>
+    <inputs>
+        <param format="phylip, phy" name="input" type="data" label="Alignment file" help="phylip format"/>
+        <conditional name="sequence">
+        <param name="seqtype" type="select" label="Data type">
+            <option value="nt">Nucleic acids</option>
+            <option value="aa">Amino acids</option>
 				<option value="cfg">Type information file</option>
-			</param>
+        </param>
 			<when value="nt" />
 			<when value="aa" />
 			<when value="cfg">
                  <param name="input_info" format="txt" type="data" multiple="false" label="Information file" help="Precompute file containning sequence description (dna or protein)"/>
             </when>
-		</conditional>   
-		<param name="stat_crit" type="select" label="Statistical criterion to select the model">
-				<option value="aic">AIC</option>
-				<option value="bic">BIC</option>
-		</param>
-		<param name="move" type="select" label="Tree topology search" display="radio">
-			<option value="NNI">NNI (Nearest Neighbor Interchange)</option>
-			<option value="SPR">SPR (Subtree Pruning and Regraphing)</option>
-		</param>
-   		<conditional name="support_condition">
-   			<param type="select" name="support" label="Branch support" help="Use aLRT or aBayes to save computing time">
-				<option value="sh">SH-like aLRT</option>
-				<option value="aBayes">aBayes</option>
-				<option value="boot">Bootstrap</option>
-				<option value="no">No branch support</option>
-			</param>  
-			<when value="sh"/>
-			<when value="aBayes"/>
-			<when value="boot">
-				<param type="integer" name="boot_number" min="1" value="100" label="Number of bootstrap replicates" help="Must be a positive integer"/>
-			</when>
-			<when value="no"/>
 		</conditional>
-               <conditional name="inpuTree">
-                   <param name="inputtree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Use input starting tree" />
-                   <when value="true">
-                       <param name="userInpuTree" type="data" label="Tree file" help="newick format"/>
-                   </when>
-                   <when value="false"/>
+        <param name="stat_crit" type="select" label="Statistical criterion to select the model">
+            <option value="aic">AIC</option>
+            <option value="bic">BIC</option>
+        </param>
+        <param name="move" type="select" label="Tree topology search" display="radio">
+            <option value="NNI">NNI (Nearest Neighbor Interchange)</option>
+            <option value="SPR">SPR (Subtree Pruning and Regraphing)</option>
+        </param>
+        <conditional name="support_condition">
+            <param type="select" name="support" label="Branch support" help="Use aLRT or aBayes to save computing time">
+                <option value="sh">SH-like aLRT</option>
+                <option value="aBayes">aBayes</option>
+                <option value="boot">Bootstrap</option>
+                <option value="no">No branch support</option>
+            </param>
+            <when value="sh"/>
+            <when value="aBayes"/>
+            <when value="boot">
+                <param type="integer" name="boot_number" min="1" value="100" label="Number of bootstrap replicates"
+                       help="Must be a positive integer"/>
+                <param name="algorithm" type="select" label="Choose algorithm">
+                    <option value="booster" selected="True">TBE (Transfer bootstrap)</option>
+                    <option value="classical">FBP (Felsenstein bootstrap)</option>
+                </param>
+            </when>
+            <when value="no"/>
         </conditional>
-        <param type="integer" name="randstart" value="0" min="0" max="10" label="Number of random starting trees" />
-	</inputs>
-	<outputs>
-		<data format="nhx" name="output_tree" label="PhyML Newick tree"/>
-		<data format="txt" name="output_stats" label="PhyML Statistics"/>
-		<data format="txt" name="output_stdout" label="SMS Best Model"/>
-		<data format="txt" name="output_models" label="SMS compare models"/>
-	</outputs>
-	<tests>
+        <conditional name="inpuTree">
+            <param name="inputtree" type="boolean" truevalue="true" falsevalue="false" checked="False"
+                   label="Use input starting tree"/>
+            <when value="true">
+                <param format="nhx, nwk" name="userInpuTree" type="data" label="Tree file" help="newick format"/>
+            </when>
+            <when value="false"/>
+        </conditional>
+        <param type="integer" name="randstart" value="0" min="0" max="10" label="Number of random starting trees"/>
+    </inputs>
+    <outputs>
+        <data name="boosterlog" format="txt" label="Booster: booster.log">
+            <filter>support_condition['support'] == "boot"</filter>
+        </data>
+        <data name="avgdist" format="nhx"
+              label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: ${input.name}_raw.nhx">
+            <filter>support_condition['support'] == "boot"</filter>
+        </data>
+        <data name="booster_support_tree" format="nhx" label="Booster: Tree with normalized supports: ${input.name}.nhx"
+              from_work_dir="booster_output_tree.nhx">
+            <filter>support_condition['support'] == "boot"</filter>
+        </data>
+        <data name="output_stats" format="txt"  label="PhyML Statistics" from_work_dir="*_phyml_tree.txt"/>
+        <data name="output_bootstrap_trees" format="txt" label="PhyML bootstrap trees: ${input.name}.boot_trees.txt"
+              from_work_dir="*_phyml_boot_trees.txt">
+            <filter>support_condition['support'] == "boot"</filter>
+        </data>
+        <data name="output_tree" format="nhx" label="PhyML newick tree: ${input.name}.nhx "/>
+        <data name="output_models" format="txt" label="SMS compare models"/>
+        <data name="output_stdout" format="txt" label="SMS Best Model"/>
+    </outputs>
+    <tests>
         <test>
-            <param name="input" value="phylip" />
-            <param name="seqtype" value="nt" />
-            <output name="output_models" file="sms.csv" />
-
+            <param name="input" value="phylip"/>
+            <param name="seqtype" value="nt"/>
+            <output name="output_models" file="sms.csv"/>
         </test>
     </tests>
-	<help><![CDATA[
+    <help><![CDATA[
 
 .. class:: infomark
 
 This script runs SMS to select the substitution model which best fits the input data.
 It may also run PhyML with the selected model.
+
 SMS options :
-	 -h = Help
-	 -i = **Mandatory** Input alignment file in PHYLIP format
-	 -d = **Mandatory** Data type : 'aa' or 'nt'
-	 -o = Output directory
-	 -p = Output CSV filename
-	 -c = Statistical criterion to select the model : 'AIC' (default) or 'BIC'
-	 -u = Input starting tree (Newick format)
-	 -t = Use this option if you want SMS to infer a tree with PhyML using the SMS selected model
- PhyML options :
-	 -s = Type of tree improvement : 'NNI (default)' or 'SPR'
-	 -r = Number of random starting trees : 0 (default)
-	 -b = Branch Support : >0 for bootstraps, -4 for aLRT, 0 (default)
+
+ -h  Help
+ -i  **Mandatory** Input alignment file in PHYLIP format
+ -d  **Mandatory** Data type : 'aa' or 'nt'
+ -o  Output directory
+ -p  Output CSV filename
+ -c  Statistical criterion to select the model : 'AIC' (default) or 'BIC'
+ -u  Input starting tree (Newick format)
+ -t  Use this option if you want SMS to infer a tree with PhyML using the SMS selected model
+
+PhyML options :
+
+ -s  Type of tree improvement : 'NNI (default)' or 'SPR'
+ -r  Number of random starting trees : 0 (default)
+ -b  Branch Support : >0 for bootstraps, -4 for aLRT, 0 (default)
+
 
 **PhyML 20120412**
 
@@ -224,8 +258,21 @@ Models References:
     Alexander Mirsky,Linda Kazandjian and Maria Anisimova
     Antibody-specific Model of Amino Acid Substitution for Immunological Inferences from Alignments of Antibody Sequences
     Mol Biol Evol (2014) doi: 10.1093/molbev/msu340
-		]]>
-	</help>
+
+##########################
+BOOSTER Bootstrap Supports
+##########################
+
+Three files are generated:
+
+1) "support" : Reference tree with branches labelled using normalized supports (1-avgdist/(p-1)), (p) being the number of taxa on the light side of the branch.
+2) "avgdist (raw)" : Reference tree with branches labelled as "branch id|average transfer distance|p"
+3) "booster.log": Booster log file with the following informations:
+    a) Global transfer score per taxa (2 columns: taxon\ttransferscore),
+    b) Most transferred taxa per branch (4 columns: Branch Id\tp\tAverage distance\tsemicolumn separated list of most transfered taxa with their respective transfer index)
+
+]]>
+    </help>
     <citations>
         <citation type="doi">10.1093/sysbio/syq010</citation>
         <citation type="doi">10.1093/nar/gki352</citation>

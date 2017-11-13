@@ -6,15 +6,11 @@
     </edam_operations>
     <requirements>
         <requirement type="package" version="3.1">phyml</requirement>
+        <requirement type="package" version="0.2.4">gotree</requirement>
     </requirements>
     <version_command>
         <![CDATA[ phyml --version ]]>
     </version_command>
-    <stdio>
-        <regex match="*"
-               source="stdrr"
-               level="fatal"/>
-    </stdio>
     <command>
         <![CDATA[
             ##PhyML outputs are based on input path and we need to create outputs in working_dir.
@@ -54,16 +50,21 @@
                 
                 #if (str($support_condition.branchSupport) in ['0','-1','-2','-4','-5']):
                     --bootstrap ${support_condition.branchSupport}
+
                 #else:
-                    --bootstrap ${support_condition.branchSupport.replicate}
+                    --bootstrap ${support_condition.replicate}
+
                 #end if
                     
                 #if ($seq.type_of_seq == "nt"):
+                    --model ${seq.modelnt}
                     #if str($seq.tstv).startswith('e'):
                         -t e
                     #else
                         -t ${seq.tstv}
                     #end if
+                #else
+                    --model ${seq.modelaa}
                 #end if
 
                 #if str($prop_invar).startswith('e'):
@@ -94,8 +95,12 @@
                     --r_seed ${numStartSeed}
                 #end if
                 
-                > ${output_stdout};
-                grep 'failed' ${output_stdout} >&2;
+                --no_memory_check > ${output_stdout};
+
+                #if $support_condition.branchSupport == "1"
+                    ##Compute BOOSTER bootstrap supports
+                    gotree compute support $support_condition.algorithm -i  *_phyml_tree.txt -b *_phyml_boot_trees.txt -o '${input.name}'.nhx -t \${GALAXY_SLOTS} --out-raw $avgdist --moved-taxa --highest-per-branches -l $boosterlog --dist-cutoff 0.3 --silent
+                #end if
         ]]>
     </command>
     <inputs>
@@ -114,7 +119,7 @@
             <when value="nt">
                <param name="tstv" type="text" value="estimated" label="Transition/transversion ratio"
                       help="Must be a positive integer, 'e' if you want PhyML to estimate it"  />
-               <param name="model" type="select" label="Substitution model">
+               <param name="modelnt" type="select" label="Substitution model">
                     <option value="HKY85" selected="true">HKY85</option>
                     <option value="JC69">JC69</option>
                     <option value="K80">K80</option>
@@ -131,7 +136,7 @@
                </param>
             </when>
             <when value="aa">
-                <param name="model" type="select" label="Evolution model">
+                <param name="modelaa" type="select" label="Evolution model">
                     <option value="LG" selected="true">LG</option>
                     <option value="WAG">WAG</option>
                     <option value="JTT">JTT</option>
@@ -195,6 +200,10 @@
             <when value="1">
                 <param name="replicate" type="integer" min="1" value="100" label="Number of bootstrap replicates"
                        help="Must be a positive integer" />
+                <param name="algorithm" type="select" label="Choose algorithm">
+                    <option value="booster" selected="True">TBE (Transfer bootstrap)</option>
+                    <option value="classical">FBP (Felsenstein bootstrap)</option>
+                </param>
             </when>
         </conditional>
         <param name="numStartSeed" type="integer" value="0" label="Seed value used to initiate the random number generator "
@@ -202,15 +211,30 @@
         <conditional name="usetree">
             <param name="inputTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="User starting tree" />
             <when value="true">
-                <param name="userInputTree" type="data" label="Tree file" help="newick format"/>
+                <param name="userInputTree" type="data" format="nhx, nwk" label="Tree file" help="newick format"/>
             </when>
             <when value="false"/>
         </conditional>
     </inputs>
     <outputs>
-        <data name="output_tree" format="nhx" label="PhyML Newick tree: ${input.name}.nwk" from_work_dir="*_phyml_tree.txt" />
-        <data name="output_stats" format="txt" label="PhyML Statistic: ${input.name}.stats.txt" from_work_dir="*_phyml_stats.txt"/>
-        <data name="output_stdout" format="txt" label="PhyML Stdout: ${input.name}"/>
+        <data name="boosterlog" format="txt" label="Booster: booster.log" >
+            <filter>support_condition['branchSupport'] == '1'</filter>
+        </data>
+        <data name="booster_support_tree" format="nhx" label="Booster: Tree with normalized supports: ${input.name}.nhx" from_work_dir="*.nhx">
+            <filter>support_condition['branchSupport'] == '1'</filter>
+        </data>
+        <data name="avgdist" format="nhx" label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: ${input.name}_raw.nhx">
+            <filter>support_condition['branchSupport'] == '1'</filter>
+        </data>
+        <data name="output_bootstrap_trees" format="txt" label="PhyML bootstrap trees: ${input.name}.boot_trees.txt" from_work_dir="*_phyml_boot_trees.txt">
+            <filter>support_condition['branchSupport'] == '1'</filter>
+        </data>
+        <data name="output_stdout" format="txt" label="PhyML log: ${input.name}.log"/>
+        <data name="output_stats" format="txt" label="PhyML statistic: ${input.name}.stats.txt" from_work_dir="*_phyml_stats.txt"/>
+        <data name="output_tree" format="nhx" label="PhyML Newick tree: ${input.name}.nhx" from_work_dir="*_phyml_tree.txt">
+            <filter>support_condition['branchSupport'] != '1'</filter>
+        </data>
+
     </outputs>
     <tests>
         <test>
@@ -359,13 +383,28 @@ OPTIONS
       This option may be useful when running simulations involving PhyML. 
   --quiet  
       No interactive question (for running in batch mode) and quiet output.
-  --alias_subpatt  
+  --no_memory_check
+      No interactive question for memory usage (for running in batch mode). Normal ouput otherwise.
+  --alias_subpatt
       Site aliasing is generalized at the subtree level. Sometimes lead to faster calculations.
       See Kosakovsky Pond SL, Muse SV, Sytematic Biology (2004) for an example.
   --boot_progress_display   num (default=20)
       num is the frequency at which the bootstrap progress bar will be updated.
       Must be an integer.
  ]]>
+
+##########################
+BOOSTER Bootstrap Supports
+##########################
+
+Three files are generated:
+
+1) "support" : Reference tree with branches labelled using normalized supports (1-avgdist/(p-1)), (p) being the number of taxa on the light side of the branch.
+2) "avgdist (raw)" : Reference tree with branches labelled as "branch id|average transfer distance|p"
+3) "booster.log": Booster log file with the following informations:
+    a) Global transfer score per taxa (2 columns: taxon\ttransferscore),
+    b) Most transfered taxa per branch (4 columns: Branch Id\tp\tAverage distance\tsemicolumn separated list of most transfered taxa with their respective transfer index)
+
     </help>
     <citations>
        <citation type="doi">10.1093/sysbio/syq010</citation> 

@@ -8,7 +8,6 @@
         <requirement type="package" version="3.1">phyml</requirement>
         <requirement type="package" version="0.2.4">gotree</requirement>
     </requirements>
-
     <version_command>
         <![CDATA[ phyml --version ]]>
     </version_command>
@@ -19,7 +18,6 @@
             #if ($usetree.inputTree == "true"):
             ln -sf ${$usetree.userInputTree} ${$usetree.userInputTree.name};
             #end if
-            #set $bootstrap = "false"
 
             phyml --input '${input.name}'
                 ${phylip_format}
@@ -32,7 +30,7 @@
 
                 #else:
                     --bootstrap ${support_condition.replicate}
-                    #set $bootstrap = "true"
+
                 #end if
                     
                 #if ($seq.type_of_seq == "nt"):
@@ -78,9 +76,14 @@
 
                 #if $support_condition.branchSupport == "1"
                     ##Compute BOOSTER bootstrap supports
-                    gotree compute support $support_condition.algorithm -i  *_phyml_tree.txt -b *_phyml_boot_trees.txt -o $booster_support_tree -t \${GALAXY_SLOTS} --out-raw $avgdist --moved-taxa --highest-per-branches -l $boosterlog --dist-cutoff 0.3 --silent
+                    gotree compute support $support_condition.algorithm -i *_phyml_tree.txt
+                                                                        -b *_phyml_boot_trees.txt
+                                                                        -o '${input.name}'.nhx
+                                                                        -t \${GALAXY_SLOTS}
+                                                                        --out-raw $avgdist --moved-taxa
+                                                                        --highest-per-branches -l $boosterlog
+                                                                        --dist-cutoff 0.3 --silent
                 #end if
-
         ]]>
     </command>
     <inputs>
@@ -186,7 +189,7 @@
         <conditional name="usetree">
             <param name="inputTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="User starting tree" />
             <when value="true">
-                <param name="userInputTree" type="data" format="nhw, nwk" label="Tree file" help="newick format"/>
+                <param name="userInputTree" type="data" format="nhx, nwk" label="Tree file" help="newick format"/>
             </when>
             <when value="false"/>
         </conditional>
@@ -195,7 +198,7 @@
         <data name="boosterlog" format="txt" label="Booster: booster.log" >
             <filter>support_condition['branchSupport'] == '1'</filter>
         </data>
-        <data name="booster_support_tree" format="nhx" label="Booster: Tree with normalized supports: ${input.name}.nhx ">
+        <data name="booster_support_tree" format="nhx" label="Booster: Tree with normalized supports: ${input.name}.nhx" from_work_dir="*.nhx">
             <filter>support_condition['branchSupport'] == '1'</filter>
         </data>
         <data name="avgdist" format="nhx" label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: ${input.name}_raw.nhx">
@@ -206,9 +209,7 @@
         </data>
         <data name="output_stdout" format="txt" label="PhyML log: ${input.name}.log"/>
         <data name="output_stats" format="txt" label="PhyML statistic: ${input.name}.stats.txt" from_work_dir="*_phyml_stats.txt"/>
-        <data name="output_tree" format="nhx" label="PhyML Newick tree: ${input.name}.nhx" from_work_dir="*_phyml_tree.txt">
-            <filter>support_condition['branchSupport'] != '1'</filter>
-        </data>
+        <data name="output_tree" format="nhx" label="PhyML Newick tree: ${input.name}.nhx" from_work_dir="*_phyml_tree.txt"/>
 
     </outputs>
     <tests>

@@ -6,18 +6,22 @@
     </edam_operations>
     <requirements>
         <requirement type="package" version="2.1.5">fastme</requirement>
+        <requirement type="package" version="0.2.4">gotree</requirement>
     </requirements>
+    <stdio>
+        <exit_code range="1:" level="fatal"/>
+    </stdio>
     <version_command>
         <![CDATA[ fastme --version ]]>
     </version_command>
-    <stdio>
-        <exit_code range="1:" level="fatal" />
-    </stdio>
     <command>
         <![CDATA[
+            ln -s $input '${input.name}';
+            ln -s $outputTree '${input.name}'_fastme.nhx;
+
             fastme
-            --input_data=$input
-            --output_tree=$outputTree
+            --input_data='${input.name}'
+            --output_tree='${input.name}'_fastme.nhx
             --output_matrix=$outputMatrix
             --output_info=$outputLog
             --nb_threads=\${GALAXY_SLOTS:-1}
@@ -55,26 +59,42 @@
             -f $decimalPrecision
 
             #if $bootChoice.boot == "true"
-                --output_boot=$outputBoostrap
+                --output_boot=fastme_boostrap_trees.nhx
                 --bootstrap=$bootChoice.replicates
             #end if
 
             >> tmp_stdout;
-            cat tmp_stdout > $outputLog;
+            cp tmp_stdout $outputLog;
+
+
+            #if $bootChoice.boot == "true"
+                ##Compute BOOSTER bootstrap supports
+                gotree compute support $bootChoice.algorithm -i '${input.name}'_fastme.nhx
+                                                             -b fastme_boostrap_trees.nhx
+                                                             -o '${input.name}'.nhx
+                                                             -l $boosterlog
+                                                             -t \${GALAXY_SLOTS}
+                                                             --out-raw $avgdist
+                                                             --moved-taxa --highest-per-branches
+                                                             --dist-cutoff 0.3 --silent;
+                cp '${input.name}'.nhx $outputBoostrap;
+            #end if
         ]]>
     </command>
     <inputs>
-        <param name="input" type="data" format="phylip, phy" label="Fastme input" help="Phylip Alignment or Matrix file"/>
+        <param name="input" type="data" format="phylip, phy" label="Fastme input"
+               help="Phylip Alignment or Matrix file"/>
         <conditional name="usetree">
-            <param name="inputTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Use a starting tree" />
+            <param name="inputTree" type="boolean" truevalue="true" falsevalue="false" checked="False"
+                   label="Use a starting tree"/>
             <when value="true">
-                <param name="userInputTree" type="data" label="Tree file" help="newick format"/>
+                <param name="userInputTree" type="data" format="nhx,nwk" label="Tree file" help="newick format"/>
             </when>
             <when value="false"/>
         </conditional>
-        <param name="fileout_label" type="text" value="Newick tree" label="Output name" help="Output name for files" />
+        <param name="fileout_label" type="text" value="Newick tree" label="Output name" help="Output name for files"/>
         <conditional name="typeChoice">
-            <param name="datatype" type="select" display="radio" label="Data type" >
+            <param name="datatype" type="select" display="radio" label="Data type">
                 <option value="d">DNA</option>
                 <option value="p">Protein</option>
                 <option value="m">Matrix</option>
@@ -120,9 +140,9 @@
                 <option value="false">No</option>
             </param>
             <when value="true">
-                <param name="rate" type="float"  value="1" min="0" label="Gamma distribution parameter"/>
+                <param name="rate" type="float" value="1" min="0" label="Gamma distribution parameter"/>
             </when>
-            <when value="false" />
+            <when value="false"/>
         </conditional>
         <param name="removeGap" type="select" display="radio" label="Remove gap strategy">
             <option value="">Pairwise deletion of gaps</option>
@@ -135,7 +155,8 @@
             <option value="--method=N">NJ</option>
             <option value="--method=U">UNJ</option>
         </param>
-        <param name="treeRefinement" type="select" display="radio" label="Tree Refinement" help='(NNI) Nearest Neighbor Interchanges,(SPR) Subtree Pruning and Regrafting '>
+        <param name="treeRefinement" type="select" display="radio" label="Tree Refinement"
+               help='(NNI) Nearest Neighbor Interchanges,(SPR) Subtree Pruning and Regrafting'>
             <option value="">No Refinement</option>
             <option value="--nni=O">OLS NNI</option>
             <option value="--nni=B">BalME NNI</option>
@@ -150,17 +171,30 @@
             <when value="false"/>
             <when value="true">
                 <param name="replicates" type="integer" value="1000" label="Number of replicates"/>
+                <param name="algorithm" type="select" label="Choose algorithm">
+                    <option value="booster" selected="True">TBE (Transfer bootstrap)</option>
+                    <option value="classical">FBP (Felsenstein bootstrap)</option>
+                </param>
             </when>
         </conditional>
-        <param name="decimalPrecision" type="integer" value="12" min="0" label="Decimal precision for branch lengths" />
+        <param name="decimalPrecision" type="integer" value="12" min="0" label="Decimal precision for branch lengths"/>
     </inputs>
     <outputs>
-        <data name="outputTree" format="nhx" label="${fileout_label}"/>
-        <data name="outputLog" format="txt" label="FastME Information"/>
-        <data name="outputBoostrap" format="nwk" label="FastME Bootstrap trees">
+        <data name="boosterlog" format="txt" label="Booster: booster.log" >
             <filter>bootChoice['boot'] == "true"</filter>
         </data>
-        <data name="outputMatrix" format="txt" label="FastME Distance matrix"/>
+        <data name="booster_support_tree" format="nhx" label="Booster: Tree with normalized supports: ${input.name}.nhx">
+            <filter>bootChoice['boot'] == "true"</filter>
+        </data>
+        <data name="avgdist" format="nhx" label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: ${input.name}_raw.nhx">
+            <filter>bootChoice['boot'] == "true"</filter>
+        </data>
+        <data name="outputBoostrap" format="nwk" label="FastME Bootstrap trees" from_work_dir="fastme_boostrap_trees.nhx">
+            <filter>bootChoice['boot'] == "true"</filter>
+        </data>
+        <data name="outputLog" format="txt" label="FastME Information"/>
+        <data name="outputMatrix" format="txt" label="FastME Distance matrix" />
+        <data name="outputTree" format="nhx" label="${fileout_label}" />
     </outputs>
     <tests>
         <test>
@@ -183,7 +217,7 @@
         </test>
     </tests>
     <help>
-
+<![CDATA[
 .. class:: infomark
 
 
@@ -211,9 +245,12 @@ Comprehensive, accurate and fast distance-based phylogeny inference program
 Description
 -----------
 
-FastME provides distance algorithms to infer phylogenies. It's based on balanced minimum evolution, which is the very principle of NJ.
+FastME provides distance algorithms to infer phylogenies. It's based on balanced minimum evolution, which is the
+very principle of NJ.
 
-FastME included Nearest Neighbor Interchange (NNI) and also Subtree Pruning and Regrafting (SPR), while remaining as fast as NJ and providing a number of facilities: distance estimation for DNA and proteins with various models and options, bootstrapping, and parallel computations.
+FastME included Nearest Neighbor Interchange (NNI) and also Subtree Pruning and Regrafting (SPR), while
+remaining as fast as NJ and providing a number of facilities: distance estimation for DNA and proteins with
+various models and options, bootstrapping, and parallel computations.
 
 ------------
 Dependencies
@@ -376,7 +413,7 @@ OPTIONS
 For further informations, please visite FastME_
 
 .. _FastME: http://www.atgc-montpellier.fr/fastme/usersguide.php
-
+    ]]>
     </help>
     <citations>
        <citation type="doi">10.1093/molbev/msv150</citation>
