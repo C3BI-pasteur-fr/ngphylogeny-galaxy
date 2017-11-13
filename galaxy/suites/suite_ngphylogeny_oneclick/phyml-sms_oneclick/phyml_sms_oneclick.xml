@@ -127,12 +127,12 @@
               from_work_dir="booster_output_tree.nhx">
             <filter>support_condition['support'] == "boot"</filter>
         </data>
-        <data name="output_stats" format="txt"  label="PhyML Statistics" from_work_dir="*_phyml_tree.txt"/>
+        <data name="output_stats" format="txt"  label="PhyML Statistics" from_work_dir="*_phyml_stats.txt"/>
         <data name="output_bootstrap_trees" format="txt" label="PhyML bootstrap trees: ${input.name}.boot_trees.txt"
               from_work_dir="*_phyml_boot_trees.txt">
             <filter>support_condition['support'] == "boot"</filter>
         </data>
-        <data name="output_tree" format="nhx" label="PhyML newick tree: ${input.name}.nhx "/>
+        <data name="output_tree" format="nhx" label="PhyML newick tree: ${input.name}.nhx" from_work_dir="*_phyml_tree.txt"/>
         <data name="output_models" format="txt" label="SMS compare models"/>
         <data name="output_stdout" format="txt" label="SMS Best Model"/>
     </outputs>
