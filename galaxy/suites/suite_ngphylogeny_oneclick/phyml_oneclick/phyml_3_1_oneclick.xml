@@ -99,7 +99,16 @@
 
                 #if $support_condition.branchSupport == "1"
                     ##Compute BOOSTER bootstrap supports
-                    gotree compute support $support_condition.algorithm -i  *_phyml_tree.txt -b *_phyml_boot_trees.txt -o '${input.name}'.nhx -t \${GALAXY_SLOTS} --out-raw $avgdist --moved-taxa --highest-per-branches -l $boosterlog --dist-cutoff 0.3 --silent
+                    gotree compute support $support_condition.algorithm -i *_phyml_tree.txt
+                                                                        -b *_phyml_boot_trees.txt
+                                                                        -o '${input.name}'.nhx
+                                                                        -t \${GALAXY_SLOTS}
+                                                                     #if $support_condition.algorithm == 'booster'
+                                                                        --out-raw $avgdist
+                                                                        --moved-taxa --highest-per-branches
+                                                                        --dist-cutoff 0.3
+                                                                     #end if
+                                                                       --silent;
                 #end if
         ]]>
     </command>
@@ -224,17 +233,14 @@
             <filter>support_condition['branchSupport'] == '1'</filter>
         </data>
         <data name="avgdist" format="nhx" label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: ${input.name}_raw.nhx">
-            <filter>support_condition['branchSupport'] == '1'</filter>
+            <filter>support_condition['branchSupport'] == '1' and support_condition['algorithm'] == 'booster' </filter>
         </data>
         <data name="output_bootstrap_trees" format="txt" label="PhyML bootstrap trees: ${input.name}.boot_trees.txt" from_work_dir="*_phyml_boot_trees.txt">
             <filter>support_condition['branchSupport'] == '1'</filter>
         </data>
         <data name="output_stdout" format="txt" label="PhyML log: ${input.name}.log"/>
         <data name="output_stats" format="txt" label="PhyML statistic: ${input.name}.stats.txt" from_work_dir="*_phyml_stats.txt"/>
-        <data name="output_tree" format="nhx" label="PhyML Newick tree: ${input.name}.nhx" from_work_dir="*_phyml_tree.txt">
-            <filter>support_condition['branchSupport'] != '1'</filter>
-        </data>
-
+        <data name="output_tree" format="nhx" label="PhyML Newick tree: ${input.name}.nhx" from_work_dir="*_phyml_tree.txt"/>
     </outputs>
     <tests>
         <test>

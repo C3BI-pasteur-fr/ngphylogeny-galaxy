@@ -22,12 +22,26 @@ repositories:
       - clustalo/clustalo.xml
       - clustalo/test-data/**
 
+  goalign:
+    owner: dcorreia
+    description: "Goalign is a software to manipulate multiple alignments. It is implemented in Go language"
+    include:
+      - goalign/fasta_to_phylip.xml
+
+
   fasttree:
     owner: dcorreia
     description: "FastTree infers approximately-maximum-likelihood phylogenetic trees from alignments of nucleotide or protein sequences."
     include:
       - fasttree/fasttree.xml
       - fasttree/test-data/**
+
+  fastme:
+    owner: dcorreia
+    description: "FastME Distance-based inference of phylogenetic trees"
+    include:
+      - fastme/fastme.xml
+      - fastme/test-data/**
 
   gblocks:
     owner: fmareuil

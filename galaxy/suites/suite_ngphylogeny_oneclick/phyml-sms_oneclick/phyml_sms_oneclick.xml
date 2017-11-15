@@ -9,7 +9,7 @@
         <requirement type="package" version="0.2.4">gotree</requirement>
     </requirements>
     <command><![CDATA[
-
+        ln -sf $input '${input.name}';
 		sms.sh
 		-i $input
 		-o .
@@ -58,9 +58,13 @@
                                                                 -o booster_output_tree.nhx
                                                                 -l $boosterlog
                                                                 -t \${GALAXY_SLOTS}
-                                                                --out-raw $avgdist
-                                                                --moved-taxa --highest-per-branches
-                                                                --dist-cutoff 0.3 --silent;
+                                                                #if $support_condition.algorithm == 'booster'
+                                                                    --out-raw $avgdist
+                                                                    --moved-taxa --highest-per-branches
+                                                                    --dist-cutoff 0.3
+
+                                                                #end if
+                                                                 --silent;
         #end if
 			]]>
     </command>
@@ -121,13 +125,13 @@
         </data>
         <data name="avgdist" format="nhx"
               label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: ${input.name}_raw.nhx">
-            <filter>support_condition['support'] == "boot"</filter>
+            <filter>support_condition['support'] == "boot" and support_condition['algorithm'] == "booster"</filter>
         </data>
         <data name="booster_support_tree" format="nhx" label="Booster: Tree with normalized supports: ${input.name}.nhx"
               from_work_dir="booster_output_tree.nhx">
             <filter>support_condition['support'] == "boot"</filter>
         </data>
-        <data name="output_stats" format="txt"  label="PhyML Statistics" from_work_dir="*_phyml_stats.txt"/>
+        <data name="output_stats" format="txt" label="PhyML Statistics" from_work_dir="*_phyml_stats.txt"/>
         <data name="output_bootstrap_trees" format="txt" label="PhyML bootstrap trees: ${input.name}.boot_trees.txt"
               from_work_dir="*_phyml_boot_trees.txt">
             <filter>support_condition['support'] == "boot"</filter>

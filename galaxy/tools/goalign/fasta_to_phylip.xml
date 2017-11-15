@@ -12,18 +12,26 @@
 	   	]]>
 	</command>
 	<inputs>
-		<param name="input" format="fasta" type="data" label="Source file" help="fasta or phylip format"/>
+		<param name="input" format="fasta" type="data" label="Source file" help="fasta format"/>
 	</inputs>
 	<outputs>
 		<data name="output" format="phylip" label="${input.name}"></data>
 	</outputs>
 	<help>
+<![CDATA[
 ===========
 Overview:
 ===========
-Convert fasta alignment file into phylip sequential format with goAlign*
 
-*Author: Frederic Lemoine
 
+Convert **Fasta** alignment file into **Phylip** interleave format with Goalign\*
+
+\*Author: Frederic Lemoine
+
+Goalign_ on Github
+
+.. _Goalign: https://github.com/fredericlemoine/goalign
+
+]]>
 	</help>
 </tool>
