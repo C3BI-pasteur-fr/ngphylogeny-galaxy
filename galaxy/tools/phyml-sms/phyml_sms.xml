@@ -41,18 +41,15 @@
 
 		#if $support_condition.support == "boot"
             ##Compute BOOSTER bootstrap supports
-            gotree compute support $support_condition.algorithm -i *_phyml_tree.txt
-                                                                -b *_phyml_boot_trees.txt
-                                                                -o booster_output_tree.nhx
-                                                                -l $boosterlog
-                                                                -t \${GALAXY_SLOTS}
-                                                                #if $support_condition.algorithm == 'booster'
-                                                                    --out-raw $avgdist
-                                                                    --moved-taxa --highest-per-branches
-                                                                    --dist-cutoff 0.3
-
-                                                                #end if
-                                                                --silent;
+            gotree compute support booster  -i *_phyml_tree.txt
+                                            -b *_phyml_boot_trees.txt
+                                            -o tbe_norm_tree.nhx
+                                            --out-raw tbe_raw_tree.nhx
+                                            -l tbe_log.txt
+                                            -t \${GALAXY_SLOTS}
+                                            --moved-taxa --highest-per-branches
+                                            --dist-cutoff 0.3
+                                            --silent;
         #end if
 			]]>
     </command>
@@ -82,10 +79,6 @@
             <when value="boot">
                 <param type="integer" name="boot_number" min="1" value="100" label="Number of bootstrap replicates"
                        help="Must be a positive integer"/>
-                <param name="algorithm" type="select" label="Choose algorithm">
-                    <option value="booster" selected="True">TBE (Transfer bootstrap)</option>
-                    <option value="classical">FBP (Felsenstein bootstrap)</option>
-                </param>
             </when>
             <when value="no"/>
         </conditional>
@@ -100,15 +93,17 @@
         <param type="integer" name="randstart" value="0" min="0" max="10" label="Number of random starting trees"/>
     </inputs>
     <outputs>
-        <data name="boosterlog" format="txt" label="Booster: booster.log">
+        <data name="tbe_log" format="txt" label="Booster: tbe_log.txt"
+             from_work_dir="tbe_log.txt">
             <filter>support_condition['support'] == "boot"</filter>
         </data>
-        <data name="avgdist" format="nhx"
-              label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: ${input.name}_raw.nhx">
-            <filter>support_condition['support'] == "boot" and support_condition['algorithm'] == "booster"</filter>
+        <data name="tbe_raw_tree" format="nhx"
+              label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: tbe_norm_tree_raw.nhx"
+              from_work_dir="tbe_raw_tree.nhx">
+            <filter>support_condition['support'] == "boot"</filter>
         </data>
-        <data name="booster_support_tree" format="nhx" label="Booster: Tree with normalized supports: ${input.name}.nhx"
-              from_work_dir="booster_output_tree.nhx">
+        <data name="tbe_norm_tree" format="nhx" label="Booster: Tree with normalized supports: tbe_norm_tree.nhx"
+              from_work_dir="tbe_norm_tree.nhx">
             <filter>support_condition['support'] == "boot"</filter>
         </data>
         <data name="output_stats" format="txt" label="PhyML Statistics" from_work_dir="*_phyml_stats.txt"/>
@@ -247,11 +242,12 @@ Models References:
 BOOSTER Bootstrap Supports
 ##########################
 
+
 Three files are generated:
 
-1) "support" : Reference tree with branches labelled using normalized supports (1-avgdist/(p-1)), (p) being the number of taxa on the light side of the branch.
-2) "avgdist (raw)" : Reference tree with branches labelled as "branch id|average transfer distance|p"
-3) "booster.log": Booster log file with the following informations:
+1) "tbe_norm_tree.nhx" : Reference tree with branches labelled using normalized supports (1-avgdist/(p-1)), (p) being the number of taxa on the light side of the branch.
+2) "tbe_raw_tree.nhx" : Reference tree with branches labelled as "branch id|average transfer distance|p"
+3) "tbe_log.txt": Booster log file with the following informations:
     a) Global transfer score per taxa (2 columns: taxon\ttransferscore),
     b) Most transferred taxa per branch (4 columns: Branch Id\tp\tAverage distance\tsemicolumn separated list of most transfered taxa with their respective transfer index)
 

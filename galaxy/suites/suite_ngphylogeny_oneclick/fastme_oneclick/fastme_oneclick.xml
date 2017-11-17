@@ -17,11 +17,11 @@
     <command>
         <![CDATA[
             ln -sf $input '${input.name}';
-            ln -sf $outputTree '${input.name}'_fastme.nhx;
+            ln -sf $outputTree '${input.name}_fastme.nhx';
 
             fastme
             --input_data='${input.name}'
-            --output_tree='${input.name}'_fastme.nhx
+            --output_tree='${input.name}_fastme.nhx'
             --output_matrix=$outputMatrix
             --output_info=$outputLog
             --nb_threads=\${GALAXY_SLOTS:-1}
@@ -69,16 +69,14 @@
 
             #if $bootChoice.boot == "true"
                 ##Compute BOOSTER bootstrap supports
-                gotree compute support $bootChoice.algorithm -i '${input.name}'_fastme.nhx
-                                                             -b fastme_boostrap_trees.nhx
-                                                             -o '${input.name}'.nhx
-                                                             -l $boosterlog
-                                                           #if $support_condition.algorithm == 'booster'
-                                                              --out-raw $avgdist
-                                                              --moved-taxa --highest-per-branches
-                                                              --dist-cutoff 0.3
-                                                           #end if
-                                                              --silent;
+                gotree compute support booster -i '${input.name}_fastme.nhx'
+                                               -b fastme_boostrap_trees.nhx
+                                               -o tbe_norm_tree.nhx
+                                               --out-raw tbe_raw_tree.nhx
+                                               -l tbe_log.txt
+                                               --moved-taxa --highest-per-branches
+                                               --dist-cutoff 0.3
+                                               --silent;
             #end if
         ]]>
     </command>
@@ -172,22 +170,18 @@
             <when value="false"/>
             <when value="true">
                 <param name="replicates" type="integer" value="1000" label="Number of replicates"/>
-                <param name="algorithm" type="select" label="Choose algorithm">
-                    <option value="booster" selected="True">TBE (Transfer bootstrap)</option>
-                    <option value="classical">FBP (Felsenstein bootstrap)</option>
-                </param>
             </when>
         </conditional>
         <param name="decimalPrecision" type="integer" value="12" min="0" label="Decimal precision for branch lengths"/>
     </inputs>
     <outputs>
-        <data name="boosterlog" format="txt" label="Booster: booster.log" >
+        <data name="tbe_log" format="txt" label="Booster: tbe_log.txt" from_work_dir="tbe_log.txt">
             <filter>bootChoice['boot'] == "true"</filter>
         </data>
-        <data name="booster_support_tree" format="nhx" label="Booster: Tree with normalized supports: ${input.name}.nhx">
+        <data name="tbe_norm_tree" format="nhx" label="Booster: Tree with normalized supports: tbe_norm_tree.nhx" from_work_dir="tbe_norm_tree.nhx">
             <filter>bootChoice['boot'] == "true"</filter>
         </data>
-        <data name="avgdist" format="nhx" label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: ${input.name}_raw.nhx">
+        <data name="tbe_raw_tree" format="nhx" label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: tbe_raw_tree.nhx"  from_work_dir="tbe_raw_tree.nhx">
             <filter>bootChoice['boot'] == "true" and bootChoice['algorithm'] == "booster"</filter>
         </data>
         <data name="outputBoostrap" format="nwk" label="FastME Bootstrap trees" from_work_dir="fastme_boostrap_trees.nhx">
@@ -414,6 +408,21 @@ OPTIONS
 For further informations, please visite FastME_
 
 .. _FastME: http://www.atgc-montpellier.fr/fastme/usersguide.php
+
+
+##########################
+BOOSTER Bootstrap Supports
+##########################
+
+
+Three files are generated:
+
+1) "tbe_norm_tree.nhx" : Reference tree with branches labelled using normalized supports (1-avgdist/(p-1)), (p) being the number of taxa on the light side of the branch.
+2) "tbe_raw_tree.nhx" : Reference tree with branches labelled as "branch id|average transfer distance|p"
+3) "tbe_log.txt": Booster log file with the following informations:
+    a) Global transfer score per taxa (2 columns: taxon\ttransferscore),
+    b) Most transferred taxa per branch (4 columns: Branch Id\tp\tAverage distance\tsemicolumn separated list of most transfered taxa with their respective transfer index)
+
     ]]>
     </help>
     <citations>
