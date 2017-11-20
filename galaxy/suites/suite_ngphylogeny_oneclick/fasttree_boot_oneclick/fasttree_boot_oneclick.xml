@@ -16,8 +16,10 @@
         <exit_code range=":-1" level="fatal" description="Error occurred. Please check Tool Standard Error" />
     </stdio>
     <command><![CDATA[
-                        ######## 1st Fasttree #######
+                        ### remove space introduced by Noisy
+                        sed 's/^>\s*/>/' $input > align.tmp;
 
+                        ######## 1st Fasttree #######
                         FastTree
 
                         #if $sequence_type.seqtype == 'cfg' :
@@ -40,12 +42,12 @@
 
                         #end if
                         $gamma
-                        -log $log < $input > ref_tree.tmp;
+                        -log $log < align.tmp > ref_tree.tmp;
 
                         ####### Bootstrap #######
                         #if $support_condition.support=="boot" and $support_condition.nboot>0 :
 
-                            goalign reformat phylip -i $input | goalign build seqboot -n $support_condition.nboot --gz -o boot_aligns -S;
+                            goalign reformat phylip -i align.tmp | goalign build seqboot -n $support_condition.nboot --gz -o boot_aligns -S;
                             gunzip -c boot_aligns* > all_boot_aligns
 
                             ####### 2nd Fasttree #######
@@ -154,7 +156,7 @@
               from_work_dir="tbe_norm_tree.nhx">
             <filter>support_condition['support'] == "boot"</filter>
         </data>
-        <data name="log" format="txt" label="${tool.name} on ${on_string}: FastTree_log.txt"/>
+        <data name="log" format="txt" label="FastTree_log.txt"/>
         <data name="output_tree" format="nhx" label="FastTree newick tree: ${input.name}.nhx"/>
     </outputs>
     <tests>
