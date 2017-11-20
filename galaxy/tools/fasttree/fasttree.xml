@@ -15,7 +15,8 @@
     </stdio>
     <command>
         <![CDATA[
-            FastTree $sequence_type.seqtype
+            FastTree
+            $sequence_type.seqtype
             #if $sequence_type.seqtype=='-nt'
                  $sequence_type.modeldna
             #else:
@@ -32,11 +33,11 @@
     <inputs>
         <param name="input" type="data" format="fasta" label="Aligned sequences file (FASTA format)"/>
         <conditional name="sequence_type">
-        <param name="seqtype" type="select" label="Nucleotide or protein alignment"
-               help="Specify if the aligned sequences are nucleotide or protein sequences">
-            <option value="-nt" selected="true">Nucleotide</option>
-            <option value="">Protein</option>
-        </param>
+            <param name="seqtype" type="select" label="Nucleotide or protein alignment"
+                   help="Specify if the aligned sequences are nucleotide or protein sequences">
+                <option value="-nt" selected="true">Nucleotide</option>
+                <option value="">Protein</option>
+            </param>
         <when value="">
         <param name="modelprot" type="select" label="Select the Protein model">
                 <option value="-lg">LG</option>
@@ -61,10 +62,10 @@
         <data name="output" format="nhx" label="${tool.name} on ${on_string}:tree.nhx"/>
         <data name="log" format="txt" label="${tool.name} on ${on_string}:log_FastTree_run.txt"/>
     </outputs>
-        <tests>
+    <tests>
         <test>
             <param name="input" value="aligned.fasta"/>
-            <param name="format" value="-nt"/>
+            <param name="seqtype" value="-nt"/>
             <output name="output" file="tree.nhx" ftype="nhx" lines_diff="10"/>
             <output name="log" file="log.txt" ftype="txt" lines_diff="10"/>
         </test>
