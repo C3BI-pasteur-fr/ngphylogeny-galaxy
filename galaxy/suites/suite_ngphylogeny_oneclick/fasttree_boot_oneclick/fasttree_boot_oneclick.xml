@@ -47,13 +47,11 @@
                         ####### Bootstrap #######
                         #if $support_condition.support=="boot" and $support_condition.nboot>0 :
 
-                            goalign reformat phylip -i align.tmp | goalign build seqboot -n $support_condition.nboot -o boot_aligns -S --phylip --gz;
-                            gunzip -c boot_aligns* > all_boot_aligns
+                            goalign reformat phylip -i align.tmp | goalign build seqboot -n $support_condition.nboot -o boot_aligns -S --phylip;
 
                             ####### 2nd Fasttree #######
-                            FastTree
+                            cat boot_aligns*.ph | FastTree 
                                     -n $support_condition.nboot
-
                                     #if 'dna' in $info:
                                         -nt
                                         -gtr
@@ -68,7 +66,7 @@
                                         #end if
                                     #end if
                                     $gamma
-                                    -log fasttree_bootlog < all_boot_aligns > boot_trees.tmp ;
+                                    -log fasttree_bootlog > boot_trees.tmp ;
 
                             cat fasttree_bootlog >> $log;
 
