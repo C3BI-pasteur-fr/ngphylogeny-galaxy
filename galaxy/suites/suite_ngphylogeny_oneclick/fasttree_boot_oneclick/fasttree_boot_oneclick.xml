@@ -47,7 +47,7 @@
                         ####### Bootstrap #######
                         #if $support_condition.support=="boot" and $support_condition.nboot>0 :
 
-                            goalign reformat phylip -i align.tmp | goalign build seqboot -n $support_condition.nboot --gz -o boot_aligns -S;
+                            goalign reformat phylip -i align.tmp | goalign build seqboot -n $support_condition.nboot --gz -o boot_aligns -S -p;
                             gunzip -c boot_aligns* > all_boot_aligns
 
                             ####### 2nd Fasttree #######
