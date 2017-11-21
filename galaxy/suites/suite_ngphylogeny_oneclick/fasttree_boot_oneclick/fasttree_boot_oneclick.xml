@@ -47,7 +47,7 @@
                         ####### Bootstrap #######
                         #if $support_condition.support=="boot" and $support_condition.nboot>0 :
 
-                            goalign reformat phylip -i align.tmp | goalign build seqboot -n $support_condition.nboot --gz -o boot_aligns -S -p;
+                            goalign reformat phylip -i align.tmp | goalign build seqboot -n $support_condition.nboot -o boot_aligns -S --phylip --gz;
                             gunzip -c boot_aligns* > all_boot_aligns
 
                             ####### 2nd Fasttree #######
@@ -90,6 +90,7 @@
                                     -i ref_tree.tmp
                                     -b boot_trees.tmp
                                     -o $output_tree
+                                    -l /dev/null
                                     -t \${GALAXY_SLOTS}
                                     --silent;
                         #else
