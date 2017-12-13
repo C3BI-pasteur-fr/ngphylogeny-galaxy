@@ -10,9 +10,10 @@
         <requirement type="package" version="2.1.9">FastTree</requirement>
         <requirement type="package" version="0.2.4">gotree</requirement>
         <requirement type="package" version="0.2.3">goalign</requirement>
+        <requirement type="package" version="20170122">parallel</requirement>
     </requirements>
     <command><![CDATA[
-                        ######## 1st FastTree #######
+                        ######## Building Reference Tree with FastTree #######
 
                         FastTree
                         $sequence_type.seqtype
@@ -24,15 +25,14 @@
                         $gamma
                         -log $log < $input > ref_tree.tmp;
 
-                        ####### Bootstrap #######
+                        ####### Building Bootstrap Trees #######
                         #if $support_condition.support=="boot" and $support_condition.nboot>0 :
 
-                            goalign reformat phylip -i $input | goalign build seqboot -n $support_condition.nboot --gz -o boot_aligns -S;
-                            gunzip -c boot_aligns* > all_boot_aligns
+                            ####### Building Bootstrap Alignments #######
+                            goalign build seqboot -i $input -n $support_condition.nboot -o boot_aligns -S;
 
                             ####### 2nd Fasttree #######
-                            FastTree
-                                    -n $support_condition.nboot
+                            ls boot_aligns* | parallel -j \${GALAXY_SLOTS} FastTree
                                     $sequence_type.seqtype
                                     #if $sequence_type.seqtype=='-nt'
                                          $sequence_type.modeldna
@@ -40,9 +40,9 @@
                                         $sequence_type.modelprot
                                     #end if
                                     $gamma
-                                    -log fasttree_bootlog < all_boot_aligns > boot_trees.tmp ;
+                                    -log {}.fasttree_bootlog {} > boot_trees.tmp ;
 
-                            cat fasttree_bootlog >> $log;
+                            cat *.fasttree_bootlog >> $log;
 
 
                             ###### booster #######
