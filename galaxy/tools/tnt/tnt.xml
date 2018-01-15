@@ -11,10 +11,10 @@
     </stdio>
     <command>
         <![CDATA[
-		 goalign reformat tnt -i $data -p -o tnt_input.tnt
-		 goalign stats taxa -p -i $data | awk '{print \\$1+1 "\t" \\$2}' > map
+		 goalign reformat tnt -i $data -p -o tnt_input.tnt ;
+		 goalign stats taxa -p -i $data | awk '{print \\$1+1 "\t" \\$2}' > map ;
 		 tnt < $command_file ;
-		 grep "(" tnt_trees.tre | gotree rename -m map -o $outtree
+		 grep "(" tnt_trees.tre | gotree rename -m map -o $outtree ;
         ]]>
     </command>
     <configfiles>
