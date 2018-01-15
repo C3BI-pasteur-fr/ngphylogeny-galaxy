@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<tool id="tnt" name="TNT" version="1.5">
+    <description>with options and commands</description>
+    <requirements>
+        <requirement type="package" version="1.5">TNT</requirement>
+        <requirement type="package" version="0.2.3">goalign</requirement>
+        <requirement type="package" version="0.2.4">gotree</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" level="fatal" description="Unknown error has occurred"/>
+    </stdio>
+    <command>
+        <![CDATA[
+		 goalign reformat tnt -i $data -p -o tnt_input.tnt
+		 goalign stats taxa -p -i $data | awk '{print \\$1+1 "\t" \\$2}' > map
+		 tnt < $command_file ;
+		 grep "(" tnt_trees.tre | gotree rename -m map -o $outtree
+        ]]>
+    </command>
+    <configfiles>
+      <configfile name="command_file">
+	#if ($seq.type_of_seq == "nt"):
+	nstates DNA;
+	#else
+	nstates PROT;
+	#end if
+
+	#if ($ignoregaps == "true"):
+	nstats NOGAPS;
+	#else
+	nstates GAPS;
+	#end if
+	
+	mxram 4000;
+	proc tnt_input.tnt;
+	
+	sect: slack 1000 ;
+	
+	macro=; 
+	lquote [ ; 
+	
+	log $outlog; 
+	
+	watch=; 
+	
+	coll tbr ;
+	
+	drift : fitd 2 rfitd 0.1 ; 
+	
+	var :
+	i j
+	plotapo bootit
+	medium big verybig 
+	;
+	
+	set medium 200 ;
+	set big 500 ; 
+	set verybig 1500 ;
+	set plotapo 0 ;
+	set dobremer 0 ;
+	set bootit 0 ; 
+	
+	if ( ntax > 'medium' ) 
+	  if ( ntax < 'verybig' ) 
+	    quote 
+	    ****************************************************
+	    This is a large data set.  A consensus estimation 
+	    instead of a complete search will be performed. 
+	    ****************************************************
+	    ; 
+	  else 
+	    quote 
+	    *************************************************************
+	    This is a very large data set.  A consensus estimation 
+	    instead of a complete search will be performed.
+	    *************************************************************
+	    ;
+	  end
+	else
+	  quote 
+	  *************************************************************
+	  This is a reasonnable dataset, complete search.
+	  *************************************************************
+	  ;
+	end
+	
+	resettime ;
+	
+	if ( ( ntax > 'medium' ) ) 
+	  set 0 ntax / 70 ; 
+	  set 1 'i' / 2 ; 
+	  if ( 'i' < 2 ) set i 2 ; end 
+	  if ( 'j' < 3 ) set j 3 ; end 
+	  if ( 'j' > 20 ) set j 20 ; end 
+	  if ( 'i' > 30 ) set i 30 ; end  
+	  sec: xss'/.0i'-'/.0j'+3-1 gocomb 60 fuse 4 drift 5 combstart 5 ;
+	  if ( ntax < 'big' )
+	    quote
+            ------------------------------------------------------------
+            Search routine used: 
+            a quick consensus estimation (Goloboff &38 Farris 2001),
+            with 15 replications (each with default &34xmult&34  but
+            with 3 starting points instead of the default 5, and using 
+            XSS --see Goloboff &38 Pol 2007).  The sectorial searches
+            analyzing sectors of 60 or more taxa with a combined 
+            strategy (5 starting points, 5 cycles of tree-drifting for
+            each, fusing the results in 4 cycles).  Sectors selections:
+            XSS dividing tree in '/.0i' to '/.0j' parts, 3 times., CSS
+            and RSS with defaults.  For more details of CSS, RSS, 
+            and tree-drifting, see Goloboff 1999., for details of
+            XSS, see Goloboff &38 Pol 2007.  For details of &34xmult&34,
+            see documentation of TNT.
+            Note: for consensus calculation, trees TBR-collapsed. 
+            ------------------------------------------------------------ ; 
+	    qnelsen [ xmu = rep 3 xss ; ] ;
+	  else
+	    if ( ntax < 'verybig' ) 
+	      quote
+              ------------------------------------------------------------
+              Search routine used: 
+              a quick consensus estimation (Goloboff &38 Farris 2001),
+              with 15 random addition sequences, plus TBR, and sectorial 
+              searches using CSS (defaults), RSS (defaults), and 
+              XSS (dividing tree in '/.0i' to '/.0j' parts, 3 times),
+              analyzing sectors of 60 or more taxa with a combined 
+              strategy (5 starting points, 5 cycles of tree-drifting for
+              each, fusing the results in 4 cycles).  For details of 
+              CSS, RSS, and tree-drifting, see Goloboff 1999., for details 
+              of XSS, see Goloboff &38  Pol 2007.   For details of &34xmult&34,
+              see documentation of TNT.
+              Note: for consensus calculation, trees TBR-collapsed. 
+              ------------------------------------------------------------ ; 
+	      qnelsen [ mu1=ho1 ; sec=xss ; drift=iter5; ] ;
+	    else 
+	      quote
+              ------------------------------------------------------------
+              Search routine used: 
+              a quick consensus estimation (Goloboff &38 Farris 2001),
+              with 15 random addition sequences plus TBR.
+              Note: for consensus calculation, trees TBR-collapsed. 
+              ------------------------------------------------------------ ; 
+	      qnelsen [ mu1=ho1 ; ] ;
+	    end 
+	  end 
+	else 
+	  report +/1 ; 
+	  quote
+          ------------------------------------------------------------
+          Search routine used: 
+          finding optimal score 20 times independently, using defaults
+          of &34xmult&34  plus 10 cycles of tree-drifting (Goloboff
+          1999).
+          Note: for consensus calculation, trees TBR-collapsed. 
+          ALSO NOTE: THIS IS AN OVERKILL FOR MOST DATA SETS!
+          ------------------------------------------------------------ ; 
+	  hold 1000 ; 
+	  xmu = hit 20 drift 10 ;
+	  nelsen * ; 
+	  tchoose { strict } ; 
+	end
+	
+	export - tnt_trees.tre ;
+	quote Results saved (as text) to file tnt_results.tre &10&10; 
+	
+	log / ; 
+	set i time ; 
+	quote 
+	***************************************************
+	ANALYSIS COMPLETED (total time used: '/.0i' sec) 
+	***************************************************
+        Please note!!
+	
+	...for each of the quantities calculated 
+	by this script, it is possible to use more
+	exhaustive and accurate (but more time
+	consuming) algorithms, or viceversa. The
+	routines used by the script are only an
+	approximation which provides a good tradeoff
+	between accuracy and run-times for most data
+	sets
+	;
+	
+	proc/;
+      </configfile>
+    </configfiles>
+    <inputs>
+      <param name="data" type="data" format="Phylip" label="Input file (Phylip)"/>
+      <param name="type_of_seq" type="select"  label="Data type" display="radio">
+        <option value="nt">Nucleic acids</option>
+        <option value="aa">Amino acids</option>
+      </param>
+      <param name="ignoregaps" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Consider Gaps as missing? (otherwise as an additional character)" />
+    </inputs>
+    <outputs>
+      <data name="outtrees" format="newick" />
+      <data name="outlog" format="txt" />
+      <data name="tntcommand" format="txt" label="TNT commands file" from_work_dir="command_file" />
+    </outputs>
+
+    <help>
+<![CDATA[
+.. class:: warningmark
+
+.. _here: http://en.wikipedia.org/wiki/Nexus_file.
+
+-----
+
+**What it does**
+
+TNT stands for "Tree analysis using New Technology". It is a program for phylogenetic analysis under parsimony (with very fast tree-searching algorithms; Nixon, 1999, Cladistics 15:407-406; Goloboff, 1999, Cladistics 15:407-428), as well as extensive tree handling and diagnosis capabilities. It is a joint project by Pablo Goloboff, James Farris, and Kevin Nixon. 
+
+See the homepage_ and the manual_ for more informations.
+
+This tools wraps a simple parsimony based phylogenetic tree reconstruction using TNT. The script is based on "aquickie.run" provided in TNT archive.
+
+.. _homepage: http://www.lillo.org.ar/phylogeny/tnt/
+.. _manual: http://www.lillo.org.ar/phylogeny/tnt/scripts/General_Documentation.pdf
+
+-----
+
+**Parameters**
+
+- Input File: File containing the input alignment, in Phylip format.
+
+- Data type: May be Nucleic acids (DNA) or amino acids (PROTEIN).
+
+- Ignore gaps: If checked, gaps are considered as missing characters, else gaps are considered as an additional character.
+
+-----
+
+]]>
+    </help>
+    <citations>
+      <citation type="bibtex">
+	@article{Goloboff2016,
+	doi = {10.1111/cla.12160},
+	url = {https://doi.org/10.1111/cla.12160},
+	year  = {2016},
+	month = {apr},
+	publisher = {Wiley-Blackwell},
+	volume = {32},
+	number = {3},
+	pages = {221--238},
+	author = {Pablo A. Goloboff and Santiago A. Catalano},
+	title = {{TNT} version 1.5,  including a full implementation of phylogenetic morphometrics},
+	journal = {Cladistics}
+	}
+      </citation>
+    </citations>
+</tool>
