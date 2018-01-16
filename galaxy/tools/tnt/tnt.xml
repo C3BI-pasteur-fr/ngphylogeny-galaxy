@@ -108,7 +108,7 @@
       <param name="ignoregaps" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Consider Gaps as missing? (otherwise as an additional character)" />
     </inputs>
     <outputs>
-      <data name="outtree" label="TNT tree" format="txt" />
+      <data name="outtree" label="TNT tree" format="nhx" />
       <data name="outlog" label="TNT log file" format="txt" />
       <data name="tntcommands" format="txt" label="TNT commands file" />
     </outputs>
