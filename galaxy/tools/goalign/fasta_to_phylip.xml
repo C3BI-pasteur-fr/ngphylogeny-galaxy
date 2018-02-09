@@ -4,11 +4,11 @@
         <edam_operation>operation_0335</edam_operation>
     </edam_operations>
     <requirements>
-        <requirement type="package" version="0.1.9">goalign</requirement>
+        <requirement type="package" version="0.2.6">goalign</requirement>
     </requirements>
 	<command>
 		<![CDATA[
-            goalign reformat phylip -i $input -o $output
+            goalign reformat phylip --clean-names -i $input -o $output
 	   	]]>
 	</command>
 	<inputs>
@@ -25,6 +25,10 @@ Overview:
 
 
 Convert **Fasta** alignment file into **Phylip** interleave format with Goalign\*
+
+Note:
+- First and Last spaces and tabs are removed from sequence names
+- Internal spaces and tabs in sequence names are replaced by "_"
 
 \*Author: Frederic Lemoine
 
