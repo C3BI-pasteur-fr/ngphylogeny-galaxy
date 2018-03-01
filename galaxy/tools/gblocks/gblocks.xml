@@ -50,8 +50,8 @@
         <data format="text" name="gblocks_log" label="Gblocks log: ${input.name}" >
             <filter>display_gblocks_log == True</filter>
         </data>   
-        <data format="fasta" name="output_aln" label="Gblocks Cleaned sequencies: ${input.name}" />
-        <data format="html" name="output_htm" label="Gblocks Sequencies information: ${input.name}" />
+        <data format="fasta" name="output_aln" label="Gblocks Cleaned sequences: ${input.name}" />
+        <data format="html" name="output_htm" label="Gblocks Sequences information: ${input.name}" />
     </outputs>
     <tests>
         <test>
