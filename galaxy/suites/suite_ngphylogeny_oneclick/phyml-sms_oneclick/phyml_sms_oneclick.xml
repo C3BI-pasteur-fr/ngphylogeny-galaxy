@@ -9,61 +9,68 @@
         <requirement type="package" version="0.2.4">gotree</requirement>
     </requirements>
     <command><![CDATA[
-        ln -sf $input '${input.name}';
-		sms.sh
-		-i $input
-		-o .
-		-p $output_models
-		-t
-
-        #if $sequence.seqtype == 'cfg' :
-			 ## Automatic sequence detection
-			 ## read an info file to choose which option set
-			 #set $info = open( str($input_info) ).read()
-			 #if 'dna' in $info:
-				   -d nt
-			 #else if 'protein' in $info :
-				   -d aa
-			 #end if
-        #else :
-                   -d ${sequence.seqtype}
-        #end if
-
-   		-c $stat_crit
-				
-        #if $inpuTree.inputtree == "true" :
-            -u $inpuTree.userInpuTree
-        #end if    
-		-s $move
-	
-		#if $support_condition.support == "sh":
-		    -b -4
-		#else if $support_condition.support == "aBayes":
-		    -b -5
-		#else if $support_condition.support == "no":
-		    -b 0
-		#else if $support_condition.support == "boot":
-		    -b $support_condition.boot_number
-		#end if
-
-		#if $randstart.value != 0 and $move.value == "SPR" :
-		    -r $randstart
-		#end if
-		> ${output_stdout};
-
-		#if $support_condition.support == "boot"
-            ##Compute BOOSTER bootstrap supports
-            gotree compute support booster  -i *_phyml_tree.txt
-                                            -b *_phyml_boot_trees.txt
-                                            -o tbe_norm_tree.nhx
-                                            --out-raw tbe_raw_tree.nhx
-                                            -l tbe_log.txt
-                                            -t \${GALAXY_SLOTS}
-                                            --moved-taxa --highest-per-branches
-                                            --dist-cutoff 0.3
-                                            --silent;
-        #end if
-			]]>
+    ln -sf $input '${input.name}';
+    sms.sh
+      -i $input
+      -o .
+      -p $output_models
+      -t
+    #if $sequence.seqtype == 'cfg' :
+      ## Automatic sequence detection
+      ## read an info file to choose which option set
+      #set $info = open( str($input_info) ).read()
+      #if 'dna' in $info:
+        -d nt
+      #else if 'protein' in $info :
+        -d aa
+      #end if
+    #else :
+      -d ${sequence.seqtype}
+    #end if
+      -c $stat_crit
+    #if $inpuTree.inputtree == "true" :
+      -u $inpuTree.userInpuTree
+    #end if    
+      -s $move
+    #if $support_condition.support == "sh":
+      -b -4
+    #else if $support_condition.support == "aBayes":
+      -b -5
+    #else if $support_condition.support == "no":
+      -b 0
+    #else if $support_condition.support == "boot":
+      -b $support_condition.boot_number
+    #end if
+    #if $randstart.value != 0 and $move.value == "SPR" :
+      -r $randstart
+    #end if
+      > ${output_stdout};
+    
+    #if $support_condition.support == "boot" :
+      ##Compute TBE (BOOSTER) bootstrap supports
+      gotree compute support booster
+        -i *_phyml_tree.txt
+        -b *_phyml_boot_trees.txt
+        -o tbe_norm_tree.nhx
+        --out-raw tbe_raw_tree.nhx
+        -l tbe_log.txt
+        -t \${GALAXY_SLOTS}
+        --moved-taxa --highest-per-branches
+        --dist-cutoff 0.3
+        --silent;
+      ##Compute Classical (FBP) supports
+      gotree compute support classical
+        -i *_phyml_tree.txt
+        -b *_phyml_boot_trees.txt
+        -o fbp_tree.nhx
+        -l fbp_log.txt
+        -t \${GALAXY_SLOTS}
+        --silent;
+      mv fbp_tree.nhx phyml_tree.txt
+    #else :
+      mv *_phyml_tree.txt phyml_tree.txt
+    #end if
+    ]]>
     </command>
     <inputs>
         <param format="phylip, phy" name="input" type="data" label="Alignment file" help="phylip format"/>
@@ -131,7 +138,7 @@
               from_work_dir="*_phyml_boot_trees.txt">
             <filter>support_condition['support'] == "boot"</filter>
         </data>
-        <data name="output_tree" format="nhx" label="PhyML newick tree: ${input.name}.nhx" from_work_dir="*_phyml_tree.txt"/>
+        <data name="output_tree" format="nhx" label="PhyML newick tree: ${input.name}.nhx" from_work_dir="phyml_tree.txt"/>
         <data name="output_models" format="txt" label="SMS compare models"/>
         <data name="output_stdout" format="txt" label="SMS Best Model"/>
     </outputs>
@@ -147,7 +154,9 @@
 .. class:: infomark
 
 This script runs SMS to select the substitution model which best fits the input data.
-It may also run PhyML with the selected model.
+It also runs PhyML with the selected model.
+
+Moreover, if option "support=boot" is selected, it will compute FBP (classical) and TBE (booster) bootstrap supports.
 
 SMS options :
 
