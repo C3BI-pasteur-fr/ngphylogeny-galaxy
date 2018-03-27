@@ -64,17 +64,6 @@
         --moved-taxa --highest-per-branches
         --dist-cutoff 0.3
         --silent;
-      ##Compute Classical (FBP) supports
-      gotree compute support classical
-        -i *_phyml_tree.txt
-        -b *_phyml_boot_trees.txt
-        -o fbp_tree.nhx
-        -l fbp_log.txt
-        -t \${GALAXY_SLOTS}
-        --silent;
-      mv fbp_tree.nhx phyml_tree.txt
-    #else :
-      mv *_phyml_tree.txt phyml_tree.txt
     #end if
     ]]>
   </command>
@@ -155,7 +144,7 @@
       <filter>support_condition['support'] == "boot"</filter>
     </data>
     <data name="output_tree" format="nhx" label="PhyML newick tree: ${input.name}.nhx"
-	  from_work_dir="phyml_tree.txt"/>
+	  from_work_dir="*_phyml_tree.txt"/>
     <data name="output_models" format="txt" label="SMS compare models"/>
     <data name="output_stdout" format="txt" label="SMS Best Model"/>
   </outputs>
