@@ -1,217 +1,239 @@
-<tool id="fastme_oneclick" name="FastME OneClick" version="2.1.5.1">
-    <description>Distance-based inference of phylogenetic trees</description>
-    <edam_operations>
-        <edam_operation>operation_0540</edam_operation>
-        <edam_operation>operation_0324</edam_operation>
-    </edam_operations>
-    <requirements>
-        <requirement type="package" version="2.1.5">fastme</requirement>
-        <requirement type="package" version="0.2.4">gotree</requirement>
-    </requirements>
-    <stdio>
-        <exit_code range="1:" level="fatal"/>
-    </stdio>
-    <version_command>
-        <![CDATA[ fastme --version ]]>
-    </version_command>
-    <command>
-        <![CDATA[
-            ln -sf $input '${input.name}';
-            ln -sf $outputTree '${input.name}_fastme.nhx';
+<tool id="fastme" name="FastME" version="2.1.5.2">
+  <description>Distance-based inference of phylogenetic trees</description>
+  <edam_operations>
+    <edam_operation>operation_0540</edam_operation>
+    <edam_operation>operation_0324</edam_operation>
+  </edam_operations>
+  <requirements>
+    <requirement type="package" version="2.1.5.2">fastme</requirement>
+    <requirement type="package" version="0.2.4">gotree</requirement>
+    <requirement type="package" version="0.2.6">goalign</requirement>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
+  <version_command>
+    <![CDATA[ fastme --version ]]>
+  </version_command>
+  <command>
+    <![CDATA[
+	     #if $input.is_of_type('fasta')
+	       goalign reformat phylip -i $input --auto-detect -o  ${input.name};
+	     #else
+	       ln -sf $input '${input.name}';
+	     #endif
+             ln -sf $outputTree '${input.name}_fastme.nhx';
 
             fastme
-            --input_data='${input.name}'
-            --output_tree='${input.name}_fastme.nhx'
-            --output_matrix=$outputMatrix
-            --output_info=$outputLog
-            --nb_threads=\${GALAXY_SLOTS:-1}
+              --input_data='${input.name}'
+              --output_tree='${input.name}_fastme.nhx'
+              --output_matrix=$outputMatrix
+              --output_info=$outputLog
+              --nb_threads=\${GALAXY_SLOTS:-1}
 
             #if ($usetree.inputTree == "true"):
-                --user_tree=${$usetree.userInputTree.name}
+              --user_tree=${$usetree.userInputTree.name}
             #end if
 
             #if $typeChoice.datatype =="d"
-                --dna=$typeChoice.modeldna
-
+              --dna=$typeChoice.modeldna
             #else if $typeChoice.datatype =="p"
-                --protein=$typeChoice.modelprot
-
+              --protein=$typeChoice.modelprot
             #else if $typeChoice.datatype =="cfg":
-                 ## Read information of sequence type
-                 ## read an info file to choose which option set and set a model by default
-                 #set $info = open( str($input_info) ).read()
-                 #if 'dna' in $info:
-                        --dna=T
-                 #else if 'protein' in $info:
-                       --protein=L
-                 #end if
-
+              ## Read information of sequence type
+               ## read an info file to choose which option set and set a model by default
+               #set $info = open( str($input_info) ).read()
+               #if 'dna' in $info:
+               --dna=T
+               #else if 'protein' in $info:
+               --protein=L
+               #end if
             #end if
 
             #if $gammaChoice.gamma == "true"
-                --gamma=$gammaChoice.rate
+              --gamma=$gammaChoice.rate
             #end if
 
-            $distance
-            $equilibrium
-            $removeGap
-            $treeRefinement
-            -f $decimalPrecision
+              $distance
+              $equilibrium
+              $removeGap
+              $treeRefinement
+              -f $decimalPrecision
 
             #if $bootChoice.boot == "true"
-                --output_boot=fastme_boostrap_trees.nhx
-                --bootstrap=$bootChoice.replicates
+              --output_boot=fastme_boostrap_trees.nhx
+              --bootstrap=$bootChoice.replicates
             #end if
 
-            >> tmp_stdout;
-            cp tmp_stdout $outputLog;
-
+              >> tmp_stdout;
+              cp tmp_stdout $outputLog;
 
             #if $bootChoice.boot == "true"
-                ##Compute BOOSTER bootstrap supports
-                gotree compute support booster -i '${input.name}_fastme.nhx'
-                                               -b fastme_boostrap_trees.nhx
-                                               -o tbe_norm_tree.nhx
-                                               --out-raw tbe_raw_tree.nhx
-                                               -l tbe_log.txt
-                                               --moved-taxa --highest-per-branches
-                                               --dist-cutoff 0.3
-                                               --silent;
+              ##Compute BOOSTER bootstrap supports
+              gotree compute support booster
+	        -i '${input.name}_fastme.nhx'
+                -b fastme_boostrap_trees.nhx
+                -o tbe_norm_tree.nhx
+                --out-raw tbe_raw_tree.nhx
+                -l tbe_log.txt
+                --moved-taxa --highest-per-branches
+                --dist-cutoff 0.3
+                --silent;
             #end if
         ]]>
-    </command>
-    <inputs>
-        <param name="input" type="data" format="phylip, phy" label="Fastme input"
-               help="Phylip Alignment or Matrix file"/>
-        <conditional name="usetree">
-            <param name="inputTree" type="boolean" truevalue="true" falsevalue="false" checked="False"
-                   label="Use a starting tree"/>
-            <when value="true">
-                <param name="userInputTree" type="data" format="nhx,nwk" label="Tree file" help="newick format"/>
-            </when>
-            <when value="false"/>
-        </conditional>
-        <param name="fileout_label" type="text" value="Newick tree" label="Output name" help="Output name for files"/>
-        <conditional name="typeChoice">
-            <param name="datatype" type="select" display="radio" label="Data type">
-                <option value="d">DNA</option>
-                <option value="p">Protein</option>
-                <option value="m">Matrix</option>
-                <option value="cfg">Type information file</option>
-            </param>
-            <when value="d">
-                <param name="modeldna" type="select" label="Evolutionary model">
-                    <option value="4">F84</option>
-                    <option value="R">RY</option>
-                    <option value="1">F81</option>
-                    <option value="J">JC69</option>
-                    <option value="K">K2P</option>
-                    <option value="T" selected="true">TN93</option>
-                    <option value="p">p-distance</option>
-                </param>
-            </when>
-            <when value="p">
-                <param name="modelprot" type="select" label="Evolutionary model">
-                    <option value="L" selected="true">LG</option>
-                    <option value="W">WAG</option>
-                    <option value="J">JTT</option>
-                    <option value="h">Day off</option>
-                    <option value="C">CpRev</option>
-                    <option value="D">DCMut</option>
-                    <option value="b">HIVb</option>
-                    <option value="I">HIVw</option>
-                    <option value="M">MtREV</option>
-                    <option value="R">RtREV</option>
-                    <option value="p">p-distance</option>
-                </param>
-            </when>
-            <when value="m"/>
-            <when value="cfg">
-                <param name="input_info" format="txt" type="data" multiple="false" label="Config file" help="Precompute file containning sequence description (dna or protein)"/>
-            </when>
-        </conditional>
-        <param name="equilibrium" type="boolean" label="Equilibrium frequencies" truevalue="--equilibrium" falsevalue=""
-               help="By default, frequencies are globally counted from the nucleotides alignment or defined by the proteic substitution model.
-               By checking the box, frequencies are pairwise estimated by counting the nucleotides or estimated by counting the amino-acids in the alignment."/>
-        <conditional name="gammaChoice">
-            <param name="gamma" type="select" label="Gamma distributed rates across sites">
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-            </param>
-            <when value="true">
-                <param name="rate" type="float" value="1" min="0" label="Gamma distribution parameter"/>
-            </when>
-            <when value="false"/>
-        </conditional>
-        <param name="removeGap" type="select" display="radio" label="Remove gap strategy">
-            <option value="">Pairwise deletion of gaps</option>
-            <option value="--remove_gap">Remove all sites with gap</option>
+  </command>
+  <inputs>
+    <param name="input" type="data" format="fasta, phylip, phy"
+	   label="Fastme input"
+           help="Fasta/Phylip Alignment or Matrix file"/>
+    <conditional name="usetree">
+      <param name="inputTree" type="boolean" truevalue="true"
+	     falsevalue="false"
+	     checked="False" label="Use a starting tree"/>
+      <when value="true">
+        <param name="userInputTree" type="data" format="nhx,nwk"
+	       label="Tree file" help="newick format"/>
+      </when>
+      <when value="false"/>
+    </conditional>
+    <param name="fileout_label" type="text" value="Newick tree"
+	   label="Output name" help="Output name for files"/>
+    <conditional name="typeChoice">
+      <param name="datatype" type="select" display="radio" label="Data type">
+        <option value="d">DNA</option>
+        <option value="p">Protein</option>
+        <option value="m">Matrix</option>
+        <option value="cfg">Type information file</option>
+      </param>
+      <when value="d">
+        <param name="modeldna" type="select" label="Evolutionary model">
+          <option value="4">F84</option>
+          <option value="R">RY</option>
+          <option value="1">F81</option>
+          <option value="J">JC69</option>
+          <option value="K">K2P</option>
+          <option value="T" selected="true">TN93</option>
+          <option value="p">p-distance</option>
         </param>
-        <param name="distance" type="select" label="Starting tree (distance algorithm used)">
-            <option value="--method=I">BIONJ</option>
-            <option value="--method=B --branch_length=B">TaxAdd BalME</option>
-            <option value="--method=O --branch_length=O">TaxAdd OLSME</option>
-            <option value="--method=N">NJ</option>
-            <option value="--method=U">UNJ</option>
+      </when>
+      <when value="p">
+        <param name="modelprot" type="select" label="Evolutionary model">
+          <option value="L" selected="true">LG</option>
+          <option value="W">WAG</option>
+          <option value="J">JTT</option>
+          <option value="h">Day off</option>
+          <option value="C">CpRev</option>
+          <option value="D">DCMut</option>
+          <option value="b">HIVb</option>
+          <option value="I">HIVw</option>
+          <option value="M">MtREV</option>
+          <option value="R">RtREV</option>
+          <option value="p">p-distance</option>
         </param>
-        <param name="treeRefinement" type="select" display="radio" label="Tree Refinement"
-               help='(NNI) Nearest Neighbor Interchanges,(SPR) Subtree Pruning and Regrafting'>
-            <option value="">No Refinement</option>
-            <option value="--nni=O">OLS NNI</option>
-            <option value="--nni=B">BalME NNI</option>
-            <option value="--spr" selected="true">BalME SPR</option>
-            <option value="--nni=B --spr">BalME NNI + SPR</option>
-        </param>
-        <conditional name="bootChoice">
-            <param name="boot" type="select" label="Bootstrap">
-                <option value="false">No</option>
-                <option value="true">Yes</option>
-            </param>
-            <when value="false"/>
-            <when value="true">
-                <param name="replicates" type="integer" value="1000" label="Number of replicates"/>
-            </when>
-        </conditional>
-        <param name="decimalPrecision" type="integer" value="12" min="0" label="Decimal precision for branch lengths"/>
-    </inputs>
-    <outputs>
-        <data name="tbe_log" format="txt" label="Booster: tbe_log.txt" from_work_dir="tbe_log.txt">
-            <filter>bootChoice['boot'] == "true"</filter>
-        </data>
-        <data name="tbe_norm_tree" format="nhx" label="Booster: Tree with normalized supports: tbe_norm_tree.nhx" from_work_dir="tbe_norm_tree.nhx">
-            <filter>bootChoice['boot'] == "true"</filter>
-        </data>
-        <data name="tbe_raw_tree" format="nhx" label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: tbe_raw_tree.nhx"  from_work_dir="tbe_raw_tree.nhx">
-            <filter>bootChoice['boot'] == "true" and bootChoice['algorithm'] == "booster"</filter>
-        </data>
-        <data name="outputBoostrap" format="nwk" label="FastME Bootstrap trees" from_work_dir="fastme_boostrap_trees.nhx">
-            <filter>bootChoice['boot'] == "true"</filter>
-        </data>
-        <data name="outputLog" format="txt" label="FastME Information"/>
-        <data name="outputMatrix" format="txt" label="FastME Distance matrix" />
-        <data name="outputTree" format="nhx" label="${fileout_label}" />
-    </outputs>
-    <tests>
-        <test>
-         <param name="input" value="fastme.phylip" />
-            <param name="modeldna" value="4"/>
-            <param name="gamma" value="false"/>
-            <param name="treeRefinement" value=""/>
-            <param name="distance" value="--method=I"/>
-            <param name="supportPrecision" value="6"/>
-            <output name="outputTree" file="newick" />
-        </test>
-        <test>
-            <param name="input" value="fastme.phylip" />
-            <param name="modeldna" value="T"/>
-            <param name="distance" value="--method=I"/>
-            <param name="treeRefinement" value="--nni=B --spr"/>
-            <param name="supportPrecision" value="6"/>
-            <param name="fileout_label" value="TreeTn93BionjSpr.nwk" />
-            <output name="outputTree" file="TreeTn93BionjSpr.nwk" />
-        </test>
-    </tests>
-    <help>
+      </when>
+      <when value="m"/>
+      <when value="cfg">
+        <param name="input_info" format="txt" type="data" multiple="false"
+	       label="Config file"
+	       help="Precompute file containning sequence description (dna or protein)"/>
+      </when>
+    </conditional>
+    <param name="equilibrium" type="boolean" label="Equilibrium frequencies"
+	   truevalue="--equilibrium" falsevalue=""
+           help="By default, frequencies are globally counted from the nucleotides
+		 alignment or defined by the proteic substitution model.
+		 By checking the box, frequencies are pairwise estimated
+		 by counting the nucleotides or estimated by counting the
+		 amino-acids in the alignment."/>
+    <conditional name="gammaChoice">
+      <param name="gamma" type="select" label="Gamma distributed rates across sites">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+      </param>
+      <when value="true">
+        <param name="rate" type="float" value="1" min="0"
+	       label="Gamma distribution parameter"/>
+      </when>
+      <when value="false"/>
+    </conditional>
+    <param name="removeGap" type="select" display="radio" label="Remove gap strategy">
+      <option value="">Pairwise deletion of gaps</option>
+      <option value="--remove_gap">Remove all sites with gap</option>
+    </param>
+    <param name="distance" type="select" label="Starting tree (distance algorithm used)">
+      <option value="--method=I">BIONJ</option>
+      <option value="--method=B --branch_length=B">TaxAdd BalME</option>
+      <option value="--method=O --branch_length=O">TaxAdd OLSME</option>
+      <option value="--method=N">NJ</option>
+      <option value="--method=U">UNJ</option>
+    </param>
+    <param name="treeRefinement" type="select" display="radio" label="Tree Refinement"
+           help='(NNI) Nearest Neighbor Interchanges,(SPR) Subtree Pruning and Regrafting'>
+      <option value="">No Refinement</option>
+      <option value="--nni=O">OLS NNI</option>
+      <option value="--nni=B">BalME NNI</option>
+      <option value="--spr" selected="true">BalME SPR</option>
+      <option value="--nni=B --spr">BalME NNI + SPR</option>
+    </param>
+    <conditional name="bootChoice">
+      <param name="boot" type="select" label="Bootstrap">
+        <option value="false">No</option>
+        <option value="true">Yes</option>
+      </param>
+      <when value="false"/>
+      <when value="true">
+        <param name="replicates" type="integer" value="1000"
+	       label="Number of replicates"/>
+      </when>
+    </conditional>
+    <param name="decimalPrecision" type="integer" value="12" min="0"
+	   label="Decimal precision for branch lengths"/>
+  </inputs>
+  <outputs>
+    <data name="tbe_log" format="txt" label="Booster: tbe_log.txt"
+	  from_work_dir="tbe_log.txt">
+      <filter>bootChoice['boot'] == "true"</filter>
+    </data>
+    <data name="tbe_norm_tree" format="nhx"
+	  label="Booster: Tree with normalized supports: tbe_norm_tree.nhx"
+	  from_work_dir="tbe_norm_tree.nhx">
+      <filter>bootChoice['boot'] == "true"</filter>
+    </data>
+    <data name="tbe_raw_tree" format="nhx"
+	  label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: tbe_raw_tree.nhx"
+	  from_work_dir="tbe_raw_tree.nhx">
+      <filter>bootChoice['boot'] == "true" and bootChoice['algorithm'] == "booster"</filter>
+    </data>
+    <data name="outputBoostrap" format="nwk"
+	  label="FastME Bootstrap trees"
+	  from_work_dir="fastme_boostrap_trees.nhx">
+      <filter>bootChoice['boot'] == "true"</filter>
+    </data>
+    <data name="outputLog" format="txt" label="FastME Information"/>
+    <data name="outputMatrix" format="txt" label="FastME Distance matrix" />
+    <data name="outputTree" format="nhx" label="${fileout_label}" />
+  </outputs>
+  <tests>
+    <test>
+      <param name="input" value="fastme.phylip" />
+      <param name="modeldna" value="4"/>
+      <param name="gamma" value="false"/>
+      <param name="treeRefinement" value=""/>
+      <param name="distance" value="--method=I"/>
+      <param name="supportPrecision" value="6"/>
+      <output name="outputTree" file="newick" />
+    </test>
+    <test>
+      <param name="input" value="fastme.phylip" />
+      <param name="modeldna" value="T"/>
+      <param name="distance" value="--method=I"/>
+      <param name="treeRefinement" value="--nni=B --spr"/>
+      <param name="supportPrecision" value="6"/>
+      <param name="fileout_label" value="TreeTn93BionjSpr.nwk" />
+      <output name="outputTree" file="TreeTn93BionjSpr.nwk" />
+    </test>
+  </tests>
+  <help>
 <![CDATA[
 .. class:: infomark
 
@@ -424,9 +446,9 @@ Three files are generated:
     b) Most transferred taxa per branch (4 columns: Branch Id\tp\tAverage distance\tsemicolumn separated list of most transfered taxa with their respective transfer index)
 
     ]]>
-    </help>
-    <citations>
-       <citation type="doi">10.1093/molbev/msv150</citation>
-       <citation type="doi">10.1089/106652702761034136</citation>
-    </citations>
+</help>
+<citations>
+  <citation type="doi">10.1093/molbev/msv150</citation>
+  <citation type="doi">10.1089/106652702761034136</citation>
+</citations>
 </tool>
