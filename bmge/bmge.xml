@@ -32,7 +32,8 @@
       </param>
       <when value="DNA"> 
 	<param name="matrix" type="hidden" label="matrix"  value="DNAPAM"/>                                           	 
-	<param name="estimated" type="integer" label="Name of the PAM matrix [ 1-500 ]"  value="250" min="1" max="500"/>   
+	<param name="estimated" type="integer" label="Name of the PAM matrix [ 1-500 ]"
+	       value="250" min="1" max="500"/>   
       </when>
       <when value="AA">
 	<param name="matrix" type="hidden" label="matrix" value="BLOSUM"/>
@@ -115,7 +116,8 @@
 Please cite:
 ==============
 
-"BMGE_ (Block Mapping and Gathering with Entropy): a new software for selection of phylogenetic informative regions from multiple sequence alignments"
+"BMGE_ (Block Mapping and Gathering with Entropy): a new software for selection of
+phylogenetic informative regions from multiple sequence alignments"
 
 
 .. _BMGE: http://www.biomedcentral.com/1471-2148/10/210
@@ -130,9 +132,12 @@ BMC Evolutionary Biology 2010
 Overview:
 ===========
 
-BMGE (Block Mapping and Gathering with Entropy) is a program that selects regions in a multiple sequence alignment that are suited for phylogenetic inference. BMGE selects characters that are biologically relevant, thanks to the use of standard similarity matrixs such as PAM or BLOSUM. Moreover, BMGE provides other character- or sequenceremoval operations, such stationary-based character trimming (that provides a subset of compositionally homogeneous characters) or removal of sequences containing a too large proportion of gaps. Finally, BMGE can simply be used to perform standard conversion operations among DNA-, codon-, RY- and amino acid-coding sequences.
-
-
+BMGE (Block Mapping and Gathering with Entropy) is a program that selects regions in a multiple sequence
+alignment that are suited for phylogenetic inference. BMGE selects characters that are biologically relevant,
+thanks to the use of standard similarity matrixs such as PAM or BLOSUM. Moreover, BMGE provides other character-
+or sequenceremoval operations, such stationary-based character trimming (that provides a subset of compositionally
+homogeneous characters) or removal of sequences containing a too large proportion of gaps. Finally, BMGE can simply
+be used to perform standard conversion operations among DNA-, codon-, RY- and amino acid-coding sequences.
   </help>
   <citations>
     <citation type="doi">10.1186/1471-2148-10-210</citation> 
