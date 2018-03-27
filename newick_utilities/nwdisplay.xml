@@ -1,93 +1,95 @@
 <tool id="nwdisplay" name="Newick Display" version="1.6">
-    <description>Display a phylogenetic tree as SVG</description>
-    <edam_operations>
-        <edam_operation>operation_0567</edam_operation>
-    </edam_operations>
-    <requirements>
-        <requirement type="package" version="1.6">newick_utilities</requirement>
-    </requirements>
-    <command>
-			nw_display
-			-s 
-			$scalebar
-			-u "$legend"
-			-I 'r'
-			-i
-			#if $condbranchsupport.branchsupport == "true":
-			   "fill:$condbranchsupport.supcolor;
-			    font-size:$condbranchsupport.supfontsize;
-			    transform:$condbranchsupport.suptransform;"
-			#else:
-			     "visibility:hidden;"
-			#end if
-			-b
-			#if $condbranchlength.branchlength == "true":
-               "fill:$condbranchlength.lencolor;
-                font-size:$condbranchlength.lenfontsize;
-                transform:$condbranchlength.lentransform;"
-            #else:
-                 "visibility:hidden;"
-            #end if			
-			
-			-l "font-family:$leafFont;font-size:$leafSize;"
-			-d "stroke:grey;fill:none;stroke-width:2;stoke-linecap:round;"
-			-w  $width
-			$radial
-			
-		    $fileNewick > $output
-		
-    </command>
-	<inputs>
-		<param name="fileNewick" format="txt,nw,nwk,nhx" type="data" label="Newick file" />
-		<param name="scalebar" type="boolean" truevalue="" falsevalue="-S"	checked="True" label="Display scale bar" />
-		<param name="legend" type="text" value="" label="Unit name scale" />
-		<param name="leafFont" type="text" value="sans-serif" label="Leaf font" />
-		<param name="leafSize" type="text" value="10px" label="Leaf font-size" />
-		<conditional name="condbranchsupport">
-			<param name="branchsupport" type="select" label="Branch support">
-			    <option value="true">Display branch support</option>
-                <option value="false" selected="true">Hide branch support</option>
-            </param>
-			<when value="true">
-				<param name="supcolor" type="color" value="red" label="color" />
-				<param name="supfontsize" type="text" value="10px" label="font-size" />
-				<param name="suptransform" type="text" value="translateY(1.5em)" label="move" />
-			</when>
-			<when value="false" />
-		</conditional>
-		<conditional name="condbranchlength">
-			<param name="branchlength" type="select" label="Branch length">
-				<option value="true">Display branch length</option>
-				<option value="false" selected="true">Hide branch length</option>
-			</param>
-			<when value="true">
-				<param name="lencolor" type="color" value="blue" label="color" />
-				<param name="lenfontsize" type="text" value="10px" label="font-size" />
-				<param name="lentransform" type="text" value="translate(-1.5em,0em)" label="move" />
-			</when>
-			<when value="false" />
-		</conditional>
-		<param name="width" type="integer" value="800"	label="SVG Tree width (px)" />
-		<param name="radial" type="boolean" truevalue="-r" falsevalue="" checked="False" label="Draw a radial tree" />
-	</inputs>
-	<outputs>
-		<data name="output" format="svg" label="${fileNewick.name}.svg" />
-	</outputs>
-	<tests>
-		<test>
-		    <param name="fileNewick" value="tree.nwk"/>
-		    <param name="width" value="400"/>
-		    <param name="leafFont" value="courier"/>
-            <output name="output" file="tree.svg" lines_diff="2"/>
-		</test>
-		<test>
-            <param name="fileNewick" value="tree.nwk"/>
-            <param name="radial" value="-r"/>
-            <param name="branchlength" value="true"/>
-            <output name="output" file="tree2.svg" lines_diff="2"/>
-        </test>
-	</tests>
-    <help>
+  <description>Display a phylogenetic tree as SVG</description>
+  <edam_operations>
+    <edam_operation>operation_0567</edam_operation>
+  </edam_operations>
+  <requirements>
+    <requirement type="package" version="1.6">newick_utilities</requirement>
+  </requirements>
+  <command>
+    nw_display
+      -s 
+      $scalebar
+      -u "$legend"
+      -I 'r'
+      -i
+      #if $condbranchsupport.branchsupport == "true":
+        "fill:$condbranchsupport.supcolor;
+        font-size:$condbranchsupport.supfontsize;
+        transform:$condbranchsupport.suptransform;"
+      #else:
+        "visibility:hidden;"
+      #end if
+      -b
+      #if $condbranchlength.branchlength == "true":
+        "fill:$condbranchlength.lencolor;
+        font-size:$condbranchlength.lenfontsize;
+        transform:$condbranchlength.lentransform;"
+      #else:
+        "visibility:hidden;"
+      #end if			
+        -l "font-family:$leafFont;font-size:$leafSize;"
+        -d "stroke:grey;fill:none;stroke-width:2;stoke-linecap:round;"
+        -w  $width
+        $radial
+      $fileNewick > $output
+  </command>
+  <inputs>
+    <param name="fileNewick" format="txt,nw,nwk,nhx" type="data"
+	   label="Newick file" />
+    <param name="scalebar" type="boolean" truevalue="" falsevalue="-S"
+	   checked="True" label="Display scale bar" />
+    <param name="legend" type="text" value="" label="Unit name scale" />
+    <param name="leafFont" type="text" value="sans-serif" label="Leaf font" />
+    <param name="leafSize" type="text" value="10px" label="Leaf font-size" />
+    <conditional name="condbranchsupport">
+      <param name="branchsupport" type="select" label="Branch support">
+	<option value="true">Display branch support</option>
+        <option value="false" selected="true">Hide branch support</option>
+      </param>
+      <when value="true">
+	<param name="supcolor" type="color" value="red" label="color" />
+	<param name="supfontsize" type="text" value="10px" label="font-size" />
+	<param name="suptransform" type="text" value="translateY(1.5em)"
+	       label="move" />
+      </when>
+      <when value="false" />
+    </conditional>
+    <conditional name="condbranchlength">
+      <param name="branchlength" type="select" label="Branch length">
+	<option value="true">Display branch length</option>
+	<option value="false" selected="true">Hide branch length</option>
+      </param>
+      <when value="true">
+	<param name="lencolor" type="color" value="blue" label="color" />
+	<param name="lenfontsize" type="text" value="10px" label="font-size" />
+	<param name="lentransform" type="text" value="translate(-1.5em,0em)"
+	       label="move" />
+      </when>
+      <when value="false" />
+    </conditional>
+    <param name="width" type="integer" value="800"	label="SVG Tree width (px)" />
+    <param name="radial" type="boolean" truevalue="-r" falsevalue="" checked="False"
+	   label="Draw a radial tree" />
+  </inputs>
+  <outputs>
+    <data name="output" format="svg" label="${fileNewick.name}.svg" />
+  </outputs>
+  <tests>
+    <test>
+      <param name="fileNewick" value="tree.nwk"/>
+      <param name="width" value="400"/>
+      <param name="leafFont" value="courier"/>
+      <output name="output" file="tree.svg" lines_diff="2"/>
+    </test>
+    <test>
+      <param name="fileNewick" value="tree.nwk"/>
+      <param name="radial" value="-r"/>
+      <param name="branchlength" value="true"/>
+      <output name="output" file="tree2.svg" lines_diff="2"/>
+    </test>
+  </tests>
+  <help>
 <![CDATA[
 **Displays a tree as a graph, as text or SVG.**
 
@@ -252,7 +254,7 @@ $ nw_display -s -r -l 'font-style:italics' data/catarrhini
 
 ]]>
 </help>
- <citations>
-        <citation type="doi">10.1186/1748-7188-3-7</citation> 
- </citations>
+<citations>
+  <citation type="doi">10.1186/1748-7188-3-7</citation> 
+</citations>
 </tool>
