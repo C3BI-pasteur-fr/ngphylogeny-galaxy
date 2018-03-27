@@ -1,96 +1,102 @@
 <tool id="muscle" name="MUSCLE" version="3.8.31.1">
-    <description>MUltiple Sequence Comparison by Log- Expectation</description>
-    <edam_operations>
-        <edam_operation>operation_0492</edam_operation>
-    </edam_operations>
-    <requirements>
-        <requirement type="package" version="3.8.31">muscle</requirement>
-    </requirements>
-    <version_command>
-      <![CDATA[  muscle -version ]]>
-    </version_command>
-    <command><![CDATA[
-                muscle
-                ##Do not display progress messages
-                -quiet
-                -in $input
-
-                #if $mode.run == "custom" :
-                    -maxiters $mode.iterations
-                #else:
-                    -maxiters $mode.run
-                #end if
-                
-                -cluster1 $cluster
-                $diags
-                $outputFormat
-                #for $output in $outputFormat.value
-                    #if $output
-                        -${output}out file_$output
-                    #end if
-                #end for
-            ]]>
-    </command>
-    <inputs>
-        <param name="input" type="data" format="fasta" label="Fasta file" help="Input file in FASTA format"/>
-        <conditional name="mode">
-            <param name="run" type="select" label="Run options" help="The number of iterations is predefined to allow to select between accuracy or speed options">
-                <option value="16" selected="true" >Most accurate, maxiters=16</option>
-                <option value="2">Compromise options for large datasets, maxiters=2 </option>
-                <option value="1">Fastest mode, maxiters=1 </option>
-                <option value="custom">Custom mode</option>
-            </param>
-            <when value="2" />
-            <when value="1" />
-            <when value="16" />
-            <when value="custom">
-                <param name="iterations" type="integer" min='1' value="16" label="Maximum number of iterations (-maxiters)"
-                       help="Increase the quality, increase the computing time"/>
-            </when>
-        </conditional>
-        
-        <param name="diags" type="boolean" truevalue="-diags" falsevalue="" checked="False" label="Find diagonals (-diags)"
-               help="Use diagonal optimization. This can significantly improve speed with closely-related sequences." />
-        
-        <param name="cluster" type="select" label="Clustering (tree-building) options"
-               help="Algorithm use to build guide trees for progressive alignment">
-            <option value="upgma">UPGMA</option>
-            <option value="upgmb" selected="true" >UPGMB</option> 
-            <option value="neighborjoining">Neighbor Joining</option>
-        </param>
-	<param name="outputFormat" type="select" multiple="true" label="Output file(s)">
-            <option value="fasta" selected="true">Fasta</option>
-            <option value="phys">Phylip sequential</option>
-            <option value="phyi">Phylip interleave</option>
-            <option value="clw">Clustalw</option>
-            <option value="html">HTML (colored web page)</option>
+  <description>MUltiple Sequence Comparison by Log- Expectation</description>
+  <edam_operations>
+    <edam_operation>operation_0492</edam_operation>
+  </edam_operations>
+  <requirements>
+    <requirement type="package" version="3.8.31">muscle</requirement>
+  </requirements>
+  <version_command>
+    <![CDATA[  muscle -version ]]>
+  </version_command>
+  <command><![CDATA[
+  muscle
+  ##Do not display progress messages
+    -quiet
+    -in $input
+  #if $mode.run == "custom" :
+    -maxiters $mode.iterations
+  #else:
+    -maxiters $mode.run
+  #end if
+    -cluster1 $cluster
+    $diags
+    $outputFormat
+  #for $output in $outputFormat.value
+    #if $output
+      -${output}out file_$output
+    #end if
+  #end for
+  ]]>
+  </command>
+  <inputs>
+    <param name="input" type="data" format="fasta" label="Fasta file"
+	   help="Input file in FASTA format"/>
+    <conditional name="mode">
+      <param name="run" type="select" label="Run options"
+	     help="The number of iterations is predefined to allow
+		   to select between accuracy or speed options">
+        <option value="16" selected="true" >Most accurate, maxiters=16</option>
+        <option value="2">Compromise options for large datasets, maxiters=2 </option>
+        <option value="1">Fastest mode, maxiters=1 </option>
+        <option value="custom">Custom mode</option>
+      </param>
+      <when value="2" />
+      <when value="1" />
+      <when value="16" />
+      <when value="custom">
+        <param name="iterations" type="integer" min='1' value="16"
+	       label="Maximum number of iterations (-maxiters)"
+               help="Increase the quality, increase the computing time"/>
+      </when>
+    </conditional>
+    <param name="diags" type="boolean" truevalue="-diags" falsevalue=""
+	   checked="False" label="Find diagonals (-diags)"
+           help="Use diagonal optimization. This can significantly
+		 improve speed with closely-related sequences." />
+    <param name="cluster" type="select" label="Clustering (tree-building) options"
+           help="Algorithm use to build guide trees for progressive alignment">
+      <option value="upgma">UPGMA</option>
+      <option value="upgmb" selected="true" >UPGMB</option> 
+      <option value="neighborjoining">Neighbor Joining</option>
     </param>
-	</inputs>
-	<outputs>
-		<data name="outputfasta" format="fasta" label="Muscle alignment fasta" from_work_dir="file_fasta">
-			<filter>'fasta' in outputFormat</filter>
-		</data>
-		<data name="outputphys" format="phylip" label="Muscle alignment Phylip sequential"  from_work_dir="file_phys">
-			<filter>'phys' in outputFormat</filter>
-		</data>
-		<data name="outputphyi" format="phylip" label="Muscle alignment Phylip interleave" from_work_dir="file_phyi">
-			<filter>'phyi' in outputFormat</filter>
-		</data>
-        <data name="outputclw" format="clw" label="Muscle alignment Clustalw format" from_work_dir="file_clw">
-            <filter>'clw' in outputFormat</filter>
-        </data>
-        <data name="outputhtml" format="html" label="Muscle alignment Html" from_work_dir="file_html">
-            <filter>'html' in outputFormat</filter>
-        </data>
-    </outputs>
-    <tests>
-        <test>
-            <param name="input" value="seqtest.fasta"/>
-            <output name="outputfasta" value="seqtest_aln.fasta"/>
-        </test>
-    </tests>
-    <help>
-
+    <param name="outputFormat" type="select" multiple="true" label="Output file(s)">
+      <option value="fasta" selected="true">Fasta</option>
+      <option value="phys">Phylip sequential</option>
+      <option value="phyi">Phylip interleave</option>
+      <option value="clw">Clustalw</option>
+      <option value="html">HTML (colored web page)</option>
+    </param>
+  </inputs>
+  <outputs>
+    <data name="outputfasta" format="fasta"
+	  label="Muscle alignment fasta" from_work_dir="file_fasta">
+      <filter>'fasta' in outputFormat</filter>
+    </data>
+    <data name="outputphys" format="phylip"
+	  label="Muscle alignment Phylip sequential"  from_work_dir="file_phys">
+      <filter>'phys' in outputFormat</filter>
+    </data>
+    <data name="outputphyi" format="phylip"
+	  label="Muscle alignment Phylip interleave" from_work_dir="file_phyi">
+      <filter>'phyi' in outputFormat</filter>
+    </data>
+    <data name="outputclw" format="clw"
+	  label="Muscle alignment Clustalw format" from_work_dir="file_clw">
+      <filter>'clw' in outputFormat</filter>
+    </data>
+    <data name="outputhtml" format="html"
+	  label="Muscle alignment Html" from_work_dir="file_html">
+      <filter>'html' in outputFormat</filter>
+    </data>
+  </outputs>
+  <tests>
+    <test>
+      <param name="input" value="seqtest.fasta"/>
+      <output name="outputfasta" value="seqtest_aln.fasta"/>
+    </test>
+  </tests>
+  <help>
 .. class:: infomark
 
 **MUSCLE version 3.8.31, 2004**
@@ -125,9 +131,9 @@ For further informations, please visite the MUSCLE_ website.
   :-clw:                 Write output in CLUSTALW format (default FASTA)
   :-quiet:             Do not write progress messages to stderr
 
-    </help>
-	<citations>
-        <citation type="doi">10.1093/nar/gkh340</citation>
-        <citation type="doi">10.1186/1471-2105-5-113</citation>
-    </citations>
+  </help>
+  <citations>
+    <citation type="doi">10.1093/nar/gkh340</citation>
+    <citation type="doi">10.1186/1471-2105-5-113</citation>
+  </citations>
 </tool>
