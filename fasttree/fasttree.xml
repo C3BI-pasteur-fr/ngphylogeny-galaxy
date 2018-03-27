@@ -22,7 +22,7 @@
   #if $input.is_of_type('phylip')
     goalign reformat fasta -i $input -p -o align.tmp;
   #else
-    sed 's/^>\s*/>/' $input > align.tmp;
+    ln -sf $input align.tmp;
   #endif
   
   ######## 1st Fasttree #######
