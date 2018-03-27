@@ -1,228 +1,268 @@
-<tool id="phyml_oneclick_3_0" name="PhyML Oneclick 3.0" version="3.0_360-500M">
-    <description>Phylogeny software based on the maximum-likelihood</description>
-    <edam_operations>
-        <edam_operation>operation_0540</edam_operation>
-        <edam_operation>operation_0324</edam_operation>
-    </edam_operations>
-    <requirements>
-        <requirement type="package" version="3.0_360-500M">phyml</requirement>
-    </requirements>
-    <version_command>
-        <![CDATA[ phyml --version ]]>
-    </version_command>
-    <stdio>
-        <regex match="*"
-               source="stdrr"
-               level="fatal"/>
-    </stdio>
-    <command>
-        <![CDATA[
-            ##PhyML outputs are based on input path and we need to create outputs in working_dir.
-            ln -sf $input '${input.name}';
-            #if ($usetree.inputTree == "true"):
-            ln -sf ${$usetree.userInputTree} ${$usetree.userInputTree.name};
-            #end if
+<tool id="phyml_3_0" name="PhyML 3.0" version="3.0_360-500M">
+  <description>Phylogeny software based on the maximum-likelihood</description>
+  <edam_operations>
+    <edam_operation>operation_0540</edam_operation>
+    <edam_operation>operation_0324</edam_operation>
+  </edam_operations>
+  <requirements>
+    <requirement type="package" version="3.0_360-500M">phyml</requirement>
+    <requirement type="package" version="0.2.4">gotree</requirement>
+    <requirement type="package" version="0.2.6">goalign</requirement>
+  </requirements>
+  <version_command>
+    <![CDATA[ phyml --version ]]>
+  </version_command>
+  <stdio>
+    <regex match="*"
+           source="stdrr"
+           level="fatal"/>
+  </stdio>
+  <command><![CDATA[
+  #if $input.is_of_type('fasta')
+    goalign reformat phylip -i $input -o align.phy;
+  #else
+    ln -sf $input align.phy;
+  #endif
 
-            phyml --input '${input.name}'
-                ${phylip_format}
+  #if ($usetree.inputTree == "true"):
+    ln -sf ${$usetree.userInputTree} ${$usetree.userInputTree.name};
+  #end if
+  
+  phyml
+    --input align.phy
+    ${phylip_format}
+    #if $seq.type_of_seq == "cfg"
+      ## Read information of sequence type
+      ## read an info file to choose which option set and set a model by default
+      #set $info = open( str($input_info) ).read()
+      #if 'dna' in $info:
+        --datatype nt
+        --model HKY85
+        -f e
+      #else if 'protein' in $info:
+        --datatype aa
+        --model WAG
+        -f m
+      #end if
+    #else
+      --datatype ${seq.type_of_seq}
+      --model ${seq.model}
+      -f ${seq.equi_freq}
+    #end if
+    --multiple ${nb_data_set}
+    #if (str($support_condition.branchSupport) in ['0','-1','-2','-4','-5']):
+      --bootstrap ${support_condition.branchSupport}
+    #else:
+      --bootstrap ${support_condition.replicate}
+    #end if
+    #if ($seq.type_of_seq == "nt"):
+      #if str($seq.tstv).startswith('e'):
+        -t e
+      #else
+        -t ${seq.tstv}
+      #end if
+    #end if
+    #if str($prop_invar).startswith('e'):
+      --pinv e
+    #else
+      --pinv ${prop_invar}
+    #end if
+    --nclasses ${nbSubstCat}
+    #if (str($nbSubstCat) != "1"):
+      #if str($gamma).startswith('e'):
+        --alpha e
+      #else
+        --alpha ${gamma}
+      #end if
+    #end if
+    --search ${move}
+    -o ${optimisationTopology}
+    #if ($usetree.inputTree == "true"):
+      --inputtree ${$usetree.userInputTree.name}
+    #end if
+    #if ($numStartSeed != "0"):
+      --r_seed ${numStartSeed}
+    #end if
+    > ${output_stdout};
 
-                #if $seq.type_of_seq == "cfg"
+    grep 'failed' ${output_stdout} >&2;
 
-                         ## Read information of sequence type
-                         ## read an info file to choose which option set and set a model by default
-                         #set $info = open( str($input_info) ).read()
-
-                         #if 'dna' in $info:
-                              --datatype nt
-                              --model HKY85
-                              -f e
-
-                         #else if 'protein' in $info:
-                              --datatype aa
-                              --model WAG
-                              -f m
-
-                         #end if
-                #else
-                    --datatype ${seq.type_of_seq}
-                    --model ${seq.model}
-                    -f ${seq.equi_freq}
-
-                #end if
-
-                --multiple ${nb_data_set}
-                
-                #if (str($support_condition.branchSupport) in ['0','-1','-2','-4','-5']):
-                    --bootstrap ${support_condition.branchSupport}
-                #else:
-                    --bootstrap ${support_condition.branchSupport.replicate}
-                #end if
-                    
-                #if ($seq.type_of_seq == "nt"):
-                    #if str($seq.tstv).startswith('e'):
-                        -t e
-                    #else
-                        -t ${seq.tstv}
-                    #end if
-                #end if
-
-                #if str($prop_invar).startswith('e'):
-                        --pinv e
-                #else
-                        --pinv ${prop_invar}
-                #end if
-
-                --nclasses ${nbSubstCat}
-                
-                #if (str($nbSubstCat) != "1"):
-
-                    #if str($gamma).startswith('e'):
-                        --alpha e
-                    #else
-                        --alpha ${gamma}
-                    #end if
-                #end if
-
-                --search ${move}
-                -o ${optimisationTopology}
-                
-                #if ($usetree.inputTree == "true"):
-                    --inputtree ${$usetree.userInputTree.name}
-                #end if
-                
-                #if ($numStartSeed != "0"):
-                    --r_seed ${numStartSeed}
-                #end if
-                
-                > ${output_stdout};
-                grep 'failed' ${output_stdout} >&2;
-        ]]>
-    </command>
-    <inputs>
-        <param name="input" type="data" format="phylip, phy" label="Alignment file" help="phylip format"/>
-        <param name="phylip_format" type="select"  label="Changes interleaved format" display="radio">
-            <option value="">Interleaved</option>
-            <option value="--sequential">Sequential</option>
-        </param> 
-        <param name="nb_data_set" type="integer" min="1" value="1" label="Number of data sets" />
-        <conditional name="seq">
-            <param name="type_of_seq" type="select"  label="Data type" display="radio">
-                <option value="nt">Nucleic acids</option>
-                <option value="aa">Amino acids</option>
-                <option value="cfg">Type information file</option>
-            </param>
-            <when value="nt">
-               <param name="tstv" type="text" value="estimated" label="Transition/transversion ratio"
-                      help="Must be a positive integer, 'e' if you want PhyML to estimate it"  />
-               <param name="model" type="select" label="Substitution model">
-                    <option value="HKY85" selected="true">HKY85</option>
-                    <option value="JC69">JC69</option>
-                    <option value="K80">K80</option>
-                    <option value="F81">F81</option>
-                    <option value="F84">F84</option>
-                    <option value="TN93">TN93</option>
-                    <option value="GTR">GTR</option>
-               </param>
-               <param name="equi_freq" type="select" label="Equilibrium frequencies"
-                       help="Empirical: frequencies are estimated by counting the occurences in the alignment.
-                       ML/Model:frequencies are estimated using ML for nucleotides or defined by the proteic substitution model.">
-                    <option value="m">ML/Model</option>
-                    <option value="e" selected="true">Empirical</option>
-               </param>
-            </when>
-            <when value="aa">
-                <param name="model" type="select" label="Evolution model">
-                    <option value="LG" selected="true">LG</option>
-                    <option value="WAG">WAG</option>
-                    <option value="JTT">JTT</option>
-                    <option value="MtREV">MtREV</option>
-                    <option value="Dayhoff">Dayhoff</option>
-                    <option value="DCMut">DCMut</option>
-                    <option value="RtREV">RtREV</option>
-                    <option value="CpREV">CpREV</option>
-                    <option value="VT">VT</option>
-                    <option value="Blosum62">Blosum62</option>
-                    <option value="MtMam">MtMam</option>
-                    <option value="MtArt">MtArt</option>
-                    <option value="HIVw">HIVw</option>
-                    <option value="HIVb">HIVb</option>
-                </param>
-                <param name="equi_freq" type="select" label="Equilibrium frequencies"
-                       help="Empirical: frequencies are estimated by counting the occurences in the alignment.
-                       ML/Model:frequencies are estimated using ML for nucleotides or defined by the proteic substitution model.">
-                    <option value="m" selected="true">ML/Model</option>
-                    <option value="e">Empirical</option>
-                </param>
-            </when>
-            <when value="cfg">
-                 <param name="input_info" format="txt" type="data" multiple="false" label="Config file"
-                        help="Precompute file containning sequence description (dna or protein)"/>
-            </when>
-        </conditional>
-        <param name="prop_invar" type="text" value="estimated" label="Proportion of invariant sites"
-               help="Can be a fixed value in the [0,1] range or 'e' to get the maximum likelihood estimate, 0 to ignore this parameter"/>
-        <param name="nbSubstCat" type="integer" min="1" value="4" label="Number of categories for the discrete gamma model"
-               help="1 means no gamma model" />
-        <param name="gamma"  type="text" value="estimated" label="Parameter of the gamma model"
-               help="'e' if you want PhyML to estimate it"/>
-        <param name="move" type="select" label="Tree topology search" display="radio">
-            <option value="NNI">NNI (Nearest Neighbor Interchange)</option>
-            <option value="SPR">SPR (Subtree Pruning and Regraphing)</option>
-            <option value="BEST">Best of NNI and SPR</option>
+    #if $support_condition.branchSupport == "1"
+      ##Compute BOOSTER bootstrap supports
+      gotree compute support booster
+        -i *_phyml_tree.txt
+	-b *_phyml_boot_trees.txt
+        -o tbe_norm_tree.nhx
+        --out-raw tbe_raw_tree.nhx
+        -l tbe_log.txt
+        -t \${GALAXY_SLOTS}
+        --moved-taxa --highest-per-branches
+        --dist-cutoff 0.3
+        --silent;
+    #end if
+  ]]>
+  </command>
+  <inputs>
+    <param name="input" type="data" format="phylip, phy, fasta, fa" label="Alignment file"
+	   help="phylip/fasta format"/>
+    <param name="phylip_format" type="select" label="Changes interleaved format"
+	   display="radio">
+      <option value="">Interleaved</option>
+      <option value="--sequential">Sequential</option>
+    </param> 
+    <param name="nb_data_set" type="integer" min="1" value="1" label="Number of data sets"/>
+    <conditional name="seq">
+      <param name="type_of_seq" type="select" label="Data type" display="radio">
+        <option value="nt">Nucleic acids</option>
+        <option value="aa">Amino acids</option>
+        <option value="cfg">Type information file</option>
+      </param>
+      <when value="nt">
+        <param name="tstv" type="text" value="estimated" label="Transition/transversion ratio"
+               help="Must be a positive integer, 'e' if you want PhyML to estimate it"/>
+        <param name="model" type="select" label="Substitution model">
+          <option value="HKY85" selected="true">HKY85</option>
+          <option value="JC69">JC69</option>
+          <option value="K80">K80</option>
+          <option value="F81">F81</option>
+          <option value="F84">F84</option>
+          <option value="TN93">TN93</option>
+          <option value="GTR">GTR</option>
         </param>
-        <param name="optimisationTopology" type="select" label="Optimise parameter">
-            <option value="tlr">Tree topology, Branch length, Model parameter</option>
-            <option value="tl">Tree topology, Branch length</option>
-            <option value="l">Branch length</option>
-            <option value="r">Model parameter</option>
-            <option value="n">No parameter is optimized</option>
+        <param name="equi_freq" type="select" label="Equilibrium frequencies"
+               help="Empirical: frequencies are estimated by counting the occurences in the alignment.
+                     ML/Model:frequencies are estimated using ML for nucleotides or defined by the
+		     proteic substitution model.">
+          <option value="m">ML/Model</option>
+          <option value="e" selected="true">Empirical</option>
         </param>
-        <conditional name="support_condition">
-            <param name="branchSupport" type="select" label="Statistical test for branch support"
-                  help="Use aLRT or aBayes to save computing time">
-                <option value="0">No support</option>
-                <option value="1">Bootstrap</option>
-                <option value="-1">Likelihood aLRT statistics</option>
-                <option value="-2">Likelihood Chi2-based</option>
-                <option value="-4" selected='true'>SH-like</option>
-                <option value="-5">Approximate Bayes branch supports</option>
-            </param>
-            <when value="0"/>
-            <when value="-1"/>
-            <when value="-2"/>
-            <when value="-4"/>
-            <when value="-5"/>
-            <when value="1">
-                <param name="replicate" type="integer" min="1" value="100" label="Number of bootstrap replicates"
-                       help="Must be a positive integer" />
-            </when>
-        </conditional>
-        <param name="numStartSeed" type="integer" value="0" label="Seed value used to initiate the random number generator"
-               help="0 to random seed"/>
-        <conditional name="usetree">
-            <param name="inputTree" type="boolean" truevalue="true" falsevalue="false" checked="False" label="User starting tree" />
-            <when value="true">
-                <param name="userInputTree" type="data" label="Tree file" help="newick format"/>
-            </when>
-            <when value="false"/>
-        </conditional>
-    </inputs>
-    <outputs>
-        <data name="output_tree" format="nhx" label="PhyML Newick tree: ${input.name}.nwk" from_work_dir="*_phyml_tree.txt" />
-        <data name="output_stats" format="txt" label="PhyML Statistic: ${input.name}.stats.txt" from_work_dir="*_phyml_stats.txt"/>
-        <data name="output_stdout" format="txt" label="PhyML Stdout: ${input.name}"/>
-    </outputs>
-    <tests>
-        <test>
-            <param name="input" value="phylip" />
-            <param name="prop_invar" value="0"/>
-            <param name="type_of_seq" value="nt" />
-            <param name="numStartSeed" value="1458308600" />
-            <output name="output_tree" file="phylip_phyml_tree.txt" />
-            <output name="output_stats" file="phylip_phyml_stats.txt" lines_diff="4"/>
-        </test>
-    </tests>
-    <help>
+      </when>
+      <when value="cfg">
+        <param name="input_info" format="txt" type="data" multiple="false" label="Config file"
+               help="Precompute file containning sequence description (dna or protein)"/>
+      </when>
+      <when value="aa">
+        <param name="model" type="select" label="Evolution model">
+          <option value="LG" selected="true">LG</option>
+          <option value="WAG">WAG</option>
+          <option value="JTT">JTT</option>
+          <option value="MtREV">MtREV</option>
+          <option value="Dayhoff">Dayhoff</option>
+          <option value="DCMut">DCMut</option>
+          <option value="RtREV">RtREV</option>
+          <option value="CpREV">CpREV</option>
+          <option value="VT">VT</option>
+          <option value="Blosum62">Blosum62</option>
+          <option value="MtMam">MtMam</option>
+          <option value="MtArt">MtArt</option>
+          <option value="HIVw">HIVw</option>
+          <option value="HIVb">HIVb</option>
+        </param>
+        <param name="equi_freq" type="select" label="Equilibrium frequencies"
+               help="Empirical: frequencies are estimated by counting the occurences in the alignment.
+                     ML/Model:frequencies are estimated using ML for nucleotides or defined by
+		     the proteic substitution model.">
+          <option value="m" selected="true">ML/Model</option>
+          <option value="e">Empirical</option>
+        </param>
+      </when>
+    </conditional>
+    <param name="prop_invar" type="text" value="estimated"
+	   label="Proportion of invariant sites"
+           help="Can be a fixed value in the [0,1] range or 'e' to get the maximum
+		 likelihood estimate, 0 to ignore this parameter"/>
+    <param name="nbSubstCat" type="integer" min="1" value="4"
+	   label="Number of categories for the discrete gamma model"
+           help="1 means no gamma model"/>
+    <param name="gamma" type="text" value="estimated" label="Parameter of the gamma model"
+           help="'e' if you want PhyML to estimate it"/>
+    <param name="move" type="select" label="Tree topology search" display="radio">
+      <option value="NNI">NNI (Nearest Neighbor Interchange)</option>
+      <option value="SPR">SPR (Subtree Pruning and Regraphing)</option>
+      <option value="BEST">Best of NNI and SPR</option>
+    </param>
+    <param name="optimisationTopology" type="select" label="Optimise parameter">
+      <option value="tlr">Tree topology, Branch length, Model parameter</option>
+      <option value="tl">Tree topology, Branch length</option>
+      <option value="l">Branch length</option>
+      <option value="r">Model parameter</option>
+      <option value="n">No parameter is optimized</option>
+    </param>
+    <conditional name="support_condition">
+      <param name="branchSupport" type="select" label="Statistical test for branch support"
+             help="Use aLRT or aBayes to save computing time">
+        <option value="0">No support</option>
+        <option value="1">Bootstrap</option>
+        <option value="-1">Likelihood aLRT statistics</option>
+        <option value="-2">Likelihood Chi2-based</option>
+        <option value="-4" selected='true'>SH-like</option>
+        <option value="-5">Approximate Bayes branch supports</option>
+      </param>
+      <when value="0"/>
+      <when value="-1"/>
+      <when value="-2"/>
+      <when value="-4"/>
+      <when value="-5"/>
+      <when value="1">
+        <param name="replicate" type="integer" min="1" value="100"
+	       label="Number of bootstrap replicates"
+               help="Must be a positive integer"/>
+      </when>
+    </conditional>
+    <param name="numStartSeed" type="integer" value="0"
+	   label="Seed value used to initiate the random number generator"
+           help="0 to random seed"/>
+    <conditional name="usetree">
+      <param name="inputTree" type="boolean" truevalue="true"
+	     falsevalue="false" checked="False"
+	     label="User starting tree"/>
+      <when value="true">
+        <param name="userInputTree" type="data" format="nhx, nwk"
+	       label="Tree file" help="newick format"/>
+      </when>
+      <when value="false"/>
+    </conditional>
+  </inputs>
+  <outputs>
+    <data name="tbe_log" format="txt" label="Booster: tbe_log.txt"
+	  from_work_dir="tbe_log.txt">
+      <filter>support_condition['branchSupport'] == '1'</filter>
+    </data>
+    <data name="tbe_norm_tree" format="nhx"
+	  label="Booster: Tree with normalized supports: tbe_norm_tree.nhx"
+          from_work_dir="tbe_norm_tree.nhx">
+      <filter>support_condition['branchSupport'] == '1'</filter>
+    </data>
+    <data name="tbe_raw_tree" format="nhx"
+          label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: tbe_raw_tree.nhx"
+          from_work_dir="tbe_raw_tree.nhx">
+      <filter>support_condition['branchSupport'] == '1'</filter>
+    </data>
+    <data name="output_bootstrap_trees" format="txt"
+	  label="PhyML bootstrap trees: align.phy_phyml_boot_trees.txt"
+          from_work_dir="*_phyml_boot_trees.txt">
+      <filter>support_condition['branchSupport'] == '1'</filter>
+    </data>
+    <data name="output_stdout" format="txt"
+	  label="PhyML log: ${input.name}"/>
+    <data name="output_stats" format="txt"
+	  label="PhyML Statistic: ${input.name}.stats.txt"
+	  from_work_dir="*_phyml_stats.txt"/>
+    <data name="output_tree" format="nhx"
+	  label="PhyML Newick tree: ${input.name}.nwk"
+	  from_work_dir="*_phyml_tree.txt" />
+  </outputs>
+  <tests>
+    <test>
+      <param name="input" value="phylip" />
+      <param name="prop_invar" value="0"/>
+      <param name="type_of_seq" value="nt" />
+      <param name="numStartSeed" value="1458308600" />
+      <output name="output_tree" file="phylip_phyml_tree.txt" />
+      <output name="output_stats" file="phylip_phyml_stats.txt" lines_diff="4"/>
+    </test>
+  </tests>
+  <help>
     <![CDATA[ 
 .. class:: infomark
 
@@ -366,8 +406,8 @@ OPTIONS
       num is the frequency at which the bootstrap progress bar will be updated.
       Must be an integer.
  ]]>
-    </help>
-    <citations>
-       <citation type="doi">10.1093/sysbio/syq010</citation> 
-    </citations>
+  </help>
+  <citations>
+    <citation type="doi">10.1093/sysbio/syq010</citation> 
+  </citations>
 </tool>
