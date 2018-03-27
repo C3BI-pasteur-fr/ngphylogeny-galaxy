@@ -1,1 +1,0 @@
-docker run -v /Users/flemoine/Documents/Projects/NGPhylogeny_fr_galaxytools/galaxy/tools/tnt:/local_tools -e GALAXY_CONFIG_TOOL_CONFIG_FILE=config/tool_conf.xml.sample,config/shed_tool_conf.xml.sample,/local_tools/tool_conf.xml  -p 8081:80 -p 8021:21 -p 8022:22 -i -t bgruening/galaxy-stable bash
