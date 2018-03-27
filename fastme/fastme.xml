@@ -18,7 +18,7 @@
   <command>
     <![CDATA[
 	     #if $input.is_of_type('fasta')
-	       goalign reformat phylip -i $input --auto-detect -o  ${input.name};
+	       goalign reformat phylip -i $input -o  ${input.name};
 	     #else
 	       ln -sf $input '${input.name}';
 	     #endif
