@@ -68,7 +68,7 @@
     ]]>
   </command>
   <inputs>
-    <param format="phylip, phy" name="input" type="data"
+    <param format="phylip,phy,fasta,fa" name="input" type="data"
 	   label="Alignment file" help="phylip format"/>
     <conditional name="sequence">
       <param name="seqtype" type="select" label="Data type">
@@ -116,7 +116,7 @@
 	     falsevalue="false" checked="False"
              label="Use input starting tree"/>
       <when value="true">
-        <param format="nhx, nwk" name="userInpuTree" type="data"
+        <param format="nhx,nwk" name="userInpuTree" type="data"
 	       label="Tree file" help="newick format"/>
       </when>
       <when value="false"/>

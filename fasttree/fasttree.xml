@@ -99,7 +99,7 @@
   ]]>
   </command>
   <inputs>
-    <param name="input" type="data" format="fasta, phylip"
+    <param name="input" type="data" format="fasta,phylip"
 	   label="Aligned sequences file (FASTA/Phylip format)"/>
     <conditional name="sequence_type">
       <param name="seqtype" type="select" label="Nucleotide or protein alignment"

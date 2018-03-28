@@ -63,7 +63,7 @@
     </configfile>
   </configfiles>
   <inputs>
-    <param name="data" type="data" format="nex, fasta, phylip"
+    <param name="data" type="data" format="nex,fasta,phylip"
 	   label="Nexus/Fasta/Phylip input file"/>
     <param name="filename" type="text" label="Output filename" size="10" value=""
            help="Output files will be named this with .p, .t, .mcmc extensions. Use to avoid overwriting files when running repeated analyses on the same dataset."/>

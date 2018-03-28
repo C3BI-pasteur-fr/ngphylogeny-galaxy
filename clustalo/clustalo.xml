@@ -35,7 +35,7 @@
     ]]>
   </command>
   <inputs>
-    <param name="inputSequences" format="fasta, clustal, msf, phylip, selex, stockholm" type="data" label="Sequences file"/>
+    <param name="inputSequences" format="fasta,clustal,msf,phylip,selex,stockholm" type="data" label="Sequences file"/>
     <param name="inputFormat" label="Input format file" type="select">
       <option value="" selected="true">Auto</option>
       <option value="--infmt=fasta">FASTA</option>

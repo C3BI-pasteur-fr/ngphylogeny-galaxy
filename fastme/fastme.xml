@@ -83,7 +83,7 @@
         ]]>
   </command>
   <inputs>
-    <param name="input" type="data" format="fasta, phylip, phy"
+    <param name="input" type="data" format="fasta,phylip,phy"
 	   label="Fastme input"
            help="Fasta/Phylip Alignment or Matrix file"/>
     <conditional name="usetree">

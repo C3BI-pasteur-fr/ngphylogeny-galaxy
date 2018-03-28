@@ -103,7 +103,7 @@
   ]]>
   </command>
   <inputs>
-    <param name="input" type="data" format="phylip, phy, fasta, fa" label="Alignment file"
+    <param name="input" type="data" format="phylip,phy,fasta,fa" label="Alignment file"
 	   help="phylip/fasta format"/>
     <param name="phylip_format" type="select" label="Changes interleaved format"
 	   display="radio">
@@ -217,7 +217,7 @@
 	     falsevalue="false" checked="False"
 	     label="User starting tree"/>
       <when value="true">
-        <param name="userInputTree" type="data" format="nhx, nwk"
+        <param name="userInputTree" type="data" format="nhx,nwk"
 	       label="Tree file" help="newick format"/>
       </when>
       <when value="false"/>

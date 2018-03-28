@@ -44,7 +44,7 @@
     mv input.fasta-gb.htm $output_htm;
   </command>
   <inputs>
-    <param name="input" type="data" format="fasta, phylip"
+    <param name="input" type="data" format="fasta,phylip"
 	   label="Source file" help="Fasta format"/>
     <conditional name="typeChoice">
       <param name="datatype" type="select" label="Data type">
