@@ -1,4 +1,4 @@
-<tool id="gblocks_oneclick" name="Gblocks OneClick" version="0.91.1">
+<tool id="gblocks" name="Gblocks" version="0.91.1.post1">
   <description>cleaning aligned sequences</description>
   <edam_operations>
     <edam_operation>operation_0368</edam_operation>

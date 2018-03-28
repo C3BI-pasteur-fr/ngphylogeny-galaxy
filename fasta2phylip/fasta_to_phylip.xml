@@ -1,4 +1,4 @@
-<tool id="fasta_to_phylip" name="Fasta to Phylip" version="1.1">
+<tool id="fasta_to_phylip" name="Fasta to Phylip" version="1.1.post1">
   <description>Convert fasta alignment file into phylip interleaved format</description>
   <edam_operations>
     <edam_operation>operation_2089</edam_operation>

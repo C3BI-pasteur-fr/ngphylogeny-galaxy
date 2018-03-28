@@ -1,4 +1,4 @@
-<tool id="phyml_3_0" name="PhyML 3.0" version="3.0_360-500M">
+<tool id="phyml_3_0" name="PhyML 3.0" version="3.0_360-500M.post1">
   <description>Phylogeny software based on the maximum-likelihood</description>
   <edam_operations>
     <edam_operation>operation_0540</edam_operation>

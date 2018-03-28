@@ -1,4 +1,4 @@
-<tool id="muscle" name="MUSCLE" version="3.8.31.1">
+<tool id="muscle" name="MUSCLE" version="3.8.31.1.post1">
   <description>MUltiple Sequence Comparison by Log- Expectation</description>
   <edam_operations>
     <edam_operation>operation_0492</edam_operation>

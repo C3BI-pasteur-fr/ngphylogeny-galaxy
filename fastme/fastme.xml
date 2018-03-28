@@ -1,4 +1,4 @@
-<tool id="fastme" name="FastME" version="2.1.5.2">
+<tool id="fastme" name="FastME" version="2.1.5.2.post1">
   <description>Distance-based inference of phylogenetic trees</description>
   <edam_operations>
     <edam_operation>operation_0540</edam_operation>

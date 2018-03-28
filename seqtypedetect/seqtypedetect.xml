@@ -1,4 +1,4 @@
-<tool id="seqtypedetect" name="Sequence type detection" version="1.0">
+<tool id="seqtypedetect" name="Sequence type detection" version="1.0.post1">
     <description>Detect sequence datatype on fasta file</description>
 
     <command interpreter="python">

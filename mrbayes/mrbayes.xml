@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<tool id="mrbayes" name="MrBayes" version="3.2.6">
+<tool id="mrbayes" name="MrBayes" version="3.2.6.post1">
   <description>with options and commands</description>
   <requirements>
     <requirement type="package" version="3.2.6">mrbayes</requirement>

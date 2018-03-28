@@ -1,4 +1,4 @@
-<tool id="fasttree_boot_oneclick" name="FastTree+Bootstrap Oneclick" version="2.1.9">
+<tool id="fasttree" name="FastTree" version="2.1.9.post1">
   <description>FastTree + Boostrap -> Infers approximately-maximum-likelihood phylogenetic trees from
   alignments of nucleotide or protein sequences.
   </description>
