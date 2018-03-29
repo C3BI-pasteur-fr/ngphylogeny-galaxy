@@ -16,7 +16,7 @@
     <param name="input" format="fasta" type="data" label="Source file" help="fasta or phylip format"/>
   </inputs>
   <outputs>
-    <data name="output" format="phylip" label="${input.name}"></data>
+    <data name="output" format="phylip" label="${input.name}.phy"></data>
   </outputs>
   <help>
 ===========
