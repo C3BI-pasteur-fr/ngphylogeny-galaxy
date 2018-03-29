@@ -21,7 +21,7 @@
   #end if
     -cluster1 $cluster
     $diags
-    $outputFormat
+  ## $outputFormat
   #for $output in $outputFormat.value
     #if $output
       -${output}out file_$output
