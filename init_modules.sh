@@ -17,5 +17,5 @@ puts stderr "\t$name $version"
 module-whatis "$name $version"
 prepend-path PATH $MODULE_PACKAGES/$name/$version/
 EOF
-    
+
 done < "package_list.txt"

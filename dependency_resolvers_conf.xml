@@ -1,6 +1,6 @@
 <dependency_resolvers>
   <!-- Example configuration of modules dependency resolver, uses Environment Modules -->
-  <modules modulecmd="/usr/bin/modulecmd" find_by="avail" modulepath="find_by="avail" modulepath="/usr/share/modules/modulefiles" />
+  <modules modulecmd="/usr/bin/modulecmd" find_by="avail" prefetch="true" modulepath="/usr/share/modules/modulefiles" />
   <!-- the default configuration, first look for dependencies installed from the toolshed -->
   <tool_shed_packages />
   <galaxy_packages />

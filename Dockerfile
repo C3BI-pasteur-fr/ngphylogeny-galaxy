@@ -36,5 +36,5 @@ RUN mkdir /packages \
 RUN echo "source /usr/share/modules/init/bash" >> /etc/bash.bashrc
 RUN echo "source /usr/share/modules/init/sh" >> /etc/profile
 
-
 COPY dependency_resolvers_conf.xml /galaxy-central/config/dependency_resolvers_conf.xml
+COPY environment_modules_mapping.yml /galaxy-central/config/environment_modules_mapping.yml
