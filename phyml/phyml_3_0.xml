@@ -18,11 +18,11 @@
            level="fatal"/>
   </stdio>
   <command><![CDATA[
-  #if $input.is_of_type('fasta')
+  #if $input.is_of_type('fasta'):
     goalign reformat phylip -i $input -o align.phy;
   #else
     ln -sf $input align.phy;
-  #endif
+  #end if
 
   #if ($usetree.inputTree == "true"):
     ln -sf ${$usetree.userInputTree} ${$usetree.userInputTree.name};

@@ -10,11 +10,11 @@
     <requirement type="package" version="0.2.6">goalign</requirement>
   </requirements>
   <command><![CDATA[
-  #if $input.is_of_type('fasta')
+  #if $input.is_of_type('fasta'):
     goalign reformat phylip -i $input -o align.phy;
   #else
     ln -sf $input align.phy;
-  #endif
+  #end if
   
   sms.sh
     -i align.phy

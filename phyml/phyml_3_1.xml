@@ -18,11 +18,11 @@
            level="fatal"/>
   </stdio>
   <command><![CDATA[
-  #if $input.is_of_type('fasta')
+  #if $input.is_of_type('fasta'):
     goalign reformat phylip -i $input -o align.phy;
   #else
     ln -sf $input align.phy;
-  #endif
+  #end if
   
   #if ($usetree.inputTree == "true"):
     ln -sf ${$usetree.userInputTree} ${$usetree.userInputTree.name};
@@ -31,7 +31,7 @@
   phyml
     --input align.phy
     ${phylip_format}
-    #if $seq.type_of_seq == "cfg"
+    #if $seq.type_of_seq == "cfg":
       ## Read information of sequence type
       ## read an info file to choose which option set and set a model by default
       #set $info = open( str($input_info) ).read()

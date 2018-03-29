@@ -23,7 +23,7 @@
     goalign reformat fasta -i $input -p -o align.tmp;
   #else
     ln -sf $input align.tmp;
-  #endif
+  #end if
   
   ######## 1st Fasttree #######
   FastTree

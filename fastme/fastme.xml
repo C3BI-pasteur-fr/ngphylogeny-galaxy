@@ -17,11 +17,11 @@
   </version_command>
   <command>
     <![CDATA[
-	     #if $input.is_of_type('fasta')
+	     #if $input.is_of_type('fasta'):
 	       goalign reformat phylip -i $input -o  ${input.name};
 	     #else
 	       ln -sf $input '${input.name}';
-	     #endif
+	     #end if
              ln -sf $outputTree '${input.name}_fastme.nhx';
 
             fastme

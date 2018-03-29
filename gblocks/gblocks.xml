@@ -8,11 +8,11 @@
     <requirement type="package" version="0.2.6">goalign</requirement>
   </requirements>
   <command>
-    #if $input.is_of_type('phylip')
+    #if $input.is_of_type('phylip'):
       goalign reformat fasta -i $input -p -o input.fasta;
     #else
       ln -s ${input} input.fasta;
-    #endif
+    #end if
 
     Gblocks
       input.fasta
@@ -25,7 +25,6 @@
       -b3=$b3
       -b4=$b4
       -b5=$b5
-    
     #if $typeChoice.datatype =="cfg":
       ## Read information of sequence type
       ## read an info file to choose which option set and set a model by default
@@ -38,9 +37,9 @@
     #else
       $typeChoice.datatype
     #end if
-    
      > $gblocks_log;
     mv input.fasta-gb $output_aln;
+     
     mv input.fasta-gb.htm $output_htm;
   </command>
   <inputs>
