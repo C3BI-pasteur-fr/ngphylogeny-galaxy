@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<toolbox>
+  <section id="phylogeny" name="Phylogeny">
+    <tool file="/local_tools/gblocks/gblocks.xml" />
+    <tool file="/local_tools/fasta2phylip/fasta_to_phylip.xml" />
+    <tool file="/local_tools/mafft/mafft.xml" />
+    <tool file="/local_tools/phyml-sms/phyml_sms.xml" />
+    <tool file="/local_tools/noisy/noisy.xml" />
+    <tool file="/local_tools/muscle/muscle.xml" />
+    <tool file="/local_tools/fastme/fastme.xml" />
+    <tool file="/local_tools/mrbayes/mrbayes.xml" />
+    <tool file="/local_tools/goalign/fasta_to_phylip.xml" />
+    <tool file="/local_tools/newick_utilities/nwdisplay.xml" />
+    <tool file="/local_tools/fasttree/fasttree.xml" />
+    <tool file="/local_tools/tnt/tnt.xml" />
+    <tool file="/local_tools/bmge/bmge.xml" />
+    <tool file="/local_tools/phyml/phyml_3_0.xml" />
+    <tool file="/local_tools/phyml/phyml_3_1.xml" />
+    <tool file="/local_tools/seqtypedetect/seqtypedetect.xml" />
+    <tool file="/local_tools/clustalo/clustalo.xml" />
+  </section>
+</toolbox>

@@ -1,0 +1,14 @@
+gblocks	0.91b	docker://evolbioinfo/gblocks:v0.91b
+mafft	7.273	docker://evolbioinfo/mafft:v7.273
+phyml-sms	1.7	docker://evolbioinfo/phyml-sms:v1.7
+noisy	1.5.12	docker://evolbioinfo/muscle:v1.5.12
+muscle	3.8.31	docker://evolbioinfo/muscle:v3.8.31
+fastme	2.1.5.2	docker://evolbioinfo/fastme:v2.1.5.2
+mrbayes	3.2.6	docker://evolbioinfo/mrbayes:v3.2.6
+goalign	0.2.6	docker://evolbioinfo/goalign:v0.2.6
+gotree	0.2.4	docker://evolbioinfo/gotree:v0.2.4
+newick_utilities	1.6	docker://evolbioinfo/newick_utilities:v1.6
+fasttree	2.1.9	docker://evolbioinfo/fasttree:v2.1.9
+bmge	1.12	docker://evolbioinfo/bmge:v1.12
+phyml	3.1	docker://evolbioinfo/phyml:v3.1
+clustalo	1.2.1	docker://evolbioinfo/clustal_omega:v1.2.1
