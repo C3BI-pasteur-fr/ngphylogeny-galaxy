@@ -18,15 +18,14 @@
   <command>
     <![CDATA[
 	     #if $input.is_of_type('fasta'):
-	       goalign reformat phylip -i $input -o  ${input.name};
+	       goalign reformat phylip -i $input -o  align.tmp;
 	     #else
-	       ln -sf $input '${input.name}';
+	       ln -sf $input align.tmp;
 	     #end if
-             ln -sf $outputTree '${input.name}_fastme.nhx';
 
             fastme
-              --input_data='${input.name}'
-              --output_tree='${input.name}_fastme.nhx'
+              --input_data=align.tmp
+              --output_tree='$outputTree'
               --output_matrix=$outputMatrix
               --output_info=$outputLog
               --nb_threads=\${GALAXY_SLOTS:-1}
