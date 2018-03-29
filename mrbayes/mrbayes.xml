@@ -10,12 +10,12 @@
   </stdio>
   <version_command>mb -version</version_command>
   <command><![CDATA[
-  #if $input.is_of_type('phylip')
-    goalign reformat nexus -i $data -p | sed 's/datatype=nucleotide/datatype=dna/g' > align.nx;
-  #else if $input.is_of_type('fasta)
-    goalign reformat nexus -i $data | sed 's/datatype=nucleotide/datatype=dna/g' > align.nx;
+  #if $data.is_of_type('phylip'):
+    goalign reformat nexus -i ${data} -p | sed 's/datatype=nucleotide/datatype=dna/g' > align.nx;
+  #else if $data.is_of_type('fasta'):
+    goalign reformat nexus -i ${data} | sed 's/datatype=nucleotide/datatype=dna/g' > align.nx;
   #else
-    ln -sf $data align.nx
+    ln -sf ${data} align.nx
   #end if
 
   mb $command_file > $outfile;
@@ -25,7 +25,7 @@
   #if $filename
     mv "${filename}".* outputs/ ;
   #else
-    mv nexus_input_file.* outputs/ ;
+    cp align* outputs/ ;
   #end if
   ]]>
   </command>
@@ -79,7 +79,6 @@
       <validator type="in_range" min="1" max="2147483647"
 		 message="Must be greater than or equal to 1"/>
     </param>
-    
     <param name="outgroup" type="text" label="Outgroup" size="10" value="1"
            help="The name or number identifying one taxon from the data."/>
     <param name="model" type="select" label="Choose model"
