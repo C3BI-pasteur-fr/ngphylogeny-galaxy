@@ -38,3 +38,7 @@ RUN echo "source /usr/share/modules/init/sh" >> /etc/profile
 
 COPY dependency_resolvers_conf.xml /galaxy-central/config/dependency_resolvers_conf.xml
 COPY environment_modules_mapping.yml /galaxy-central/config/environment_modules_mapping.yml
+
+# We make galaxy folders available to singularity runs
+RUN echo "bind path = /export:/export" >> /usr/local/etc/singularity/singularity.conf \
+    && echo "bind path = /data:/data" >> /usr/local/etc/singularity/singularity.conf
