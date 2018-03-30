@@ -32,18 +32,18 @@
             #if ($input_user_tree):
               --user_tree=${input_user_tree}
             #end if
-            #if $typeChoice.datatype =="d"
-              --dna=${typeChoice.model_dna}
-            #else if $typeChoice.datatype =="p"
-              --protein=${typeChoice.model_prot}
-            #else if $typeChoice.datatype =="cfg":
+            #if $sequence_type.seqtype =="d"
+              --dna=${sequence_type.model_dna}
+            #else if $sequence_type.seqtype =="p"
+              --protein=${sequence_type.model_prot}
+            #else if $sequence_type.seqtype =="cfg":
               ## Read information of sequence type
                ## read an info file to choose which option set and set a model by default
                #set $info = open( str($input_info) ).read()
                #if 'dna' in $info:
-               --dna=${typeChoice.model_dna}
+               --dna=${sequence_type.model_dna}
                #else if 'protein' in $info:
-               --protein=${typeChoice.model_prot}
+               --protein=${sequence_type.model_prot}
                #end if
             #end if
             #if $gammaChoice.gamma == "true"
@@ -81,8 +81,8 @@
            help="Fasta/Phylip Alignment or Matrix file"/>
     <param name="input_user_tree" type="data" format="nhx,nwk"
 	   label="User tree file (Optional)" help="newick format" optional="true" />
-    <conditional name="typeChoice">
-      <param name="datatype" type="select" display="radio" label="Data type">
+    <conditional name="sequence_type">
+      <param name="seqtype" type="select" display="radio" label="Data type">
         <option value="d">DNA</option>
         <option value="p">Protein</option>
         <option value="m">Matrix</option>
@@ -181,7 +181,7 @@
       <option value="--nni=B --spr">BalME NNI + SPR</option>
     </param>
     <conditional name="bootstrap">
-      <param name="do_bootstrap" type="select" label="Bootstrap">
+      <param name="do_bootstrap" type="select" label="Bootstrap branch supports">
         <option value="false">No</option>
         <option value="true">Yes</option>
       </param>
