@@ -13,13 +13,13 @@
   <command>
     <![CDATA[
              clustalo 
-	       --infile=$inputSequences 
+	       --infile=$input_seqs
 	       $inputFormat
 	       $seqType
 	       $dealign
 	       $clusteringGuideTree
 	       #if ($iteration.iterOptions == "true")
-	         --iterations=$iteration.nbrIter
+	         --iterations=${iteration.nbrIter}
 	         $iteration.clusteringIteration
 	         #if ($iteration.separateIters.separateIterOptions == "true")
 		   --max-guidetree-iterations=$iteration.separateIters.maxGuideTreeIteration
@@ -27,7 +27,7 @@
 	         #end if
 	        #end if
 	        $getTree
-	        -o $output
+	        -o $out_align
 	        --outfmt=${outputFormat}
 	        --force
 	        --threads \${GALAXY_SLOTS:-1}
@@ -35,7 +35,7 @@
     ]]>
   </command>
   <inputs>
-    <param name="inputSequences" format="fasta,clustal,msf,phylip,selex,stockholm" type="data" label="Sequences file"/>
+    <param name="input_seqs" format="fasta,clustal,msf,phylip,selex,stockholm" type="data" label="Sequences file"/>
     <param name="inputFormat" label="Input format file" type="select">
       <option value="" selected="true">Auto</option>
       <option value="--infmt=fasta">FASTA</option>
@@ -46,7 +46,6 @@
       <option value="--infmt=stockholm">Stockholm</option>
       <option value="--infmt=vienna">Vienna</option>
     </param>  
-    <param name="outputname" label="Name for output files" type="text" size="50" value="alignment" />
     <param name="seqType" type="select" label="Sequence type">
       <option value="" selected="true">Auto</option>
       <option value="--seqtype=DNA">DNA</option>
@@ -73,27 +72,29 @@
 	<option value="true">Use iteration</option>
       </param>
       <when value="false"/>
-      <when value="true"/>
-      <param name="clusteringIteration" type="select" label="Calculate full distance matrix during iteration">
-        <option value="" selected="true">No</option>
-        <option value="--full-iter">Yes</option>
-      </param>
-      <param name="nbrIter" type="integer" value="1" min='0' max='5'
-	     label="Number of iterations (combined guide-tree/HMM)"/>
-      <conditional name="separateIters">
-        <param name="separateIterOptions" type="select" label="Different number of guide tree, HMM iterations"
-	       help="Normally, if iteration is specified, a new guide tree and HMM will be calculated for each
-		     iteration. Use this option to restrict the number of iterations for either.">
-          <option value="false" selected="true">No</option>
-          <option value="true">Yes</option>
-        </param>
-        <when value="false"/>
-        <when value="true"/>
-        <param name="maxGuideTreeIteration" type="integer" value="1" min="0" max="5"
-	       label="Maximum guide tree iterations"/>
-        <param name="maxHmmIterations" type="integer"  value="1" min="0" max="5"
-	       label="Maximum number of HMM iterations"/>
-      </conditional>
+      <when value="true">
+	<param name="clusteringIteration" type="select" label="Calculate full distance matrix during iteration">
+          <option value="" selected="true">No</option>
+          <option value="--full-iter">Yes</option>
+	</param>
+	<param name="nbrIter" type="integer" value="1" min='0' max='5'
+	       label="Number of iterations (combined guide-tree/HMM)"/>
+	<conditional name="separateIters">
+          <param name="separateIterOptions" type="select" label="Different number of guide tree, HMM iterations"
+		 help="Normally, if iteration is specified, a new guide tree and HMM will be calculated for each
+		       iteration. Use this option to restrict the number of iterations for either.">
+            <option value="false" selected="true">No</option>
+            <option value="true">Yes</option>
+          </param>
+          <when value="false"/>
+          <when value="true">
+            <param name="maxGuideTreeIteration" type="integer" value="1" min="0" max="5"
+		   label="Maximum guide tree iterations"/>
+            <param name="maxHmmIterations" type="integer"  value="1" min="0" max="5"
+		   label="Maximum number of HMM iterations"/>
+	  </when>
+	</conditional>
+      </when>
     </conditional>
     <param name="outputOrder" type="select" label="MSA output order">
       <option value="input-order">Input order</option>
@@ -114,7 +115,7 @@
     </param>
   </inputs>
   <outputs>
-    <data name="output" format="fasta" label="${outputname}">
+    <data name="out_align" format="fasta" label="alignment">
       <change_format>
         <when input="outputFormat" value="clustal" format="clustal"/>
         <when input="outputFormat" value="phylip" format="phylip"/>
@@ -124,21 +125,21 @@
         <when input="outputFormat" value="vienna" format="vienna" />                 
       </change_format>
     </data>    
-    <data name="guideTree" format="txt" label="${outputname} Guide tree" from_work_dir="guidetree.txt">
+    <data name="guide_tree" format="nhx,nw,nwk" label="alignment Guide tree" from_work_dir="guidetree.txt">
       <filter>getTree == "--guidetree-out=guidetree.txt"</filter>
     </data> 
   </outputs>
   <tests>
     <test>
-      <param name="inputSequences" value="seqtest.fasta"/>
-      <param name="output" value="seqtest_aln.fasta"/>
+      <param name="input_seqs" value="seqtest.fasta"/>
+      <param name="out_align" value="seqtest_aln.fasta"/>
     </test>
     <test>
-      <param name="inputSequences" value="seqtest.fasta"/>
+      <param name="input_seqs" value="seqtest.fasta"/>
       <param name="clusteringIteration" value="--full-iter"/>
       <param name="nbrIter" value="5"/>
       <param name="maxGuideTreeIteration" value="5"/>
-      <param name="output" value="seqtest_aln2.fasta"/>
+      <param name="out_align" value="seqtest_aln2.fasta"/>
     </test>
   </tests>
   <help>
