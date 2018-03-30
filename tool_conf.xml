@@ -2,7 +2,6 @@
 <toolbox>
   <section id="phylogeny" name="Phylogeny">
     <tool file="/local_tools/gblocks/gblocks.xml" />
-    <tool file="/local_tools/fasta2phylip/fasta_to_phylip.xml" />
     <tool file="/local_tools/mafft/mafft.xml" />
     <tool file="/local_tools/phyml-sms/phyml_sms.xml" />
     <tool file="/local_tools/noisy/noisy.xml" />
