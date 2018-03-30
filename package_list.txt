@@ -8,7 +8,7 @@ mrbayes	3.2.6	docker://evolbioinfo/mrbayes:v3.2.6	mb
 goalign	0.2.7b	docker://evolbioinfo/goalign:v0.2.7b	goalign
 gotree	0.2.4	docker://evolbioinfo/gotree:v0.2.4	gotree
 newick_utilities	1.6	docker://evolbioinfo/newick_utilities:v1.6	nw_clade,nw_display,nw_duration,nw_gen,nw_labels,nw_order,nw_rename,nw_stats,nw_topology,nw_condense,nw_distance,nw_ed,nw_indent,nw_match,nw_prune,nw_reroot,nw_support,nw_trim
-fasttree	2.1.9	docker://evolbioinfo/fasttree:v2.1.9	FastTree
+FastTree	2.1.9	docker://evolbioinfo/fasttree:v2.1.9	FastTree
 BMGE	1.12	docker://evolbioinfo/bmge:v1.12	BMGE
 phyml	3.1	docker://evolbioinfo/phyml:v3.1	phyml
 clustalo	1.2.1	docker://evolbioinfo/clustal_omega:v1.2.1	clustalo

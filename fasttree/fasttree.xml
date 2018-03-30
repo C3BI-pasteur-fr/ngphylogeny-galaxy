@@ -1,5 +1,5 @@
 <tool id="fasttree" name="FastTree" version="2.1.9.post1">
-  <description>FastTree + Boostrap -> Infers approximately-maximum-likelihood phylogenetic trees from
+  <description>FastTree : Infers approximately-maximum-likelihood phylogenetic trees from
   alignments of nucleotide or protein sequences.
   </description>
   <edam_operations>
@@ -19,10 +19,10 @@
   </stdio>
   <command><![CDATA[
   ### remove space introduced by Noisy
-  #if $input.is_of_type('phylip')
-    goalign reformat fasta -i $input -p -o align.tmp;
+  #if $input_align.is_of_type('phylip')
+    goalign reformat fasta -i $input_align -p -o align.tmp;
   #else
-    ln -sf $input align.tmp;
+    ln -sf $input_align align.tmp;
   #end if
   
   ######## 1st Fasttree #######
@@ -33,9 +33,9 @@
     #set $info = open( str($input_info) ).read()
     #if 'dna' in $info:
       -nt
-      -gtr
+      $sequence_type.modeldna
     #else if 'protein' in $info :
-      -lg
+      $sequence_type.modelprot
     #end if
   #else if $sequence_type.seqtype=='-nt':
     $sequence_type.seqtype
@@ -43,39 +43,41 @@
   #else:
     $sequence_type.modelprot
   #end if
-
   $gamma
   -log $log < align.tmp > ref_tree.tmp;
   
   ####### Bootstrap #######
-  #if $support_condition.support=="boot" and $support_condition.nboot>0 :
-    goalign reformat phylip -i align.tmp | goalign build seqboot -n $support_condition.nboot -o boot_aligns -S --phylip;
+  #if $bootstrap.do_bootstrap=="true" and $bootstrap.replicates>0 :
+    goalign reformat phylip -i align.tmp | goalign build seqboot -n $bootstrap.replicates -o boot_aligns -S --phylip;
   
     ####### 2nd Fasttree #######
     cat boot_aligns*.ph | FastTree 
-    -n $support_condition.nboot
-    #if 'dna' in $info:
-      -nt
-      -gtr
-    #else if 'protein' in $info :
-      -lg
-    #else
-      $sequence_type.seqtype
-      #if $sequence_type.seqtype=='-nt'
+    -n $bootstrap.replicates
+    #if $sequence_type.seqtype == 'cfg' :
+      ## Automatic sequence detection
+      ## read an info file to choose which option set
+      #set $info = open( str($input_info) ).read()
+      #if 'dna' in $info:
+        -nt
         $sequence_type.modeldna
-      #else:
+      #else if 'protein' in $info :
         $sequence_type.modelprot
       #end if
+    #else if $sequence_type.seqtype=='-nt':
+      $sequence_type.seqtype
+      $sequence_type.modeldna
+    #else:
+      $sequence_type.modelprot
     #end if
     $gamma
-    -log fasttree_bootlog > boot_trees.tmp ;
+    -log fasttree_bootlog > fasttree_bootstrap_trees.nhx ;
     
     cat fasttree_bootlog >> $log;
     
     ###### booster #######
     gotree compute support booster
     -i ref_tree.tmp
-    -b boot_trees.tmp
+    -b fasttree_bootstrap_trees.nhx
     -o tbe_norm_tree.nhx
     --out-raw tbe_raw_tree.nhx
     -l tbe_log.txt
@@ -87,19 +89,19 @@
     ###### Classical ######
     gotree compute support classical
     -i ref_tree.tmp
-    -b boot_trees.tmp
-    -o $output_tree
+    -b fasttree_bootstrap_trees.nhx
+    -o ${output_tree}
     -l /dev/null
     -t \${GALAXY_SLOTS}
     --silent;
   #else
-    mv ref_tree.tmp $output_tree
+    mv ref_tree.tmp ${output_tree};
   #end if
   
   ]]>
   </command>
   <inputs>
-    <param name="input" type="data" format="fasta,phylip"
+    <param name="input_align" type="data" format="fasta,phylip"
 	   label="Aligned sequences file (FASTA/Phylip format)"/>
     <conditional name="sequence_type">
       <param name="seqtype" type="select" label="Nucleotide or protein alignment"
@@ -109,14 +111,14 @@
         <option value="cfg">Type information file</option>
       </param>
       <when value="">
-        <param name="modelprot" type="select" label="Select the Protein model">
+        <param name="modelprot" type="select" label="Select the model">
           <option value="-lg" selected="true">LG</option>
           <option value="-wag">WAG</option>
           <option value="">JTT</option>
         </param>
       </when>
       <when value="-nt">
-        <param name="modeldna" type="select" label="Select the DNA model">
+        <param name="modeldna" type="select" label="Select the model">
           <option value="-gtr" selected="true" >GTR</option>
           <option value="">JC</option>
         </param>
@@ -125,6 +127,15 @@
         <param name="input_info" format="txt" type="data" multiple="false"
 	       label="Information file"
                help="Precompute file containning sequence description (dna or protein)"/>
+	<param name="modeldna" type="select" label="Evolutionary model if type is DNA">
+          <option value="-gtr" selected="true" >GTR</option>
+          <option value="">JC</option>
+        </param>
+        <param name="modelprot" type="select" label="Evolutionary model if type is PROTEIN">
+          <option value="-lg" selected="true">LG</option>
+          <option value="-wag">WAG</option>
+          <option value="">JTT</option>
+        </param>
       </when>
     </conditional>
     <param name="gamma" type="select" label="Use Gamma distribution"
@@ -133,15 +144,15 @@
       <option value="-gamma">Yes</option>
       <option value="">No</option>
     </param>
-    <conditional name="support_condition">
-      <param type="select" name="support" label="Branch support"
+    <conditional name="bootstrap">
+      <param type="select" name="do_bootstrap" label="Bootstrap branch support"
 	     help="Compute branch support">
-        <option value="no">No branch support</option>
-        <option value="boot">Bootstrap</option>
+        <option value="false">No branch support</option>
+        <option value="true">Bootstrap</option>
       </param>
-      <when value="boot">
-        <param type="integer" name="nboot" min="1" value="1000"
-	       label="Number of bootstrap replicates"
+      <when value="true">
+        <param type="integer" name="replicates" min="1" value="1000"
+	       label="Number of replicates"
                help="Must be a positive integer"/>
       </when>
       <when value="no"/>
@@ -150,23 +161,28 @@
   <outputs>
     <data name="tbe_log" format="txt" label="Booster: tbe_log.txt"
           from_work_dir="tbe_log.txt">
-      <filter>support_condition['support'] == "boot"</filter>
+      <filter>bootstrap['do_bootstrap'] == "true"</filter>
     </data>
     <data name="tbe_raw_tree" format="nhx"
           label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: tbe_norm_tree_raw.nhx"
           from_work_dir="tbe_raw_tree.nhx">
-      <filter>support_condition['support'] == "boot"</filter>
+      <filter>bootstrap['do_bootstrap'] == "true"</filter>
     </data>
     <data name="tbe_norm_tree" format="nhx" label="Booster: Tree with normalized supports: tbe_norm_tree.nhx"
           from_work_dir="tbe_norm_tree.nhx">
-      <filter>support_condition['support'] == "boot"</filter>
+      <filter>bootstrap['do_bootstrap'] == "true"</filter>
     </data>
     <data name="log" format="txt" label="FastTree_log.txt"/>
-    <data name="output_tree" format="nhx" label="FastTree newick tree: ${input.name}.nhx"/>
+    <data name="output_tree" format="nhx" label="FastTree output tree"/>
+    <data name="boot_trees" format="nwk"
+	  label="FastTree Bootstrap trees"
+	  from_work_dir="fasttree_bootstrap_trees.nhx">
+      <filter>bootstrap['do_bootstrap'] == "true"</filter>
+    </data>
   </outputs>
   <tests>
     <test>
-      <param name="input" value="aligned.fasta"/>
+      <param name="input_align" value="aligned.fasta"/>
       <param name="seqtype" value="-nt"/>
       <output name="output_tree" file="tree.nhx" ftype="nhx" lines_diff="10"/>
       <output name="log" file="log.txt" ftype="txt" lines_diff="10"/>
