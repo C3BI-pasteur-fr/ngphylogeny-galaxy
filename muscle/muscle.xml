@@ -13,7 +13,7 @@
   muscle
   ##Do not display progress messages
     -quiet
-    -in $input
+    -in $input_seqs
   #if $mode.run == "custom" :
     -maxiters $mode.iterations
   #else:
@@ -21,16 +21,12 @@
   #end if
     -cluster1 $cluster
     $diags
-  ## $outputFormat
-  #for $output in $outputFormat.value
-    #if $output
-      -${output}out file_$output
-    #end if
-  #end for
+  -${outputFormat.value}out align.out
+  -htmlout ${out_align_html}
   ]]>
   </command>
   <inputs>
-    <param name="input" type="data" format="fasta" label="Fasta file"
+    <param name="input_seqs" type="data" format="fasta" label="Fasta file"
 	   help="Input file in FASTA format"/>
     <conditional name="mode">
       <param name="run" type="select" label="Run options"
@@ -60,40 +56,29 @@
       <option value="upgmb" selected="true" >UPGMB</option> 
       <option value="neighborjoining">Neighbor Joining</option>
     </param>
-    <param name="outputFormat" type="select" multiple="true" label="Output file(s)">
+    <param name="outputFormat" type="select" label="Output format">
       <option value="fasta" selected="true">Fasta</option>
       <option value="phys">Phylip sequential</option>
       <option value="phyi">Phylip interleave</option>
       <option value="clw">Clustalw</option>
-      <option value="html">HTML (colored web page)</option>
     </param>
   </inputs>
   <outputs>
-    <data name="outputfasta" format="fasta"
-	  label="Muscle alignment fasta" from_work_dir="file_fasta">
-      <filter>'fasta' in outputFormat</filter>
+    <data name="out_align" format="fasta"
+	  label="Muscle alignment" from_work_dir="align.out">
+      <change_format>
+        <when input="outputFormat" value="phys" format="phylip"/>
+        <when input="outputFormat" value="phyi" format="phylip"/>
+        <when input="outputFormat" value="clw" format="clustal"/>
+      </change_format>
     </data>
-    <data name="outputphys" format="phylip"
-	  label="Muscle alignment Phylip sequential"  from_work_dir="file_phys">
-      <filter>'phys' in outputFormat</filter>
-    </data>
-    <data name="outputphyi" format="phylip"
-	  label="Muscle alignment Phylip interleave" from_work_dir="file_phyi">
-      <filter>'phyi' in outputFormat</filter>
-    </data>
-    <data name="outputclw" format="clw"
-	  label="Muscle alignment Clustalw format" from_work_dir="file_clw">
-      <filter>'clw' in outputFormat</filter>
-    </data>
-    <data name="outputhtml" format="html"
-	  label="Muscle alignment Html" from_work_dir="file_html">
-      <filter>'html' in outputFormat</filter>
-    </data>
+    <data name="out_align_html" format="fasta"
+	  label="Muscle alignment (html)"/>
   </outputs>
   <tests>
     <test>
-      <param name="input" value="seqtest.fasta"/>
-      <output name="outputfasta" value="seqtest_aln.fasta"/>
+      <param name="input_seqs" value="seqtest.fasta"/>
+      <output name="out_align" value="seqtest_aln.fasta"/>
     </test>
   </tests>
   <help>
