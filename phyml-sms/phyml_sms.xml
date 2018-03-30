@@ -7,7 +7,7 @@
   <requirements>
     <requirement type="package" version="1.7">phyml-sms</requirement>
     <requirement type="package" version="0.2.4">gotree</requirement> 
-    <requirement type="package" version="0.2.6">goalign</requirement>
+    <requirement type="package" version="0.2.7b">goalign</requirement>
   </requirements>
   <command><![CDATA[
   #if $input.is_of_type('fasta'):

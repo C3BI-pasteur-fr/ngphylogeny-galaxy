@@ -3,7 +3,7 @@
   <description>with options and commands</description>
   <requirements>
     <requirement type="package" version="3.2.6">mrbayes</requirement>
-    <requirement type="package" version="0.2.6">goalign</requirement>
+    <requirement type="package" version="0.2.7b">goalign</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" level="fatal" description="Unknown error has occurred"/>

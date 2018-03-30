@@ -5,7 +5,7 @@ noisy	1.5.12	docker://evolbioinfo/noisy:v1.5.12	noisy
 muscle	3.8.31	docker://evolbioinfo/muscle:v3.8.31	muscle
 fastme	2.1.5.2	docker://evolbioinfo/fastme:v2.1.5.2	fastme
 mrbayes	3.2.6	docker://evolbioinfo/mrbayes:v3.2.6	mb
-goalign	0.2.6	docker://evolbioinfo/goalign:v0.2.6	goalign
+goalign	0.2.7b	docker://evolbioinfo/goalign:v0.2.7b	goalign
 gotree	0.2.4	docker://evolbioinfo/gotree:v0.2.4	gotree
 newick_utilities	1.6	docker://evolbioinfo/newick_utilities:v1.6	nw_display
 fasttree	2.1.9	docker://evolbioinfo/fasttree:v2.1.9	FastTree
