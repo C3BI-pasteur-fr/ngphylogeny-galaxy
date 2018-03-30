@@ -132,8 +132,7 @@
 	   checked="False" label="Reorder output?" />
     <param name="getTree" type="boolean" truevalue="--treeout" falsevalue=""
 	   checked="False" label="Display alignment tree ?" />
-    <param name="outputFormat" type="select" label="Output format"
-	   help="Either FASTA or ClustalW">
+    <param name="outputFormat" type="select" label="Output format">
       <option value="" selected="true">FASTA</option>
       <option value="--clustalout">ClustalW</option>
       <option value="--phylipout">Phylip</option>
