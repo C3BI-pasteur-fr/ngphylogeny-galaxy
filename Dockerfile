@@ -42,3 +42,10 @@ COPY environment_modules_mapping.yml /galaxy-central/config/environment_modules_
 # We make galaxy folders available to singularity runs
 RUN echo "bind path = /export:/export" >> /usr/local/etc/singularity/singularity.conf \
     && echo "bind path = /data:/data" >> /usr/local/etc/singularity/singularity.conf
+
+# Add workflows to the Docker image
+ADD ./workflows/* $GALAXY_HOME/workflows/
+# We import phylogeny workflows
+RUN startup_lite && \
+    galaxy-wait && \
+    workflow-install --workflow_path $GALAXY_HOME/workflows/ -g http://localhost:8080 -u $GALAXY_DEFAULT_ADMIN_USER -p $GALAXY_DEFAULT_ADMIN_PASSWORD
