@@ -8,10 +8,10 @@
     <requirement type="package" version="0.2.7b">goalign</requirement>
   </requirements>
   <command>
-    #if $input.is_of_type('phylip'):
-      goalign reformat fasta -i $input -p -o input.fasta;
+    #if $input_align.is_of_type('phylip'):
+      goalign reformat fasta -i ${input_align} -p -o input.fasta;
     #else
-      ln -s ${input} input.fasta;
+      ln -s ${input_align} input.fasta;
     #end if
 
     Gblocks
@@ -25,7 +25,7 @@
       -b3=$b3
       -b4=$b4
       -b5=$b5
-    #if $typeChoice.datatype =="cfg":
+    #if $sequence_type.seqtype =="cfg":
       ## Read information of sequence type
       ## read an info file to choose which option set and set a model by default
       #set $info = open( str($input_info) ).read()
@@ -33,20 +33,21 @@
         -t=d
       #else if 'protein' in $info:
         -t=p
+      #else:
+        -t=c
       #end if
     #else
-      $typeChoice.datatype
+      $sequence_type.seqtype
     #end if
-     > $gblocks_log;
-    mv input.fasta-gb $output_aln;
-     
-    mv input.fasta-gb.htm $output_htm;
-  </command>
+    > ${gblocks_log};
+    mv input.fasta-gb ${out_align};
+    mv input.fasta-gb.htm ${out_html};
+    </command>
   <inputs>
-    <param name="input" type="data" format="fasta,phylip"
+    <param name="input_align" type="data" format="fasta,phylip"
 	   label="Source file" help="Fasta format"/>
-    <conditional name="typeChoice">
-      <param name="datatype" type="select" label="Data type">
+    <conditional name="sequence_type">
+      <param name="seqtype" type="select" label="Data type">
         <option value="-t=d">DNA</option>
         <option value="-t=c">Codon</option>
         <option value="-t=p">Protein</option>
@@ -80,24 +81,21 @@
       <option value="h">With half</option>
       <option value="a">All</option>
     </param>
-    <param name="display_gblocks_log" type="boolean"
-	   checked="False" label="Display gblocks standard output" />       
   </inputs>
   <outputs>
-    <data format="text" name="gblocks_log"
-	  label="Gblocks log: ${input.name}" >
-      <filter>display_gblocks_log == True</filter>
+    <data format="txt" name="gblocks_log"
+	  label="Gblocks log" >
     </data>   
-    <data format="fasta" name="output_aln"
-	  label="Gblocks Cleaned sequences: ${input.name}" />
-    <data format="html" name="output_htm"
-	  label="Gblocks Sequences information: ${input.name}" />
+    <data format="fasta" name="out_align"
+	  label="Gblocks Cleaned sequences" />
+    <data format="html" name="out_html"
+	  label="Gblocks Sequences information" />
   </outputs>
   <tests>
     <test>
       <param name="input" value="nad3.pir"/>
-      <param name="output_aln" value="nad3.pir-gb"/>
-      <param name="output_htm" value="nad3.pir-gb.htm"/>
+      <param name="out_align" value="nad3.pir-gb"/>
+      <param name="out_html" value="nad3.pir-gb.htm"/>
     </test>
   </tests>
   <help>
