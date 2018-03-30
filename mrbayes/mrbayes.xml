@@ -11,26 +11,23 @@
   <version_command>mb -version</version_command>
   <command><![CDATA[
   #if $data.is_of_type('phylip'):
-    goalign reformat nexus -i ${data} -p | sed 's/datatype=nucleotide/datatype=dna/g' > align.nx;
+    goalign reformat nexus -i ${data} -p -o align.nx;
   #else if $data.is_of_type('fasta'):
-    goalign reformat nexus -i ${data} | sed 's/datatype=nucleotide/datatype=dna/g' > align.nx;
+    goalign reformat nexus -i ${data} -o align.nx;
   #else
-    ln -sf ${data} align.nx
+    ln -sf ${data} align.nx;
   #end if
+    
+  cp $commandfile commands.txt;
 
-  mb $command_file > $outfile;
+  mb $commandfile > $outfile;
   
   ##create data collection
-  mkdir outputs;
-  #if $filename
-    mv "${filename}".* outputs/ ;
-  #else
-    cp align* outputs/ ;
-  #end if
+  tar -czvf runs.tar.gz * ;
   ]]>
   </command>
   <configfiles>
-    <configfile name="command_file">
+    <configfile name="commandfile">
             begin mrbayes;
                 set Seed=$seed;
                 set Swapseed=$swapseed;
@@ -39,9 +36,6 @@
                 outgroup $outgroup;
                 $model;
                 lset rates=$rates;
-            #if $filename
-                mcmcp filename="${filename}";
-            #end if
                 mcmcp ngen=$ngen
                   nrun=$nrun
                   nchain=$nchain
@@ -65,8 +59,6 @@
   <inputs>
     <param name="data" type="data" format="nex,fasta,phylip"
 	   label="Nexus/Fasta/Phylip input file"/>
-    <param name="filename" type="text" label="Output filename" size="10" value=""
-           help="Output files will be named this with .p, .t, .mcmc extensions. Use to avoid overwriting files when running repeated analyses on the same dataset."/>
     <param name="ngen" type="integer" label="Number of generations" value="10000">
       <validator type="in_range" min="1" max="2147483647"
 		 message="Must be greater than or equal to 1"/>
@@ -139,11 +131,11 @@
     </param>
   </inputs>
   <outputs>
-    <data name="outfile" format="txt"/>
-    ﻿<data name="mrbayesparams" format="txt" label="Mr Bayes commands file" from_work_dir="command_file" />
-    <collection name="outputs" type="list" label="List of mrbayes generated files">
-      <discover_datasets pattern="__name_and_ext__" format="txt" directory="outputs"  />
-    </collection>
+   <data name="outfile" format="txt"/>
+   <data name="usedalignment" format="txt" label="Reformated alignment for mrbayes" from_work_dir="align.nx" />
+   <data name="mrbayescommand" format="txt" label="Mr Bayes command file" from_work_dir="commands.txt"  />
+   <data name="firstrun" format="txt" label="Mr Bayes run1 results" from_work_dir="align.nx.run1.t" />
+   <data name="allruns" format="tar.gz" label="Mr Bayes All Runs Outputs" from_work_dir="runs.tar.gz" />
   </outputs>
   
   <tests>
