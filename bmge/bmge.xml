@@ -8,22 +8,22 @@
   </requirements>
   <command>
     <![CDATA[
-	     BMGE -i $input
-	       -t $dataType.codeSeq
+	     BMGE -i ${input_align}
+	       -t ${dataType.codeSeq}
 	       -m $dataType.matrix$dataType.estimated
 	       -w $windowsSize
 	       -g $rateCutOff
 	       -h $entropy_threshold
                -b $minBlock
                #for $output in $outputFormat.value
-               #if $output
-               -$output file$output
-               #end if
+                 #if $output
+                   -$output file$output
+                 #end if
                #end for
     ]]>
   </command>
   <inputs>
-    <param name="input" format="fasta" type="data" label="Source file" help="Fasta format"/>
+    <param name="input_align" format="fasta" type="data" label="Source file" help="Fasta format"/>
     <conditional name="dataType">
       <param name="codeSeq" type="select" label="Sequence Coding">
 	<option value="DNA">DNA</option>
@@ -90,16 +90,16 @@
     </param>			
   </inputs>
   <outputs>
-    <data name="outputop" format="phylip" label="BMGE Cleaned sequences Phylip" from_work_dir="fileop">
+    <data name="out_align_phylip" format="phylip" label="BMGE Cleaned sequences Phylip" from_work_dir="fileop">
       <filter>'op' in outputFormat</filter>
     </data>
-    <data name="outputof" format="fasta" label="BMGE Cleaned sequences Fasta"  from_work_dir="fileof">
+    <data name="out_align_fasta" format="fasta" label="BMGE Cleaned sequences Fasta"  from_work_dir="fileof">
       <filter>'of' in outputFormat</filter>
     </data>
-    <data name="outputon" format="nex" label="BMGE Cleaned sequences Nexus" from_work_dir="fileon">
+    <data name="out_align_nexus" format="nex" label="BMGE Cleaned sequences Nexus" from_work_dir="fileon">
       <filter>'on' in outputFormat</filter>
     </data>
-    <data name="outputoh" format="html" label="BMGE Cleaned sequences Html" from_work_dir="fileoh">
+    <data name="out_align_html" format="html" label="BMGE Cleaned sequences Html" from_work_dir="fileoh">
       <filter>'oh' in outputFormat</filter>
     </data>
   </outputs>
