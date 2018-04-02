@@ -1,1 +1,1 @@
-docker run --privileged=True -v $PWD:/local_tools -e GALAXY_CONFIG_TOOL_CONFIG_FILE=config/tool_conf.xml.sample,config/shed_tool_conf.xml.sample,/local_tools/tool_conf.xml -e GALAXY_DOCKER_ENABLED=True -p 8081:80 -p 8021:21 -p 8022:22 -i -t bgruening/galaxy-stable bash
+docker run --privileged=true -v $PWD:/local_tools -e GALAXY_CONFIG_TOOL_CONFIG_FILE=config/tool_conf.xml.sample,config/shed_tool_conf.xml.sample,/local_tools/tool_conf.xml -e GALAXY_DOCKER_ENABLED=True -p 8181:80 -p 8121:21 -p 8122:22 -i -t ngphylogalaxy bash
