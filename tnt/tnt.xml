@@ -11,22 +11,29 @@
     </stdio>
     <command>
       <![CDATA[
-	       goalign reformat tnt -i $data -o tnt_input.tnt ;
-	       goalign stats taxa -i $data | awk '{print \$1+1 "\t" \$2}' > map ;
+	       goalign reformat tnt -i $input_align -o tnt_input.tnt ;
+	       goalign stats taxa -i $input_align | awk '{print \$1+1 "\t" \$2}' > map ;
 	       tnt < $command_file 2>&1 ;
-	       grep "(" tnt_trees.tre | gotree rename -m map -o $outtree ;
-	       cat $command_file > $tntcommands
+	       grep "(" tnt_trees.tre | gotree rename -m map -o $out_tree ;
+	       cat $command_file > $tnt_commands
       ]]>
     </command>
     <configfiles>
       <configfile name="command_file">
 	<![CDATA[
-	#if $seqtype == "nt"
-	nstates DNA;
+	#if $sequence_type.seqtype == "nt":
+	  nstates DNA;
+	#else if $sequence_type.seqtype == "aa":
+	  nstates PROT;
 	#else
-	nstates PROT;
+          ## Read information of sequence type
+          #set $info = open( str($input_info) ).read()
+          #if 'dna' in $info:
+            nstates DNA;
+          #else if 'protein' in $info:
+            nstates PROT;
+          #end if
 	#end if
-
 	#if $ignoregaps == "true"
 	nstats NOGAPS;
 	#else
@@ -38,7 +45,7 @@
 	sect: slack 1000 ;
 	macro=; 
 	lquote [ ; 
-	log $outlog; 
+	log $out_log; 
 	watch=; 
 	coll tbr ;
 	drift : fitd 2 rfitd 0.1 ;
@@ -99,18 +106,28 @@
        </configfile>
     </configfiles>
     <inputs>
-      <param name="data" type="data" format="fasta" label="Input file (fasta)"/>
-      <param name="seqtype" type="select"  label="Data type" display="radio">
-        <option value="nt">Nucleic acids</option>
-        <option value="aa">Amino acids</option>
-      </param>
-      
+      <param name="input_align" type="data" format="fasta" label="Input file (fasta)"/>
+      <conditional name="sequence_type">
+	<param name="seqtype" type="select"  label="Data type" display="radio">
+          <option value="nt">Nucleic acids</option>
+          <option value="aa">Amino acids</option>
+	  <option value="cfg">Type information file</option>
+	</param>
+	<when value="nt"/>
+	<when value="aa"/>
+	<when value="cfg">
+	  <param name="input_info" format="txt" type="data" multiple="false"
+		 label="Config file"
+		 help="Precomputed file containning sequence type (dna or protein)"/>
+	</when>
+      </conditional>
+
       <param name="ignoregaps" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Consider Gaps as missing? (otherwise as an additional character)" />
     </inputs>
     <outputs>
-      <data name="outtree" label="TNT tree" format="txt" />
-      <data name="outlog" label="TNT log file" format="txt" />
-      <data name="tntcommands" format="txt" label="TNT commands file" />
+      <data name="out_tree" label="TNT tree" format="txt" />
+      <data name="out_log" label="TNT log file" format="txt" />
+      <data name="tnt_commands" format="txt" label="TNT commands file" />
     </outputs>
 
     <help>

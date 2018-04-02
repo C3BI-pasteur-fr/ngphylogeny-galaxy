@@ -10,16 +10,16 @@
     <requirement type="package" version="0.2.7b">goalign</requirement>
   </requirements>
   <command><![CDATA[
-  #if $input.is_of_type('fasta'):
-    goalign reformat phylip -i $input -o align.phy;
+  #if $input_align.is_of_type('fasta'):
+    goalign reformat phylip -i $input_align -o align.phy;
   #else
-    ln -sf $input align.phy;
+    ln -sf $input_align align.phy;
   #end if
   
   sms.sh
     -i align.phy
     -o .
-    -p $output_models
+    -p $out_models
     -t
     #if $sequence.seqtype == 'cfg' :
       ## Automatic sequence detection
@@ -34,25 +34,25 @@
       -d ${sequence.seqtype}
     #end if
       -c $stat_crit
-    #if $inpuTree.inputtree == "true" :
-      -u $inpuTree.userInpuTree
+    #if $input_user_tree :
+      -u $input_user_tree
     #end if    
       -s $move
-    #if $support_condition.support == "sh":
+    #if $bootstrap.support == "sh":
       -b -4
-    #else if $support_condition.support == "aBayes":
+    #else if $bootstrap.support == "aBayes":
       -b -5
-    #else if $support_condition.support == "no":
+    #else if $bootstrap.support == "no":
       -b 0
-    #else if $support_condition.support == "boot":
-      -b $support_condition.boot_number
+    #else if $bootstrap.support == "boot":
+      -b $bootstrap.replicates
     #end if
     #if $randstart.value != 0 and $move.value == "SPR" :
       -r $randstart
     #end if
-    > ${output_stdout};
+    > ${out_stdout};
     
-    #if $support_condition.support == "boot" :
+    #if $bootstrap.support == "boot" :
       ##Compute TBE (BOOSTER) bootstrap supports
       gotree compute support booster
         -i *_phyml_tree.txt
@@ -68,7 +68,7 @@
     ]]>
   </command>
   <inputs>
-    <param format="phylip,phy,fasta,fa" name="input" type="data"
+    <param format="phylip,phy,fasta,fa" name="input_align" type="data"
 	   label="Alignment file" help="phylip format"/>
     <conditional name="sequence">
       <param name="seqtype" type="select" label="Data type">
@@ -92,67 +92,58 @@
     </param>
     <param name="move" type="select" label="Tree topology search" display="radio">
       <option value="NNI">NNI (Nearest Neighbor Interchange)</option>
-      <option value="SPR">SPR (Subtree Pruning and Regraphing)</option>
+      <option value="SPR" selected="true">SPR (Subtree Pruning and Regraphing)</option>
     </param>
-    <conditional name="support_condition">
-      <param type="select" name="support" label="Branch support"
-	     help="Use aLRT or aBayes to save computing time">
+    <conditional name="bootstrap">
+      <param type="select" name="support" label="Branch support">
         <option value="sh">SH-like aLRT</option>
         <option value="aBayes">aBayes</option>
-        <option value="boot">Bootstrap</option>
-        <option value="no">No branch support</option>
+        <option value="boot">Bootstrap (FBP+TBE)</option>
+        <option value="no" selected="true">No branch support</option>
       </param>
       <when value="sh"/>
       <when value="aBayes"/>
       <when value="boot">
-        <param type="integer" name="boot_number" min="1" value="100"
+        <param type="integer" name="replicates" min="1" value="100"
 	       label="Number of bootstrap replicates"
 	       help="Must be a positive integer"/>
       </when>
       <when value="no"/>
     </conditional>
-    <conditional name="inpuTree">
-      <param name="inputtree" type="boolean" truevalue="true"
-	     falsevalue="false" checked="False"
-             label="Use input starting tree"/>
-      <when value="true">
-        <param format="nhx,nwk" name="userInpuTree" type="data"
-	       label="Tree file" help="newick format"/>
-      </when>
-      <when value="false"/>
-    </conditional>
+    <param format="nhx,nwk" name="input_user_tree" type="data"
+	   label="User Tree File (Optional)" help="newick format" optionnal="true" />
     <param type="integer" name="randstart" value="0" min="0" max="10"
 	   label="Number of random starting trees"/>
   </inputs>
   <outputs>
     <data name="tbe_log" format="txt" label="Booster: tbe_log.txt"
           from_work_dir="tbe_log.txt">
-      <filter>support_condition['support'] == "boot"</filter>
+      <filter>bootstrap['support'] == "boot"</filter>
     </data>
     <data name="tbe_raw_tree" format="nhx"
           label="Booster: Tree with [id|avg transfer distances|depth] as branch labels: tbe_norm_tree_raw.nhx"
           from_work_dir="tbe_raw_tree.nhx">
-      <filter>support_condition['support'] == "boot"</filter>
+      <filter>bootstrap['support'] == "boot"</filter>
     </data>
     <data name="tbe_norm_tree" format="nhx" label="Booster: Tree with normalized supports: tbe_norm_tree.nhx"
           from_work_dir="tbe_norm_tree.nhx">
-      <filter>support_condition['support'] == "boot"</filter>
+      <filter>bootstrao['support'] == "boot"</filter>
     </data>
-    <data name="output_stats" format="txt" label="PhyML Statistics" from_work_dir="*_phyml_stats.txt"/>
-    <data name="output_bootstrap_trees" format="txt" label="PhyML bootstrap trees: ${input.name}.boot_trees.txt"
+    <data name="out_stats" format="txt" label="PhyML Statistics" from_work_dir="*_phyml_stats.txt"/>
+    <data name="boot_trees" format="txt" label="PhyML bootstrap trees: ${input.name}.boot_trees.txt"
           from_work_dir="*_phyml_boot_trees.txt">
-      <filter>support_condition['support'] == "boot"</filter>
+      <filter>bootstrap['support'] == "boot"</filter>
     </data>
-    <data name="output_tree" format="nhx" label="PhyML newick tree: ${input.name}.nhx"
+    <data name="out_tree" format="nhx" label="PhyML newick tree: ${input.name}.nhx"
 	  from_work_dir="*_phyml_tree.txt"/>
-    <data name="output_models" format="txt" label="SMS compare models"/>
-    <data name="output_stdout" format="txt" label="SMS Best Model"/>
+    <data name="out_models" format="txt" label="SMS compare models"/>
+    <data name="out_stdout" format="txt" label="SMS Best Model"/>
   </outputs>
   <tests>
     <test>
-      <param name="input" value="phylip"/>
+      <param name="input_align" value="phylip"/>
       <param name="seqtype" value="nt"/>
-      <output name="output_models" file="sms.csv"/>
+      <output name="out_models" file="sms.csv"/>
     </test>
   </tests>
   <help><![CDATA[
@@ -177,7 +168,7 @@ SMS options :
 
 PhyML options :
 
- -s  Type of tree improvement : 'NNI (default)' or 'SPR'
+ -s  Type of tree improvement : 'NNI' or 'SPR (default)'
  -r  Number of random starting trees : 0 (default)
  -b  Branch Support : >0 for bootstraps, -4 for aLRT, 0 (default)
 

@@ -10,17 +10,17 @@
   </stdio>
   <version_command>mb -version</version_command>
   <command><![CDATA[
-  #if $data.is_of_type('phylip'):
-    goalign reformat nexus -i ${data} -p -o align.nx;
-  #else if $data.is_of_type('fasta'):
-    goalign reformat nexus -i ${data} -o align.nx;
+  #if $input_align.is_of_type('phylip'):
+    goalign reformat nexus -i ${input_align} -p -o align.nx;
+  #else if $input_align.is_of_type('fasta'):
+    goalign reformat nexus -i ${input_align} -o align.nx;
   #else
-    ln -sf ${data} align.nx;
+    ln -sf ${input_align} align.nx;
   #end if
     
   cp $commandfile commands.txt;
 
-  mb $commandfile > $outfile;
+  mb $commandfile > $stdoutfile;
   
   ##create data collection
   tar -czvf runs.tar.gz * ;
@@ -57,7 +57,7 @@
     </configfile>
   </configfiles>
   <inputs>
-    <param name="data" type="data" format="nex,fasta,phylip"
+    <param name="input_align" type="data" format="nex,fasta,phylip"
 	   label="Nexus/Fasta/Phylip input file"/>
     <param name="ngen" type="integer" label="Number of generations" value="10000">
       <validator type="in_range" min="1" max="2147483647"
@@ -131,7 +131,7 @@
     </param>
   </inputs>
   <outputs>
-   <data name="outfile" format="txt"/>
+   <data name="stdoutfile" format="txt"/>
    <data name="usedalignment" format="txt" label="Reformated alignment for mrbayes" from_work_dir="align.nx" />
    <data name="mrbayescommand" format="txt" label="Mr Bayes command file" from_work_dir="commands.txt"  />
    <data name="firstrun" format="txt" label="Mr Bayes run1 results" from_work_dir="align.nx.run1.t" />
@@ -140,8 +140,8 @@
   
   <tests>
     <test>
-      <param name="data" value="avian_ovomucoids.nex"/>
-      <output name="outfile">
+      <param name="input_align" value="avian_ovomucoids.nex"/>
+      <output name="stdoutfile">
         <assert_contents>
           <has_text text="        500 -- [-6144.805] (-6235.323) * [-5853.458] (-5936.317)"/>
           <has_text text="       3000 -- (-4258.327) [-3872.656] * [-3961.044] (-3988.174)"/>

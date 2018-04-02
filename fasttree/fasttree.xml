@@ -90,12 +90,12 @@
     gotree compute support classical
     -i ref_tree.tmp
     -b fasttree_bootstrap_trees.nhx
-    -o ${output_tree}
+    -o ${out_tree}
     -l /dev/null
     -t \${GALAXY_SLOTS}
     --silent;
   #else
-    mv ref_tree.tmp ${output_tree};
+    mv ref_tree.tmp ${out_tree};
   #end if
   
   ]]>
@@ -173,7 +173,7 @@
       <filter>bootstrap['do_bootstrap'] == "true"</filter>
     </data>
     <data name="log" format="txt" label="FastTree_log.txt"/>
-    <data name="output_tree" format="nhx" label="FastTree output tree"/>
+    <data name="out_tree" format="nhx" label="FastTree output tree"/>
     <data name="boot_trees" format="nwk"
 	  label="FastTree Bootstrap trees"
 	  from_work_dir="fasttree_bootstrap_trees.nhx">
@@ -184,7 +184,7 @@
     <test>
       <param name="input_align" value="aligned.fasta"/>
       <param name="seqtype" value="-nt"/>
-      <output name="output_tree" file="tree.nhx" ftype="nhx" lines_diff="10"/>
+      <output name="out_tree" file="tree.nhx" ftype="nhx" lines_diff="10"/>
       <output name="log" file="log.txt" ftype="txt" lines_diff="10"/>
     </test>
   </tests>

@@ -32,10 +32,10 @@
         -d "stroke:grey;fill:none;stroke-width:2;stoke-linecap:round;"
         -w  $width
         $radial
-      $fileNewick > $output
+      $input_tree > $out_image
   </command>
   <inputs>
-    <param name="fileNewick" format="txt,nw,nwk,nhx" type="data"
+    <param name="input_tree" format="txt,nw,nwk,nhx" type="data"
 	   label="Newick file" />
     <param name="scalebar" type="boolean" truevalue="" falsevalue="-S"
 	   checked="True" label="Display scale bar" />
@@ -73,20 +73,20 @@
 	   label="Draw a radial tree" />
   </inputs>
   <outputs>
-    <data name="output" format="svg" label="${fileNewick.name}.svg" />
+    <data name="out_image" format="svg" label="Tree image" />
   </outputs>
   <tests>
     <test>
-      <param name="fileNewick" value="tree.nwk"/>
+      <param name="input_tree" value="tree.nwk"/>
       <param name="width" value="400"/>
       <param name="leafFont" value="courier"/>
-      <output name="output" file="tree.svg" lines_diff="2"/>
+      <output name="out_image" file="tree.svg" lines_diff="2"/>
     </test>
     <test>
-      <param name="fileNewick" value="tree.nwk"/>
+      <param name="input_tree" value="tree.nwk"/>
       <param name="radial" value="-r"/>
       <param name="branchlength" value="true"/>
-      <output name="output" file="tree2.svg" lines_diff="2"/>
+      <output name="out_image" file="tree2.svg" lines_diff="2"/>
     </test>
   </tests>
   <help>
