@@ -36,7 +36,7 @@
       -c $stat_crit
     #if $input_user_tree :
       -u $input_user_tree
-    #end if    
+    #end if
       -s $move
     #if $bootstrap.support == "sh":
       -b -4
@@ -47,7 +47,7 @@
     #else if $bootstrap.support == "boot":
       -b $bootstrap.replicates
     #end if
-    #if $randstart.value != 0 and $move.value == "SPR" :
+    #if $randstart.value != 0 :
       -r $randstart
     #end if
     > ${out_stdout};
@@ -111,7 +111,7 @@
       <when value="no"/>
     </conditional>
     <param format="nhx,nwk" name="input_user_tree" type="data"
-	   label="User Tree File (Optional)" help="newick format" optionnal="true" />
+	   label="User Tree File (Optional)" help="newick format" optional="true" />
     <param type="integer" name="randstart" value="0" min="0" max="10"
 	   label="Number of random starting trees"/>
   </inputs>
@@ -127,14 +127,14 @@
     </data>
     <data name="tbe_norm_tree" format="nhx" label="Booster: Tree with normalized supports: tbe_norm_tree.nhx"
           from_work_dir="tbe_norm_tree.nhx">
-      <filter>bootstrao['support'] == "boot"</filter>
+      <filter>bootstrap['support'] == "boot"</filter>
     </data>
     <data name="out_stats" format="txt" label="PhyML Statistics" from_work_dir="*_phyml_stats.txt"/>
     <data name="boot_trees" format="txt" label="PhyML bootstrap trees: ${input.name}.boot_trees.txt"
           from_work_dir="*_phyml_boot_trees.txt">
       <filter>bootstrap['support'] == "boot"</filter>
     </data>
-    <data name="out_tree" format="nhx" label="PhyML newick tree: ${input.name}.nhx"
+    <data name="out_tree" format="nhx" label="PhyML newick tree"
 	  from_work_dir="*_phyml_tree.txt"/>
     <data name="out_models" format="txt" label="SMS compare models"/>
     <data name="out_stdout" format="txt" label="SMS Best Model"/>
