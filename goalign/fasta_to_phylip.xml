@@ -1,4 +1,4 @@
-<tool id="goalign_fasta_to_phylip" name="Fasta to Phylip" version="1.0">
+<tool id="fasta_to_phylip" name="Fasta to Phylip" version="1.0">
   <description>Convert fasta alignment file into phylip interleaved format with goalign</description>
   <edam_operations>
     <edam_operation>operation_0335</edam_operation>

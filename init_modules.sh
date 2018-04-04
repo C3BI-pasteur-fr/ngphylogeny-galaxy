@@ -1,5 +1,6 @@
 MODULE_PACKAGES="/packages"
 MODULE_FILES="/usr/share/modules/modulefiles/"
+
 while IFS="	" read -r name version image commands remainder
 do
     mkdir -p $MODULE_PACKAGES/$name/$version
