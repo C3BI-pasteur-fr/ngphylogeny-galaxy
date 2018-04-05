@@ -10,6 +10,7 @@ MAINTAINER Frederic Lemoine <frederic.lemoine@pasteur.fr>
 
 ENV MODULE_PACKAGES="/packages"
 
+## Install environment modules
 RUN apt-get update --fix-missing \
     && apt-get install wget \
     && sudo apt-get update \
@@ -18,6 +19,7 @@ RUN apt-get update --fix-missing \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+## Install Singularity
 RUN git clone https://github.com/singularityware/singularity.git \
     && cd singularity \
     && git checkout development \
@@ -26,26 +28,33 @@ RUN git clone https://github.com/singularityware/singularity.git \
     && make \
     && make install
 
-COPY init_modules.sh /
-COPY package_list.txt /
+## Copy docker init files
+COPY docker/init_modules.sh $GALAXY_HOME/docker/
+COPY docker/package_list.txt $GALAXY_HOME/docker/
 
+## Installs singularity images and their
+## available commands into module paths
 RUN mkdir /packages \
-    && cd / \
+    && cd $GALAXY_HOME/docker/ \
     && ./init_modules.sh
 
+## Auto initialize environment modules for bash and sh
 RUN echo "source /usr/share/modules/init/bash" >> /etc/bash.bashrc
 RUN echo "source /usr/share/modules/init/sh" >> /etc/profile
 
-COPY dependency_resolvers_conf.xml /galaxy-central/config/dependency_resolvers_conf.xml
-COPY environment_modules_mapping.yml /galaxy-central/config/environment_modules_mapping.yml
+## COPY Galaxy conf files into right directories
+COPY docker/dependency_resolvers_conf.xml /galaxy-central/config/dependency_resolvers_conf.xml
+COPY docker/environment_modules_mapping.yml /galaxy-central/config/environment_modules_mapping.yml
+## COPY tool wrappers
+COPY tools /local_tools/
+## COPY workflows
+COPY workflows/* $GALAXY_HOME/workflows/
 
 # We make galaxy folders available to singularity runs
 RUN echo "bind path = /export:/export" >> /usr/local/etc/singularity/singularity.conf \
     && echo "bind path = /data:/data" >> /usr/local/etc/singularity/singularity.conf
 
-# Add workflows to the Docker image
-ADD ./workflows/* $GALAXY_HOME/workflows/
-# We import phylogeny workflows
+# We import workflows
 RUN startup_lite && \
     galaxy-wait && \
     workflow-install --workflow_path $GALAXY_HOME/workflows/ -g http://localhost:8080 -u $GALAXY_DEFAULT_ADMIN_USER -p $GALAXY_DEFAULT_ADMIN_PASSWORD
