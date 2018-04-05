@@ -21,7 +21,7 @@
         --seqtype R
       #end if
     #else :
-      --seqtype $sequence.seqtype
+      --seqtype $sequence_type.seqtype
     #end if
     --cutoff $cutoff
     --distance $distance
