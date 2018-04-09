@@ -13,8 +13,7 @@
     <tool file="/local_tools/fasttree/fasttree.xml" />
     <tool file="/local_tools/tnt/tnt.xml" />
     <tool file="/local_tools/bmge/bmge.xml" />
-    <tool file="/local_tools/phyml/phyml_3_0.xml" />
-    <tool file="/local_tools/phyml/phyml_3_1.xml" />
+    <tool file="/local_tools/phyml/phyml.xml" />
     <tool file="/local_tools/seqtypedetect/seqtypedetect.xml" />
     <tool file="/local_tools/clustalo/clustalo.xml" />
   </section>
