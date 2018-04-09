@@ -12,7 +12,7 @@ ENV MODULE_PACKAGES="/packages"
 
 ## Install environment modules
 RUN apt-get update --fix-missing \
-    && apt-get install wget openssl-devel \
+    && apt-get install wget libssl-dev \
     && sudo apt-get update \
     && apt-get install -y environment-modules squashfs-tools libtool libarchive-dev \
     && apt-get autoremove -y \
