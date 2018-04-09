@@ -1,2 +1,0 @@
-Phylogeny Galaxy Wrapper dedicated to workflow version OneClick. Several wrappers are modified from originals to enable OneClick user action.
-In this wrappers, an option has been added to read the sequence type from a config file.
