@@ -33,11 +33,11 @@
       #set $info = open( str($input_info) ).read()
       #if 'dna' in $info:
         --datatype nt
-        --model $model_dna
+        --model ${sequence_type.model_dna}
         -f ${sequence_type.equi_freq_dna}
       #else if 'protein' in $info:
         --datatype aa
-        --model $model_prot
+        --model ${sequence_type.model_prot}
         -f ${sequence_type.equi_freq_prot}
       #end if
     #else
