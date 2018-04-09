@@ -58,3 +58,6 @@ RUN echo "bind path = /export:/export" >> /usr/local/etc/singularity/singularity
 RUN startup_lite && \
     galaxy-wait && \
     workflow-install --workflow_path $GALAXY_HOME/workflows/ -g http://localhost:8080 -u $GALAXY_DEFAULT_ADMIN_USER -p $GALAXY_DEFAULT_ADMIN_PASSWORD
+
+RUN cat /galaxy-central/config/datatypes_conf.xml.sample  | \
+        sed 's/extension="phylip"/extension="phylip" display_in_upload="true"/' > /galaxy-central/config/datatypes_conf.xml
