@@ -3,7 +3,7 @@
 # latest
 
 # base image: galaxy-stable
-FROM bgruening/galaxy-stable:latest
+FROM bgruening/galaxy-stable:18.01
 
 # File Author / Maintainer
 MAINTAINER Frederic Lemoine <frederic.lemoine@pasteur.fr>
