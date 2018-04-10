@@ -10,23 +10,24 @@ MAINTAINER Frederic Lemoine <frederic.lemoine@pasteur.fr>
 
 ENV MODULE_PACKAGES="/packages"
 
-## Install environment modules
+## Install environment modules & singularity
 RUN apt-get update --fix-missing \
-    && apt-get install wget libssl-dev \
+    && apt-get install -y wget libssl-dev libssl1.0.0 \
     && sudo apt-get update \
     && apt-get install -y environment-modules squashfs-tools libtool libarchive-dev \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-## Install Singularity
-RUN git clone https://github.com/singularityware/singularity.git \
+    && git clone https://github.com/singularityware/singularity.git \
     && cd singularity \
     && git checkout development \
     && ./autogen.sh \
     && ./configure --prefix=/usr/local \
     && make \
-    && make install
+    && make install \
+    && cd .. \
+    && rm -rf singularity \
+    && apt-get remove -y libssl-dev \
+    && apt-get autoremove -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 ## Copy docker init files
 COPY docker/init_modules.sh $GALAXY_HOME/docker/
@@ -59,5 +60,4 @@ RUN startup_lite && \
     galaxy-wait && \
     workflow-install --workflow_path $GALAXY_HOME/workflows/ -g http://localhost:8080 -u $GALAXY_DEFAULT_ADMIN_USER -p $GALAXY_DEFAULT_ADMIN_PASSWORD
 
-RUN cat /galaxy-central/config/datatypes_conf.xml.sample  | \
-        sed 's/extension="phylip"/extension="phylip" display_in_upload="true"/' > /galaxy-central/config/datatypes_conf.xml
+RUN mv /galaxy-central/config/datatypes_conf.xml.sample /galaxy-central/config/datatypes_conf.xml
