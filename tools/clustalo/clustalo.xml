@@ -6,14 +6,36 @@
   </edam_operations>
   <requirements>
     <requirement type="package" version="1.2.1">clustalo</requirement>
+    <requirement type="package" version="0.2.7b">goalign</requirement>
   </requirements>
   <version_command>
     <![CDATA[ clustalo --version   ]]>
   </version_command>
   <command>
     <![CDATA[
+	     ## If phylip: We try phylip relaxed then phylip strict
+	     #if $input_seqs.is_of_type('phylip'):
+	       goalign reformat fasta -i $input_seqs -p -o seqs 2> /dev/null
+	         || goalign reformat fasta -i $input_seqs -p --input-strict -o seqs;
+	       #set $inputFormat = "--infmt=fasta"
+	     #else:
+	       cp $input_seqs seqs;
+	       #if $input_seqs.is_of_type('fasta'):
+	         #set $inputFormat = "--infmt=fasta"
+	       #else if $input_seqs.is_of_type('msf'):
+	         #set $inputFormat = "--infmt=msf"
+	       #else if $input_seqs.is_of_type('clustal'):
+	         #set $inputFormat = "--infmt=clustal"
+	       #else if $input_seqs.is_of_type('selex'):
+	         #set $inputFormat = "--infmt=selex"
+	       #else if $input_seqs.is_of_type('stockholm'):
+	         #set $inputFormat = "--infmt=stockholm"
+	       #else
+	         #set $inputFormat = ""
+	       #end if
+	     #end if	 
              clustalo 
-	       --infile=$input_seqs
+	       --infile=seqs
 	       $inputFormat
 	       $seqType
 	       $dealign
@@ -30,22 +52,12 @@
 	        -o $out_align
 	        --outfmt=${outputFormat}
 	        --force
-	        --threads \${GALAXY_SLOTS:-1}
+	        --threads \${GALAXY_SLOTS:-1};
         ;
     ]]>
   </command>
   <inputs>
     <param name="input_seqs" format="fasta,clustal,msf,phylip,selex,stockholm" type="data" label="Sequences file"/>
-    <param name="inputFormat" label="Input format file" type="select">
-      <option value="" selected="true">Auto</option>
-      <option value="--infmt=fasta">FASTA</option>
-      <option value="--infmt=clustal">Clustal</option>
-      <option value="--infmt=phylip">Phylip</option>
-      <option value="--infmt=msf">Msf</option>
-      <option value="--infmt=selex">Selex</option>
-      <option value="--infmt=stockholm">Stockholm</option>
-      <option value="--infmt=vienna">Vienna</option>
-    </param>  
     <param name="seqType" type="select" label="Sequence type">
       <option value="" selected="true">Auto</option>
       <option value="--seqtype=DNA">DNA</option>
