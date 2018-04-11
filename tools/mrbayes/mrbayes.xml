@@ -23,7 +23,9 @@
   mb $commandfile > $stdoutfile;
   
   ##create data collection
-  tar -czvf runs.tar.gz * ;
+  tar -czf runs.tar.gz * ;
+
+  if [ -e align.nx.t ]; then mv align.nx.t align.nx.run1.t; fi
   ]]>
   </command>
   <configfiles>
@@ -135,7 +137,7 @@
    <data name="usedalignment" format="txt" label="Reformated alignment for mrbayes" from_work_dir="align.nx" />
    <data name="mrbayescommand" format="txt" label="Mr Bayes command file" from_work_dir="commands.txt"  />
    <data name="firstrun" format="txt" label="Mr Bayes run1 results" from_work_dir="align.nx.run1.t" />
-   <data name="allruns" format="tar.gz" label="Mr Bayes All Runs Outputs" from_work_dir="runs.tar.gz" />
+   <data name="allruns" format="tar" label="Mr Bayes All Runs Outputs" from_work_dir="runs.tar.gz" />
   </outputs>
   
   <tests>

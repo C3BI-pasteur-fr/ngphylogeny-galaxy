@@ -68,8 +68,8 @@
     ]]>
   </command>
   <inputs>
-    <param format="phylip,phy,fasta,fa" name="input_align" type="data"
-	   label="Alignment file" help="phylip format"/>
+    <param format="phylip,fasta" name="input_align" type="data"
+	   label="Alignment file" help="phylip/fasta format"/>
     <conditional name="sequence">
       <param name="seqtype" type="select" label="Data type">
         <option value="nt">Nucleic acids</option>

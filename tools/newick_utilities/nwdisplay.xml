@@ -35,7 +35,7 @@
       $input_tree > $out_image
   </command>
   <inputs>
-    <param name="input_tree" format="txt,nw,nwk,nhx" type="data"
+    <param name="input_tree" format="nhx" type="data"
 	   label="Newick file" />
     <param name="scalebar" type="boolean" truevalue="" falsevalue="-S"
 	   checked="True" label="Display scale bar" />
