@@ -4,6 +4,7 @@
   <requirements>
     <requirement type="package" version="3.2.6">mrbayes</requirement>
     <requirement type="package" version="0.2.7b">goalign</requirement>
+    <requirement type="package" version="0.2.10">gotree</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" level="fatal" description="Unknown error has occurred"/>
@@ -25,7 +26,10 @@
   ##create data collection
   tar -czf runs.tar.gz * ;
 
-  if [ -e align.nx.t ]; then mv align.nx.t align.nx.run1.t; fi
+  if [ -e align.nx.t ]; then mv align.nx.t align.nx.run1.t; fi;
+
+  gotree reformat newick -i align.nx.run1.t --format nexus -o align_run1.nhx;
+  
   ]]>
   </command>
   <configfiles>
@@ -109,9 +113,9 @@
       <option value="no">No</option>
       <option value="yes">Yes</option>
     </param>
-    <param name="sump" type="boolean" truevalue="sump;" falsevalue="" label="Include sump?"
+    <param name="sump" type="boolean" truevalue="sump;" falsevalue="" label="Sumarize parameters"
            help="Summarizes sampled parameter value."/>
-    <param name="sumt" type="boolean" truevalue="sumt;" falsevalue="" label="Include sumt?"
+    <param name="sumt" type="boolean" truevalue="sumt;" falsevalue="" label="Sumarize trees"
            help="Summarizes the trees."/>
     <param name="plot" type="boolean" truevalue="plot" falsevalue="" label="Include plot?"
            help="Creates an x-y graph of the parameter over the course of the chain."/>
@@ -136,7 +140,7 @@
    <data name="stdoutfile" format="txt"/>
    <data name="usedalignment" format="txt" label="Reformated alignment for mrbayes" from_work_dir="align.nx" />
    <data name="mrbayescommand" format="txt" label="Mr Bayes command file" from_work_dir="commands.txt"  />
-   <data name="firstrun" format="txt" label="Mr Bayes run1 results" from_work_dir="align.nx.run1.t" />
+   <data name="firstrun" format="nhx" label="Mr Bayes run1 results" from_work_dir="align_run1.nhx" />
    <data name="allruns" format="tar" label="Mr Bayes All Runs Outputs" from_work_dir="runs.tar.gz" />
   </outputs>
   
