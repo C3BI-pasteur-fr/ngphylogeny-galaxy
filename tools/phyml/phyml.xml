@@ -231,11 +231,11 @@
     <conditional name="bootstrap">
       <param name="support" type="select" label="Statistical test for branch support"
              help="Use aLRT or aBayes to save computing time">
-        <option value="0">No support</option>
+        <option value="0" selected='true'>No support</option>
         <option value="1">Bootstrap</option>
         <option value="-1">Likelihood aLRT statistics</option>
         <option value="-2">Likelihood Chi2-based</option>
-        <option value="-4" selected='true'>SH-like</option>
+        <option value="-4">SH-like</option>
         <option value="-5">Approximate Bayes branch supports</option>
       </param>
       <when value="0"/>
