@@ -6,7 +6,7 @@
   </edam_operations>
   <requirements>
     <requirement type="package" version="2.1.5.2">fastme</requirement>
-    <requirement type="package" version="0.2.4">gotree</requirement>
+    <requirement type="package" version="0.2.10">gotree</requirement>
     <requirement type="package" version="0.2.7b">goalign</requirement>
   </requirements>
   <stdio>

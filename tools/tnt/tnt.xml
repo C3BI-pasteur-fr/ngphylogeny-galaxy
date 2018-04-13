@@ -4,7 +4,7 @@
     <requirements>
         <requirement type="package" version="1.5">TNT</requirement>
         <requirement type="package" version="0.2.7b">goalign</requirement>
-        <requirement type="package" version="0.2.4">gotree</requirement>
+        <requirement type="package" version="0.2.10">gotree</requirement>
     </requirements>
     <command>
       <![CDATA[
