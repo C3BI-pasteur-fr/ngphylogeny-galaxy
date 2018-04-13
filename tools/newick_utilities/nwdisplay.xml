@@ -32,7 +32,9 @@
         -d "stroke:grey;fill:none;stroke-width:2;stoke-linecap:round;"
         -w  $width
         $radial
-      $input_tree > $out_image
+       $input_tree > out_tree.svg;
+       csplit -zs -f tree_ -b '%02d.svg' out_tree.svg '/xml/' {*};
+       tar -cf out_trees.tar tree_*.svg;
   </command>
   <inputs>
     <param name="input_tree" format="nhx" type="data"
@@ -73,7 +75,8 @@
 	   label="Draw a radial tree" />
   </inputs>
   <outputs>
-    <data name="out_image" format="svg" label="Tree image" />
+  <data name="out_image" format="svg" label="Tree image" from_work_dir="tree_00.svg" />
+  <data name="all_images" format="tar" label="All tree images in a tar archive (if several trees)" from_work_dir="out_trees.tar" />
   </outputs>
   <tests>
     <test>
