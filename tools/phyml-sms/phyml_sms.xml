@@ -1,4 +1,4 @@
-<tool id="phyml-sms" name="PhyML-SMS" version="1.7.1.post1">
+<tool id="phyml-sms" name="PhyML-SMS" version="1.7.1">
   <description>Maximum likelihood-based inference of phylogenetic trees with Smart Model Selection</description>
   <edam_operations>
     <edam_operation>operation_0540</edam_operation>
@@ -7,7 +7,7 @@
   <requirements>
     <requirement type="package" version="1.7">phyml-sms</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement> 
-    <requirement type="package" version="0.2.7b">goalign</requirement>
+    <requirement type="package" version="0.2.7">goalign</requirement>
   </requirements>
   <command><![CDATA[
   #if $input_align.is_of_type('fasta'):

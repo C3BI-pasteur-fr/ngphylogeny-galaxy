@@ -1,4 +1,4 @@
-<tool id="noisy" name="Noisy" version="1.5.12.1.post1">
+<tool id="noisy" name="Noisy" version="1.5.12.1">
   <description>Cleaning aligned sequences</description>
   <edam_operations>
     <edam_operation>operation_0368</edam_operation>

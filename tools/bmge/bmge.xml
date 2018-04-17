@@ -1,4 +1,4 @@
-<tool id="bmge" name="BMGE" version="1.12.post1">
+<tool id="bmge" name="BMGE" version="1.12">
   <description>cleaning aligned sequences</description>
   <edam_operations>
     <edam_operation>operation_2089</edam_operation>
@@ -15,11 +15,10 @@
 	       -g $rateCutOff
 	       -h $entropy_threshold
                -b $minBlock
-               #for $output in $outputFormat.value
-                 #if $output
-                   -$output file$output
-                 #end if
-               #end for
+               -of output.fa
+	       -op output.phy
+	       -on output.nex
+	       -oh output.html
     ]]>
   </command>
   <inputs>
@@ -82,26 +81,12 @@
     <param name="entropy_threshold" type="float" label="Maximum entropy threshold" value="0.5" min="0" max="1"/>                  
     <param name="rateCutOff" type="float" label="Gap Rate cut-off [ 0-1 ]" value="0.5" min="0" max="1"/>
     <param name="minBlock" type="integer" label="Minimum Block Size" value="5"/>
-    <param name="outputFormat" type="select" multiple="true" label="Output file(s)">
-      <option value="of" selected="true">Fasta</option>
-      <option value="op">Phylip</option>
-      <option value="on">Nexus</option>
-      <option value="oh">HTML</option>
-    </param>			
   </inputs>
   <outputs>
-    <data name="out_align_phylip" format="phylip" label="BMGE Cleaned sequences Phylip" from_work_dir="fileop">
-      <filter>'op' in outputFormat</filter>
-    </data>
-    <data name="out_align_fasta" format="fasta" label="BMGE Cleaned sequences Fasta"  from_work_dir="fileof">
-      <filter>'of' in outputFormat</filter>
-    </data>
-    <data name="out_align_nexus" format="nex" label="BMGE Cleaned sequences Nexus" from_work_dir="fileon">
-      <filter>'on' in outputFormat</filter>
-    </data>
-    <data name="out_align_html" format="html" label="BMGE Cleaned sequences Html" from_work_dir="fileoh">
-      <filter>'oh' in outputFormat</filter>
-    </data>
+    <data name="out_align_phylip" format="phylip" label="BMGE Cleaned sequences Phylip" from_work_dir="output.phy" />
+    <data name="out_align_fasta" format="fasta" label="BMGE Cleaned sequences Fasta"  from_work_dir="output.fa" />
+    <data name="out_align_nexus" format="nex" label="BMGE Cleaned sequences Nexus" from_work_dir="output.nex" />
+    <data name="out_align_html" format="html" label="BMGE Cleaned sequences Html" from_work_dir="output.html" />
   </outputs>
   <help>
     

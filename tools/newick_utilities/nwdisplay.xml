@@ -1,4 +1,4 @@
-<tool id="nwdisplay" name="Newick Display" version="1.6.post1">
+<tool id="nwdisplay" name="Newick Display" version="1.6">
   <description>Display a phylogenetic tree as SVG</description>
   <edam_operations>
     <edam_operation>operation_0567</edam_operation>

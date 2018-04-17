@@ -1,4 +1,4 @@
-<tool id="clustalo" name="Clustal Omega" version="1.2.1.1.post1">
+<tool id="clustalo" name="Clustal Omega" version="1.2.1.1">
   <description>Multiple sequence alignment software</description>
   <edam_operations>
     <edam_operation>operation_0499</edam_operation>
@@ -6,7 +6,7 @@
   </edam_operations>
   <requirements>
     <requirement type="package" version="1.2.1">clustalo</requirement>
-    <requirement type="package" version="0.2.7b">goalign</requirement>
+    <requirement type="package" version="0.2.7">goalign</requirement>
   </requirements>
   <version_command>
     <![CDATA[ clustalo --version   ]]>

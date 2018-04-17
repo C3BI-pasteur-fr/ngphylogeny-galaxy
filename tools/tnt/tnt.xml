@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<tool id="tnt" name="TNT" version="1.5.0a.post1">
+<tool id="tnt" name="TNT" version="1.5.0a">
     <description>phylogenetic analysis under parsimony</description>
     <requirements>
         <requirement type="package" version="1.5">TNT</requirement>
-        <requirement type="package" version="0.2.7b">goalign</requirement>
+        <requirement type="package" version="0.2.7">goalign</requirement>
         <requirement type="package" version="0.2.10">gotree</requirement>
     </requirements>
     <command>
