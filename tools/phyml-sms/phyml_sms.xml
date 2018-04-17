@@ -130,7 +130,7 @@
       <filter>bootstrap['support'] == "boot"</filter>
     </data>
     <data name="out_stats" format="txt" label="PhyML Statistics" from_work_dir="*_phyml_stats.txt"/>
-    <data name="boot_trees" format="txt" label="PhyML bootstrap trees: ${input.name}.boot_trees.txt"
+    <data name="boot_trees" format="txt" label="PhyML bootstrap trees"
           from_work_dir="*_phyml_boot_trees.txt">
       <filter>bootstrap['support'] == "boot"</filter>
     </data>
