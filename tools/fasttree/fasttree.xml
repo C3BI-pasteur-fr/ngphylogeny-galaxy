@@ -1,4 +1,4 @@
-<tool id="fasttree" name="FastTree" version="2.1.9">
+<tool id="fasttree" name="FastTree" version="2.1.9_1">
   <description>FastTree : Infers approximately-maximum-likelihood phylogenetic trees from
   alignments of nucleotide or protein sequences.
   </description>
@@ -18,11 +18,11 @@
 	       description="Error occurred. Please check Tool Standard Error" />
   </stdio>
   <command><![CDATA[
-  ### remove space introduced by Noisy
+  ### Reformat and remove special characters that are incompatible with newick format
   #if $input_align.is_of_type('phylip')
-    goalign reformat fasta -i $input_align -p -o align.tmp;
+    goalign reformat fasta -i $input_align -p | sed 's/[][\(\),;\.\:]/-/g' > align.tmp;
   #else
-    ln -sf $input_align align.tmp;
+    cat $input_align | sed 's/[][\(\),;\.\:]/-/g' > align.tmp;
   #end if
   
   ######## 1st Fasttree #######

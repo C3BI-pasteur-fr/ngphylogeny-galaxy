@@ -11,13 +11,16 @@
   </requirements>
   <command><![CDATA[
   #if $input_align.is_of_type('fasta'):
-    goalign reformat phylip -i $input_align -o align.phy;
+    goalign reformat phylip -i $input_align | sed 's/[][\(\),;\.\:]/-/g' > align.phy;
   #else
-    ln -sf $input_align align.phy;
+    cat $input_align | sed 's/[][\(\),;\.\:]/-/g' > align.phy;
   #end if
+
+  ## Rename sequences
+  goalign trim name -a -p -m map -i align.phy -o align_rename.phy -m name_map;
   
   sms.sh
-    -i align.phy
+    -i align_rename.phy
     -o .
     -p $out_models
     -t
@@ -51,12 +54,16 @@
       -r $randstart
     #end if
     > ${out_stdout};
+
+    ## Rename sequnence names in trees
+    gotree rename -r -i *_phyml_tree.txt -o reftree.nwk -m name_map;
+    gotree rename -r -i *_phyml_boot_trees.txt -o boottrees.nwk -m name_map;
     
     #if $bootstrap.support == "boot" :
       ##Compute TBE (BOOSTER) bootstrap supports
       gotree compute support booster
-        -i *_phyml_tree.txt
-        -b *_phyml_boot_trees.txt
+        -i reftree.nwk
+        -b boottrees.nwk
         -o tbe_norm_tree.nhx
         --out-raw tbe_raw_tree.nhx
         -l tbe_log.txt
@@ -131,11 +138,11 @@
     </data>
     <data name="out_stats" format="txt" label="PhyML Statistics" from_work_dir="*_phyml_stats.txt"/>
     <data name="boot_trees" format="txt" label="PhyML bootstrap trees"
-          from_work_dir="*_phyml_boot_trees.txt">
+          from_work_dir="boottrees.nwk">
       <filter>bootstrap['support'] == "boot"</filter>
     </data>
     <data name="out_tree" format="nhx" label="PhyML newick tree"
-	  from_work_dir="*_phyml_tree.txt"/>
+	  from_work_dir="reftree.nwk"/>
     <data name="out_models" format="txt" label="SMS compare models"/>
     <data name="out_stdout" format="txt" label="SMS Best Model"/>
   </outputs>
