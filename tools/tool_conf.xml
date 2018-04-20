@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <toolbox>
   <section id="phylogeny" name="Phylogeny">
+    <tool file="/local_tools/booster/booster.xml" />
     <tool file="/local_tools/gblocks/gblocks.xml" />
     <tool file="/local_tools/mafft/mafft.xml" />
     <tool file="/local_tools/phyml-sms/phyml_sms.xml" />
