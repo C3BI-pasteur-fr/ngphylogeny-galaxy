@@ -1,0 +1,58 @@
+<tool id="booster" name="Booster" version="0.2.10">
+  <description>Compute BOOSTER bootstrap supports</description>
+  <requirements>
+    <requirement type="package" version="0.2.10">gotree</requirement>
+  </requirements>
+  <command>
+    <![CDATA[
+     gotree compute support
+     booster
+     -i $ref
+     -b $boot
+     -o $tbe_norm_tree
+     -t \${GALAXY_SLOTS}
+     --out-raw $tbe_raw_tree
+     --moved-taxa
+     --highest-per-branches
+     --dist-cutoff 0.3
+     -l $tbe_log
+     --silent;
+     
+     gotree compute support
+     classical
+     -i $ref
+     -b $boot
+     -o $fbp_tree
+     -t \${GALAXY_SLOTS}
+     -l /dev/null
+     --silent;
+    ]]>
+  </command>
+  <inputs>
+    <param name="ref" format="nhx" type="data" label="Reference input tree" help="Newick Format"/>
+    <param name="boot" format="nhx" type="data" label="Bootstrap trees" help="Newick Format"/>
+  </inputs>
+  <outputs>
+    <data name="fbp_tree" format="nhx" label="Tree with FBP supports"></data>
+    <data name="tbe_norm_tree" format="nhx" label="Tree with TBE normalized supports"></data>
+    <data name="tbe_raw_tree" format="nhx" label="Tree with [id|avg transfer distances|depth] as branch labels"></data>
+    <data name="tbe_log" format="txt" label="TBE log file. 2 parts 1) Global transfer score per taxa, 2) Most transfered taxa per branches"></data>
+  </outputs>
+  <help>
+    ===========
+    Overview:
+    ===========
+    Computes FBP (classical) as well as TBE (Transfer Bootstrap Expectation) bootstrap Supports.
+
+    4 files are generated:
+    1) "fbp_tree": Tree with FBP (classical) supports
+    2) "tbe_norm_tree": Reference tree with branches labelled using normalized supports (1-avgdist/(p-1)), (p) being the number of taxa on the light side of the branch
+    3) "tbe_raw_tree": Reference tree with branches labelled as "branch id|average transfer distance|p" (only if algorithm=="booster")
+    4) "tbe_log": Bootstrap log file with the following informations if algorithm="booster": 
+        a) Global transfer score per taxa (2 columns: taxon\ttransferscore)
+        b) Most transfered taxa per branch (4 columns: Branch Id\tp\tAverage distance\tsemicolumn separated list of most transfered taxa with their respective transfer index)
+  </help>
+  <citations>
+    <citation type="doi">10.1038/s41586-018-0043-0</citation>
+  </citations>
+</tool>
