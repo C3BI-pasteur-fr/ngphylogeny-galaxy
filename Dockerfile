@@ -17,7 +17,7 @@ RUN apt-get update --fix-missing \
     && apt-get install -y environment-modules squashfs-tools libtool libarchive-dev \
     && git clone https://github.com/singularityware/singularity.git \
     && cd singularity \
-    && git checkout 2.5.0-rc1 \
+    && git checkout 2.5.0 \
     && ./autogen.sh \
     && ./configure --prefix=/usr/local \
     && make \
