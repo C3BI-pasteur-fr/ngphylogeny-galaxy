@@ -1,4 +1,4 @@
-<tool id="bmge" name="BMGE" version="1.12">
+<tool id="bmge" name="BMGE" version="1.12_1">
   <description>cleaning aligned sequences</description>
   <edam_operations>
     <edam_operation>operation_2089</edam_operation>
