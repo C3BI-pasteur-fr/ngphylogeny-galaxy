@@ -1,4 +1,4 @@
-<tool id="phyml-sms" name="PhyML-SMS" version="1.7.1">
+<tool id="phyml-sms" name="PhyML-SMS" version="1.7.1_1">
   <description>Maximum likelihood-based inference of phylogenetic trees with Smart Model Selection</description>
   <edam_operations>
     <edam_operation>operation_0540</edam_operation>
@@ -7,13 +7,13 @@
   <requirements>
     <requirement type="package" version="1.7">phyml-sms</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement> 
-    <requirement type="package" version="0.2.7">goalign</requirement>
+    <requirement type="package" version="0.2.8a">goalign</requirement>
   </requirements>
   <command><![CDATA[
   #if $input_align.is_of_type('fasta'):
-    goalign reformat phylip -i $input_align | sed 's/[][\(\),;\.\:]/-/g' > align.phy;
+    goalign reformat phylip    --clean-names -i $input_align -o align.phy;
   #else
-    cat $input_align | sed 's/[][\(\),;\.\:]/-/g' > align.phy;
+    goalign reformat phylip -p --clean-names -i $input_align -o align.phy;
   #end if
 
   ## Rename sequences
@@ -55,7 +55,7 @@
     #end if
     > ${out_stdout};
 
-    ## Rename sequnence names in trees
+    ## Rename sequence names in trees
     gotree rename -r -i *_phyml_tree.txt -o reftree.nwk -m name_map;
     gotree rename -r -i *_phyml_boot_trees.txt -o boottrees.nwk -m name_map;
     

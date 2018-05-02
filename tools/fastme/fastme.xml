@@ -1,4 +1,4 @@
-<tool id="fastme" name="FastME" version="2.1.5.2">
+<tool id="fastme" name="FastME" version="2.1.5.2_1">
   <description>Distance-based inference of phylogenetic trees</description>
   <edam_operations>
     <edam_operation>operation_0540</edam_operation>
@@ -18,9 +18,9 @@
   <command>
     <![CDATA[
 	     #if $input_align.is_of_type('fasta'):
-	       goalign reformat phylip -i ${input_align} -o  align.tmp;
+	       goalign reformat phylip --clean-names    -i ${input_align} -o align.tmp;
 	     #else
-	       ln -sf ${input_align} align.tmp;
+	       goalign reformat phylip --clean-names -p -i ${input_align} -o align.tmp;
 	     #end if
 
             fastme

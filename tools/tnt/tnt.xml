@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
-<tool id="tnt" name="TNT" version="1.5.0a">
+<tool id="tnt" name="TNT" version="1.5.0a_1">
     <description>phylogenetic analysis under parsimony</description>
     <requirements>
         <requirement type="package" version="1.5">TNT</requirement>
-        <requirement type="package" version="0.2.7">goalign</requirement>
+        <requirement type="package" version="0.2.8a">goalign</requirement>
         <requirement type="package" version="0.2.10">gotree</requirement>
     </requirements>
     <command>
       <![CDATA[
-	       goalign reformat tnt -i $input_align -o tnt_input.tnt ;
+	       goalign reformat tnt --clean-names -i $input_align -o tnt_input.tnt ;
 	       goalign stats taxa -i $input_align | awk '{print \$1+1 "\t" \$2}' > map ;
 	       tnt < $command_file 2>&1 ;
 	       grep "(" tnt_trees.tre | gotree rename -m map -o $out_tree ;

@@ -1,4 +1,4 @@
-<tool id="phyml" name="PhyML" version="3.1">
+<tool id="phyml" name="PhyML" version="3.1_1">
   <description>Phylogeny software based on the maximum-likelihood</description>
   <edam_operations>
     <edam_operation>operation_0540</edam_operation>
@@ -7,7 +7,7 @@
   <requirements>
     <requirement type="package" version="3.1">phyml</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement>
-    <requirement type="package" version="0.2.7">goalign</requirement>
+    <requirement type="package" version="0.2.8a">goalign</requirement>
   </requirements>
   <version_command>
     <![CDATA[ phyml --version ]]>
@@ -18,12 +18,13 @@
            level="fatal"/>
   </stdio>
   <command><![CDATA[
+  ## Reformat input alignement, and clean sequence names
   #if $input_align.is_of_type('fasta'):
-    goalign reformat phylip -i $input_align > align.phy;
+    goalign reformat phylip    -i $input_align --clean-names -o align.phy;
   #else
-    ln -sf $input_align align.phy;
+    goalign reformat phylip -p -i $input_align --clean-names -o align.phy;
   #end if
-    
+
   phyml
     --input align.phy
     ${phylip_format}

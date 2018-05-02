@@ -1,4 +1,4 @@
-<tool id="fasttree" name="FastTree" version="2.1.9_1">
+<tool id="fasttree" name="FastTree" version="2.1.9_2">
   <description>FastTree : Infers approximately-maximum-likelihood phylogenetic trees from
   alignments of nucleotide or protein sequences.
   </description>
@@ -9,7 +9,7 @@
   <requirements>
     <requirement type="package" version="2.1.9">FastTree</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement>
-    <requirement type="package" version="0.2.7">goalign</requirement>
+    <requirement type="package" version="0.2.8a">goalign</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" level="fatal"
@@ -20,9 +20,9 @@
   <command><![CDATA[
   ### Reformat and remove special characters that are incompatible with newick format
   #if $input_align.is_of_type('phylip')
-    goalign reformat fasta -i $input_align -p | sed 's/[][\(\),;\.\:]/-/g' > align.tmp;
+    goalign reformat fasta --clean-names -i $input_align -p -o align.tmp;
   #else
-    cat $input_align | sed 's/[][\(\),;\.\:]/-/g' > align.tmp;
+    goalign reformat fasta --clean-names -i $input_align    -o align.tmp;
   #end if
   
   ######## 1st Fasttree #######
