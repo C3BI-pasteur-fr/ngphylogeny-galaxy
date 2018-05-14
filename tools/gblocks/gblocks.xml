@@ -5,7 +5,7 @@
   </edam_operations>
   <requirements>
     <requirement type="package" version="0.91b">gblocks</requirement>
-    <requirement type="package" version="0.2.7">goalign</requirement>
+    <requirement type="package" version="0.2.8">goalign</requirement>
   </requirements>
   <command>
     #if $input_align.is_of_type('phylip'):
