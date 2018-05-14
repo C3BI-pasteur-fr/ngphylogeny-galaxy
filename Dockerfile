@@ -10,6 +10,9 @@ MAINTAINER Frederic Lemoine <frederic.lemoine@pasteur.fr>
 
 ENV MODULE_PACKAGES="/packages"
 
+ENV GALAXY_CONFIG_TOOL_CONFIG_FILE=config/tool_conf.xml.sample,config/shed_tool_conf.xml.sample,/local_tools/tool_conf.xml
+ENV GALAXY_DOCKER_ENABLED=True
+
 ## Install environment modules & singularity
 RUN apt-get update --fix-missing \
     && apt-get install -y wget libssl-dev libssl1.0.0 \
@@ -61,3 +64,4 @@ RUN startup_lite && \
     workflow-install --workflow_path $GALAXY_HOME/workflows/ -g http://localhost:8080 -u $GALAXY_DEFAULT_ADMIN_USER -p $GALAXY_DEFAULT_ADMIN_PASSWORD
 
 RUN mv /galaxy-central/config/datatypes_conf.xml.sample /galaxy-central/config/datatypes_conf.xml
+

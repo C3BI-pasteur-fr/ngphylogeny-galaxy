@@ -39,9 +39,10 @@ To test these galaxy tools and workflows, you can use the [docker image](https:/
 
 ```
 docker run --privileged=true \
-           -e GALAXY_CONFIG_TOOL_CONFIG_FILE=config/tool_conf.xml.sample,config/shed_tool_conf.xml.sample,/local_tools/tool_conf.xml \
-           -e GALAXY_DOCKER_ENABLED=True \
-           -p 8080:80 -p 8121:21 -p 8122:22 -i -t evolbioinfo/ngphylogeny-galaxy
+           -p 8080:80 \
+		   -p 8121:21 \
+		   -p 8122:22 \
+		   evolbioinfo/ngphylogeny-galaxy
 ```
 
 This image integrates a running galaxy instance, with all phylogenetic tools installed on environment modules using singularity images.
