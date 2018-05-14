@@ -3,7 +3,7 @@
     <description>phylogenetic analysis under parsimony</description>
     <requirements>
         <requirement type="package" version="1.5">TNT</requirement>
-        <requirement type="package" version="0.2.8a">goalign</requirement>
+        <requirement type="package" version="0.2.8">goalign</requirement>
         <requirement type="package" version="0.2.10">gotree</requirement>
     </requirements>
     <command>

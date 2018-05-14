@@ -3,7 +3,7 @@
   <description>with options and commands</description>
   <requirements>
     <requirement type="package" version="3.2.6">mrbayes</requirement>
-    <requirement type="package" version="0.2.8a">goalign</requirement>
+    <requirement type="package" version="0.2.8">goalign</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement>
   </requirements>
   <stdio>

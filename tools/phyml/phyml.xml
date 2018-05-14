@@ -7,7 +7,7 @@
   <requirements>
     <requirement type="package" version="3.1">phyml</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement>
-    <requirement type="package" version="0.2.8a">goalign</requirement>
+    <requirement type="package" version="0.2.8">goalign</requirement>
   </requirements>
   <version_command>
     <![CDATA[ phyml --version ]]>

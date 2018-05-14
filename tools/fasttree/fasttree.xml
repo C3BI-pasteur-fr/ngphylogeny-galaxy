@@ -9,7 +9,7 @@
   <requirements>
     <requirement type="package" version="2.1.9">FastTree</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement>
-    <requirement type="package" version="0.2.8a">goalign</requirement>
+    <requirement type="package" version="0.2.8">goalign</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" level="fatal"
