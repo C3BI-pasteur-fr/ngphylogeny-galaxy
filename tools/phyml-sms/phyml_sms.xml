@@ -57,9 +57,9 @@
 
     ## Rename sequence names in trees
     gotree rename -r -i *_phyml_tree.txt -o reftree.nwk -m name_map;
-    gotree rename -r -i *_phyml_boot_trees.txt -o boottrees.nwk -m name_map;
     
     #if $bootstrap.support == "boot" :
+      gotree rename -r -i *_phyml_boot_trees.txt -o boottrees.nwk -m name_map;
       ##Compute TBE (BOOSTER) bootstrap supports
       gotree compute support booster
         -i reftree.nwk
