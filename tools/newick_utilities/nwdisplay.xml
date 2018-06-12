@@ -258,6 +258,6 @@ $ nw_display -s -r -l 'font-style:italics' data/catarrhini
 ]]>
 </help>
 <citations>
-  <citation type="doi">10.1186/1748-7188-3-7</citation> 
+  <citation type="doi">10.1093/bioinformatics/btq243</citation> 
 </citations>
 </tool>
