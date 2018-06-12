@@ -271,7 +271,7 @@
           from_work_dir="tbe_raw_tree.nhx">
       <filter>bootstrap['support'] == '1'</filter>
     </data>
-    <data name="boot_trees" format="txt"
+    <data name="boot_trees" format="nhx"
 	  label="PhyML bootstrap trees: align.phy_phyml_boot_trees.txt"
           from_work_dir="*_phyml_boot_trees.txt">
       <filter>bootstrap['support'] == '1'</filter>

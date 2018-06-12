@@ -209,7 +209,7 @@
 	  from_work_dir="tbe_raw_tree.nhx">
       <filter>bootstrap['do_bootstrap'] == "true"</filter>
     </data>
-    <data name="boot_trees" format="nwk"
+    <data name="boot_trees" format="nhx"
 	  label="FastME Bootstrap trees"
 	  from_work_dir="fastme_bootstrap_trees.nhx">
       <filter>bootstrap['do_bootstrap'] == "true"</filter>
