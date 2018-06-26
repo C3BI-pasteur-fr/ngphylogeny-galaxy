@@ -12,24 +12,24 @@
   <version_command>mb -version</version_command>
   <command><![CDATA[
   #if $input_align.is_of_type('phylip'):
-    goalign reformat nexus --clean-names -i ${input_align} -p -o align.nx;
+    goalign reformat nexus --clean-names -i ${input_align} -p| sed 's/format datatype=dna;/format datatype=dna gap=-;/g' > align.nx;
   #else if $input_align.is_of_type('fasta'):
-    goalign reformat nexus --clean-names -i ${input_align}    -o align.nx;
+    goalign reformat nexus --clean-names -i ${input_align}   | sed 's/format datatype=dna;/format datatype=dna gap=-;/g' > align.nx;
   #else
     ln -sf ${input_align} align.nx;
   #end if
-    
+
   cp $commandfile commands.txt;
 
   mb $commandfile > $stdoutfile;
-  
+
   ##create data collection
   tar -czf runs.tar.gz * ;
 
   if [ -e align.nx.t ]; then mv align.nx.t align.nx.run1.t; fi;
 
   gotree reformat newick -i align.nx.run1.t --format nexus -o align_run1.nhx;
-  
+
   ]]>
   </command>
   <configfiles>
