@@ -20,10 +20,13 @@
   <command><![CDATA[
   ## Reformat input alignement, and clean sequence names
   #if $input_align.is_of_type('fasta'):
-    goalign reformat phylip    -i $input_align --clean-names -o align.phy;
+    goalign reformat phylip    -i $input_align --clean-names -o align_1.tmp;
   #else
-    goalign reformat phylip -p -i $input_align --clean-names -o align.phy;
+    goalign reformat phylip -p -i $input_align --clean-names -o align_1.tmp;
   #end if
+  ## Rename taxa to avoid long names
+  goalign trim name -p -a -i align_1.tmp -m mapfile.txt -o align.phy;
+  rm align_1.tmp;
 
   phyml
     --input align.phy
@@ -94,14 +97,22 @@
       gotree compute support booster
         -i *_phyml_tree.txt
 	-b *_phyml_boot_trees.txt
-        -o tbe_norm_tree.nhx
-        --out-raw tbe_raw_tree.nhx
+        -o tbe_norm_tree_tmp
+        --out-raw tbe_raw_tree_tmp
         -l tbe_log.txt
         -t \${GALAXY_SLOTS}
         --moved-taxa --highest-per-branches
         --dist-cutoff 0.3
         --silent;
-    #end if
+	gotree rename -m mapfile.txt -r -i tbe_norm_tree_tmp -o tbe_norm_tree.nhx;
+	gotree rename -m mapfile.txt -r -i tbe_raw_tree_tmp -o tbe_raw_tree.nhx;
+	gotree rename -m mapfile.txt -r -i *_phyml_boot_trees.txt -o tree_phyml_boot_trees.txt;
+	rm tbe_norm_tree_tmp;
+	rm tbe_raw_tree_tmp;
+	rm align.phy_phyml_boot_trees.txt;
+     #end if
+     gotree rename -m mapfile.txt -r -i *_phyml_tree.txt -o tree_phyml_tree.txt;
+     rm align.phy_phyml_tree.txt;
     ]]>
   </command>
   <inputs>
