@@ -17,15 +17,18 @@
   </version_command>
   <command>
     <![CDATA[
-	     #if $input_align.is_of_type('fasta'):
-	       goalign reformat phylip --clean-names    -i ${input_align} -o align.tmp;
-	     #else
-	       goalign reformat phylip --clean-names -p -i ${input_align} -o align.tmp;
-	     #end if
-
+	    #if $input_align.is_of_type('fasta'):
+	      goalign reformat phylip --clean-names    -i ${input_align} -o align_1.tmp;
+	    #else
+	      goalign reformat phylip --clean-names -p -i ${input_align} -o align_1.tmp;
+	    #end if
+	    ## Rename taxa to avoid long names  
+	    goalign trim name -p -a -i align_1.tmp -m mapfile.txt -o align.tmp;
+	    rm align_1.tmp;
+	     
             fastme
               --input_data=align.tmp
-              --output_tree='${out_tree}'
+              --output_tree=out_tree_tmp
               --output_matrix=${dist_matrix}
               --output_info=${out_log}
               --nb_threads=\${GALAXY_SLOTS:-1}
@@ -55,7 +58,7 @@
               ${tree_refinement}
               -f ${decimalPrecision}
             #if $bootstrap.do_bootstrap == "true"
-              --output_boot=fastme_bootstrap_trees.nhx
+              --output_boot=fastme_bootstrap_trees_tmp
               --bootstrap=${bootstrap.replicates}
             #end if
               >> tmp_stdout;
@@ -64,16 +67,25 @@
             #if $bootstrap.do_bootstrap == "true":
               ##Compute BOOSTER bootstrap supports
               gotree compute support booster
-	        -i '${out_tree}'
-                -b fastme_bootstrap_trees.nhx
-                -o tbe_norm_tree.nhx
-                --out-raw tbe_raw_tree.nhx
+	        -i out_tree_tmp
+                -b fastme_bootstrap_trees_tmp
+                -o tbe_norm_tree_tmp
+                --out-raw tbe_raw_tree_tmp
                 -l tbe_log.txt
                 --moved-taxa --highest-per-branches
                 --dist-cutoff 0.3
                 --silent;
+	      gotree rename -m mapfile.txt -r -i tbe_norm_tree_tmp -o tbe_norm_tree.nhx;
+	      gotree rename -m mapfile.txt -r -i tbe_raw_tree_tmp -o tbe_raw_tree.nhx;
+	      gotree rename -m mapfile.txt -r -i fastme_bootstrap_trees_tmp -o fastme_bootstrap_trees.nhx;
+	      rm tbe_norm_tree_tmp;
+	      rm tbe_raw_tree_tmp;
+	      rm fastme_bootstrap_trees_tmp;
             #end if
-        ]]>
+	    gotree rename -m mapfile.txt -r -i out_tree_tmp -o '${out_tree}';
+	    rm out_tree_tmp;
+    ]]>
+
   </command>
   <inputs>
     <param name="input_align" type="data" format="fasta,fa,phylip,phy"
