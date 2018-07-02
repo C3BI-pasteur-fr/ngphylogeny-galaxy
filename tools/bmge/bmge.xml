@@ -14,14 +14,21 @@
 	         #set $info = open( str($input_info) ).read()
 	         #if 'dna' in $info:
                    -t DNA
-		   -m DNAPAM$dataType.estimated_nt
+		   -m DNAPAM${dataType.estimated_nt}
 		 #else if 'protein' in $info:
                    -t AA
-		   -m BLOSUM$dataType.estimated_aa
+		   -m BLOSUM${dataType.estimated_aa}
 		 #end if
 	       #else
-	         -t ${dataType.codeSeq}
-		 -m $dataType.matrix$dataType.estimated
+	         -t ${dataType.codeSeq}	 
+	         #if $dataType.codeSeq == "DNA":
+		   -m ${dataType.dnamatrix}${dataType.dnaestimated}
+		 #else if $sataType.codeSeq == "AA":
+		   -m ${dataType.aamatrix}${dataType.aaestimated}
+		 ## Else codon  
+		 #else:
+		   -m ${dataType.codonmatrix}${dataType.codonestimated}
+		 #end if  
 	       #end if
 	       -w $windowsSize
 	       -g $rateCutOff
@@ -42,14 +49,14 @@
 	<option value="CODON">Codon</option>
         <option value="cfg">Type information file</option>
       </param>
-      <when value="DNA"> 
-	<param name="matrix" type="hidden" label="matrix"  value="DNAPAM"/>                                           	 
-	<param name="estimated" type="integer" label="Name of the PAM matrix [ 1-500 ]"
+      <when value="DNA">
+	<param name="dnamatrix" type="hidden" label="matrix"  value="DNAPAM"/>                                           	 
+	<param name="dnaestimated" type="integer" label="Name of the PAM matrix [ 1-500 ]"
 	       value="250" min="1" max="500"/>   
       </when>
       <when value="AA">
-	<param name="matrix" type="hidden" label="matrix" value="BLOSUM"/>
-        <param name="estimated" type="select" label="Estimated matrix BLOSUM">
+	<param name="aamatrix" type="hidden" label="matrix" value="BLOSUM"/>
+        <param name="aaestimated" type="select" label="Estimated matrix BLOSUM">
 	  <option value="30">30</option>
           <option value="35">35</option>
           <option value="40">40</option>
@@ -68,8 +75,8 @@
 	</param>
       </when>
       <when value="CODON">
-	<param name="matrix" type="hidden" label="matrix" value="BLOSUM"/>
-        <param name="estimated" type="select" label="Estimated matrix BLOSUM">
+	<param name="codonmatrix" type="hidden" label="matrix" value="BLOSUM"/>
+        <param name="codonestimated" type="select" label="Estimated matrix BLOSUM">
 	  <option value="30">30</option>
           <option value="35">35</option>
           <option value="40">40</option>
