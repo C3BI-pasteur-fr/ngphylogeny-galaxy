@@ -256,24 +256,26 @@ FastTree_v2.1.9_
 
 .. _FastTree_v2.1.9: http://meta.microbesonline.org/fasttree/#Install
 
-
 ##########################
-BOOSTER Bootstrap Supports
+    Bootstrap Supports
 ##########################
 
-Three files are generated:
+If the option "Bootstrap" is selected for the menu "Bootstrap Branch Support", then a classical bootstrap analysis is performed, as well as a Booster (Transfer Bootstrap) analysis (see references).
 
-1) "support" : Reference tree with branches labelled using normalized supports (1-avgdist/(p-1)), (p) being the number of taxa on the light side of the branch.
-2) "avgdist (raw)" : Reference tree with branches labelled as "branch id|average transfer distance|p" (only if algorithm=="booster")
-3) "bootstraplog.log": Booster log file with the following informations if algorithm=="booster":
+In that case, he following additional files are generated:
+
+1) "tbe_norm_tree.nhx" : Reference tree with branches labelled using normalized supports (1-avgdist/(p-1)), (p) being the number of taxa on the light side of the branch.
+2) "tbe_raw_tree.nhx" : Reference tree with branches labelled as "branch id|average transfer distance|p"
+3) "tbe_log.txt": Booster log file with the following informations:
     a) Global transfer score per taxa (2 columns: taxon\ttransferscore),
     b) Most transferred taxa per branch (4 columns: Branch Id\tp\tAverage distance\tsemicolumn separated list of most transfered taxa with their respective transfer index)
-
+4) "fasttree_bootstrap_trees.nhx": List of bootstrap trees
 ]]>
   </help>
   <citations>
     <citation type="doi">10.1093/molbev/msp077</citation>
     <citation type="doi">10.1371/journal.pone.0009490</citation>
+    <citation type="doi">10.1038/s41586-018-0043-0</citation>
   </citations>
 </tool>
 
