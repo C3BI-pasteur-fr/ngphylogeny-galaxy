@@ -23,7 +23,7 @@
 	         -t ${dataType.codeSeq}	 
 	         #if $dataType.codeSeq == "DNA":
 		   -m ${dataType.dnamatrix}${dataType.dnaestimated}
-		 #else if $sataType.codeSeq == "AA":
+		 #else if $dataType.codeSeq == "AA":
 		   -m ${dataType.aamatrix}${dataType.aaestimated}
 		 ## Else codon  
 		 #else:
