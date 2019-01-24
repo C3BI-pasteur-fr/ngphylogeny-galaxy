@@ -1,11 +1,11 @@
-<tool id="fastme" name="FastME" version="2.1.5.2_1">
+<tool id="fastme" name="FastME" version="2.1.6.1_1">
   <description>Distance-based inference of phylogenetic trees</description>
   <edam_operations>
     <edam_operation>operation_0540</edam_operation>
     <edam_operation>operation_0324</edam_operation>
   </edam_operations>
   <requirements>
-    <requirement type="package" version="2.1.5.2">fastme</requirement>
+    <requirement type="package" version="2.1.6.1">fastme</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement>
     <requirement type="package" version="0.2.8">goalign</requirement>
   </requirements>
@@ -254,7 +254,7 @@
 .. class:: infomark
 
 
-**FastME version 2.1.4**
+**FastME version 2.1.6.1**
 
 
 .. class:: infomark

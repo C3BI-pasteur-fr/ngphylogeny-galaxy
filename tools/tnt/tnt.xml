@@ -98,7 +98,6 @@
 	export - tnt_trees.tre ;
 	log / ; 
 	proc/ ;
-
 	]]>
        </configfile>
     </configfiles>

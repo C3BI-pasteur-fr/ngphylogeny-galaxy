@@ -1,4 +1,4 @@
-<tool id="fasttree" name="FastTree" version="2.1.9_2">
+<tool id="fasttree" name="FastTree" version="2.1.10_1">
   <description>FastTree : Infers approximately-maximum-likelihood phylogenetic trees from
   alignments of nucleotide or protein sequences.
   </description>
@@ -7,7 +7,7 @@
     <edam_operation>operation_0324</edam_operation>
   </edam_operations>
   <requirements>
-    <requirement type="package" version="2.1.9">FastTree</requirement>
+    <requirement type="package" version="2.1.10">FastTree</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement>
     <requirement type="package" version="0.2.8">goalign</requirement>
   </requirements>
@@ -252,9 +252,9 @@ there are no support values for the parent nodes of redundant sequences.
 Resources
 =========
 
-FastTree_v2.1.9_
+FastTree_v2.1.10_
 
-.. _FastTree_v2.1.9: http://meta.microbesonline.org/fasttree/#Install
+.. _FastTree_v2.1.10: http://meta.microbesonline.org/fasttree/#Install
 
 ##########################
     Bootstrap Supports

@@ -1,7 +1,7 @@
-<tool id="mafft" name="MAFFT" version="7.273.1">
+<tool id="mafft" name="MAFFT" version="7.407_1">
   <description>Multiple alignment program for amino acid or nucleotide sequences</description>
   <requirements>
-    <requirement type="package" version="7.273">mafft</requirement>
+    <requirement type="package" version="7.407">mafft</requirement>
     <requirement type="package" version="3.6">fasta</requirement>
   </requirements>
   <version_command>

@@ -1,11 +1,11 @@
-<tool id="phyml-sms" name="PhyML-SMS" version="1.7.1_1">
+<tool id="phyml-sms" name="PhyML-SMS" version="1.8.1_1">
   <description>Maximum likelihood-based inference of phylogenetic trees with Smart Model Selection</description>
   <edam_operations>
     <edam_operation>operation_0540</edam_operation>
     <edam_operation>operation_0324</edam_operation>
   </edam_operations>
   <requirements>
-    <requirement type="package" version="1.7">phyml-sms</requirement>
+    <requirement type="package" version="1.8.1">phyml-sms</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement> 
     <requirement type="package" version="0.2.8">goalign</requirement>
   </requirements>
@@ -180,7 +180,7 @@ PhyML options :
  -b  Branch Support : >0 for bootstraps, -4 for aLRT, 0 (default)
 
 
-**PhyML 20120412**
+**PhyML-SMS 1.8.1**
 
 -----
 
