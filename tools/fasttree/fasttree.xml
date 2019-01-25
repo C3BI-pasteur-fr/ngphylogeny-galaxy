@@ -10,6 +10,7 @@
     <requirement type="package" version="2.1.10">FastTree</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement>
     <requirement type="package" version="0.2.8">goalign</requirement>
+    <requirement type="package" version="20170122">parallel</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" level="fatal"
@@ -48,10 +49,9 @@
   
   ####### Bootstrap #######
   #if $bootstrap.do_bootstrap=='true' and int($bootstrap.replicates) > 0 :
-    goalign reformat phylip -i align.tmp | goalign build seqboot -n $bootstrap.replicates -o boot_aligns -S --phylip;
+    goalign build seqboot -i align.tmp -n $bootstrap.replicates -o boot_aligns -S;
     ####### 2nd Fasttree #######
-    cat boot_aligns*.ph | FastTree 
-    -n $bootstrap.replicates
+    ls boot_aligns*.fa | parallel -j \${GALAXY_SLOTS} FastTree 
     #if $sequence_type.seqtype == 'cfg' :
       ## Automatic sequence detection
       ## read an info file to choose which option set
