@@ -24,7 +24,7 @@
   #else
     goalign reformat fasta --clean-names -i $input_align    -o align.tmp;
   #end if
-  
+
   ######## 1st Fasttree #######
   FastTree
   #if $sequence_type.seqtype == 'cfg' :
@@ -47,9 +47,8 @@
   -log $log < align.tmp > ref_tree.tmp;
   
   ####### Bootstrap #######
-  #if $bootstrap.do_bootstrap=="true" and $bootstrap.replicates>0 :
+  #if $bootstrap.do_bootstrap=='true' and int($bootstrap.replicates) > 0 :
     goalign reformat phylip -i align.tmp | goalign build seqboot -n $bootstrap.replicates -o boot_aligns -S --phylip;
-  
     ####### 2nd Fasttree #######
     cat boot_aligns*.ph | FastTree 
     -n $bootstrap.replicates
