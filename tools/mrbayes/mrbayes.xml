@@ -12,9 +12,9 @@
   <version_command>mb -version</version_command>
   <command><![CDATA[
   #if $input_align.is_of_type('phylip'):
-    goalign reformat nexus --clean-names -i ${input_align} -p| sed 's/format datatype=dna;/format datatype=dna gap=-;/g' > align.nx;
+    goalign reformat nexus --clean-names -i ${input_align} -p | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
   #else if $input_align.is_of_type('fasta'):
-    goalign reformat nexus --clean-names -i ${input_align}   | sed 's/format datatype=dna;/format datatype=dna gap=-;/g' > align.nx;
+    goalign reformat nexus --clean-names -i ${input_align}    | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
   #else
     ln -sf ${input_align} align.nx;
   #end if
