@@ -21,7 +21,7 @@
 
   cp $commandfile commands.txt;
 
-  mb $commandfile > $stdoutfile;
+  mb commands.txt > $stdoutfile;
 
   ##create data collection
   tar -czf runs.tar.gz * ;
