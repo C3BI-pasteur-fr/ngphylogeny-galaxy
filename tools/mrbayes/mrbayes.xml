@@ -24,9 +24,10 @@
   mb commands.txt > $stdoutfile;
 
   ##create data collection
-  tar -czf runs.tar.gz * ;
+  tar -cf runs.tar * ;
 
   if [ -e align.nx.t ]; then mv align.nx.t align.nx.run1.t; fi;
+  if [ -e align.nx.con.tre ]; then gotree reformat newick -i align.nx.con.tre --format nexus -o align.nx.con.nhx; fi;
 
   gotree reformat newick -i align.nx.run1.t --format nexus -o align_run1.nhx;
 
@@ -65,15 +66,15 @@
   <inputs>
     <param name="input_align" type="data" format="nex,fasta,phylip"
 	   label="Nexus/Fasta/Phylip input file"/>
-    <param name="ngen" type="integer" label="Number of generations" value="10000">
+    <param name="ngen" type="integer" label="Number of generations" value="100000">
       <validator type="in_range" min="1" max="2147483647"
 		 message="Must be greater than or equal to 1"/>
     </param>
-    <param name="nchain" type="integer" label="Number of chains" value="2">
+    <param name="nchain" type="integer" label="Number of chains" value="4">
       <validator type="in_range" min="1" max="2147483647"
 		 message="Must be greater than or equal to 1"/>
     </param>
-    <param name="nrun" type="integer" label="Number of runs" value="2">
+    <param name="nrun" type="integer" label="Number of runs" value="1">
       <validator type="in_range" min="1" max="2147483647"
 		 message="Must be greater than or equal to 1"/>
     </param>
@@ -113,18 +114,18 @@
       <option value="no">No</option>
       <option value="yes">Yes</option>
     </param>
-    <param name="sump" type="boolean" truevalue="sump;" falsevalue="" label="Sumarize parameters"
+    <param name="sump" type="boolean" checked="true" truevalue="sump;" falsevalue="" label="Sumarize parameters"
            help="Summarizes sampled parameter value."/>
-    <param name="sumt" type="boolean" truevalue="sumt;" falsevalue="" label="Sumarize trees"
+    <param name="sumt" type="boolean" checked="true" truevalue="sumt;" falsevalue="" label="Sumarize trees"
            help="Summarizes the trees."/>
-    <param name="plot" type="boolean" truevalue="plot" falsevalue="" label="Include plot?"
+    <param name="plot" type="boolean" checked="true" truevalue="plot" falsevalue="" label="Include plot?"
            help="Creates an x-y graph of the parameter over the course of the chain."/>
     
     <param name="checkfreq" type="integer" label="Checkpoint frequency" value="100000"
            help="Frequency with which checkpoints are written. Used for continuing analysis with append.">
       <validator type="in_range" min="100" max="2147483647" message="Must be greater than or equal to 100"/>
     </param>
-    <param name="append" type="boolean" truevalue="mcmcp append=yes" falsevalue="mcmcp append=no"
+    <param name="append" type="boolean" checked="false" truevalue="mcmcp append=yes" falsevalue="mcmcp append=no"
            label="Append to last checkpoint?"
            help="Requires .ckp file (i.e. that number of generations > checkpoint frequency for previous analysis)."/>
     <param name="seed" type="integer" label="Seed" optional="false" value="5"
@@ -141,7 +142,20 @@
    <data name="usedalignment" format="txt" label="Reformated alignment for mrbayes" from_work_dir="align.nx" />
    <data name="mrbayescommand" format="txt" label="Mr Bayes command file" from_work_dir="commands.txt"  />
    <data name="firstrun" format="nhx" label="Mr Bayes run1 results" from_work_dir="align_run1.nhx" />
-   <data name="allruns" format="tar" label="Mr Bayes All Runs Outputs" from_work_dir="runs.tar.gz" />
+   <data name="allruns" format="tar" label="Mr Bayes All Runs Outputs" from_work_dir="runs.tar" />
+   <data name="consensus" format="nhx" label="Mr Bayes Consensus tree" from_work_dir="align.nx.con.nhx">
+     <filter>sumt</filter>
+   </data>
+   <data name="trprobs" format="txt" label="Mr Bayes trees with probs" from_work_dir="align.nx.trprobs">
+     <filter>sumt</filter>
+   </data>
+   <data name="parts" format="txt" label="Mr Bayes consensus partitions" from_work_dir="align.nx.parts">
+     <filter>sumt</filter>
+   </data>
+
+   gotree reformat newick -i align.nx.run1.t --format nexus -o align_run1.nhx;
+   
+   
   </outputs>
   
   <tests>
