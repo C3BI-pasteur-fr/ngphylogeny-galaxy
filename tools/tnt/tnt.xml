@@ -32,7 +32,7 @@
           #end if
 	#end if
 	#if $ignoregaps == "true"
-	nstats NOGAPS;
+	nstates NOGAPS;
 	#else
 	nstates GAPS;
 	#end if
