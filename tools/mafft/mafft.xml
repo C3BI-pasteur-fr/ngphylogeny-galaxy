@@ -37,7 +37,9 @@
     $reorder
     $getTree
     $outputFormat
-    $input_seqs > $out_align 2> ${out_log};
+    $input_seqs > $out_align 2> log;
+    cat log >&2;
+    mv log ${out_log};
   
     mv ${input_seqs}.tree $guide_tree;
   ]]>
