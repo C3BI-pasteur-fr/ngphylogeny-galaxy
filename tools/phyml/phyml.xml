@@ -7,7 +7,7 @@
   <requirements>
     <requirement type="package" version="3.1">phyml</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement>
-    <requirement type="package" version="0.2.8">goalign</requirement>
+    <requirement type="package" version="0.3.0">goalign</requirement>
   </requirements>
   <version_command>
     <![CDATA[ phyml --version ]]>
@@ -20,21 +20,31 @@
   <command><![CDATA[
   ## Reformat input alignement, and clean sequence names
   #if $input_align.is_of_type('fasta'):
-    goalign reformat phylip    -i $input_align --clean-names -o align_1.tmp;
+    goalign reformat phylip    -i $input_align --clean-names -o align_1.tmp 2> log;
   #else
-    goalign reformat phylip -p -i $input_align --clean-names -o align_1.tmp;
+    goalign reformat phylip -p -i $input_align --clean-names -o align_1.tmp 2> log;
   #end if
   ## Rename taxa to avoid long names
-  goalign trim name -p -a -i align_1.tmp -m mapfile.txt -o align.phy;
+  goalign trim name -p -a -i align_1.tmp -m mapfile.txt -o align.phy 2> log;
   rm align_1.tmp;
 
+  #if  $sequence_type.seqtype == "cfg":
+  #set $info = open( str($input_info) ).read()
+  #else if  $sequence_type.seqtype == "auto":
+  ALPHABET=\$(goalign stats alphabet -p -i align.phy 2> log);
+  PARAMS=();
+  echo \$ALPHABET;
+  if [ "\$ALPHABET" == "nucleotide" ]; then PARAMS+=('--datatype nt --model ${sequence_type.model_dna} -f ${sequence_type.equi_freq_dna}'); elif [ "\$ALPHABET" == "protein" ]; then PARAMS+=('--datatype aa --model ${sequence_type.model_prot} -f ${sequence_type.equi_freq_prot}');fi;
+  #end if
+
+  cat log;
+  
   phyml
     --input align.phy
     ${phylip_format}
     #if $sequence_type.seqtype == "cfg":
       ## Read information of sequence type
       ## read an info file to choose which option set and set a model by default
-      #set $info = open( str($input_info) ).read()
       #if 'dna' in $info:
         --datatype nt
         --model ${sequence_type.model_dna}
@@ -44,6 +54,8 @@
         --model ${sequence_type.model_prot}
         -f ${sequence_type.equi_freq_prot}
       #end if
+    #else if $sequence_type.seqtype == "auto":
+      \${PARAMS[@]}  
     #else
       --datatype ${sequence_type.seqtype}
       #if $sequence_type.seqtype =="nt":
@@ -129,6 +141,7 @@
         <option value="nt">Nucleic acids</option>
         <option value="aa">Amino acids</option>
         <option value="cfg">Type information file</option>
+        <option value="auto" selected="true">Auto detect</option>
       </param>
       <when value="nt">
         <param name="model_dna" type="select" label="Evolutionary model">
@@ -153,6 +166,47 @@
       <when value="cfg">
         <param name="input_info" format="txt" type="data" multiple="false" label="Config file"
                help="Precompute file containning sequence description (dna or protein)"/>
+	<param name="model_dna" type="select" label="Evolutionary model (if DNA data)">
+          <option value="HKY85">HKY85</option>
+          <option value="JC69">JC69</option>
+          <option value="K80">K80</option>
+          <option value="F81">F81</option>
+          <option value="F84">F84</option>
+          <option value="TN93">TN93</option>
+          <option value="GTR" selected="true">GTR</option>
+        </param>
+	<param name="model_prot" type="select" label="Evolutionary model (if Protein data)">
+          <option value="LG" selected="true">LG</option>
+          <option value="WAG">WAG</option>
+          <option value="JTT">JTT</option>
+          <option value="MtREV">MtREV</option>
+          <option value="Dayhoff">Dayhoff</option>
+          <option value="DCMut">DCMut</option>
+          <option value="RtREV">RtREV</option>
+          <option value="CpREV">CpREV</option>
+          <option value="VT">VT</option>
+          <option value="Blosum62">Blosum62</option>
+          <option value="MtMam">MtMam</option>
+          <option value="MtArt">MtArt</option>
+          <option value="HIVw">HIVw</option>
+          <option value="HIVb">HIVb</option>
+        </param>
+        <param name="equi_freq_dna" type="select" label="Equilibrium frequencies (if DNA data)"
+               help="Empirical: frequencies are estimated by counting the occurences in the alignment.
+                     ML/Model:frequencies are estimated using ML for nucleotides or defined by the
+		     proteic substitution model.">
+          <option value="m">ML/Model</option>
+          <option value="e" selected="true">Empirical</option>
+        </param>
+        <param name="equi_freq_prot" type="select" label="Equilibrium frequencies (if Protein data)"
+               help="Empirical: frequencies are estimated by counting the occurences in the alignment.
+                     ML/Model:frequencies are estimated using ML for nucleotides or defined by the
+		     proteic substitution model.">
+          <option value="m" selected="true">ML/Model</option>
+          <option value="e">Empirical</option>
+        </param>
+      </when>
+      <when value="auto">
 	<param name="model_dna" type="select" label="Evolutionary model (if DNA data)">
           <option value="HKY85">HKY85</option>
           <option value="JC69">JC69</option>

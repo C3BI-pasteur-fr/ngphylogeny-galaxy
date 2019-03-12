@@ -9,7 +9,7 @@
   <requirements>
     <requirement type="package" version="2.1.10">FastTree</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement>
-    <requirement type="package" version="0.2.8">goalign</requirement>
+    <requirement type="package" version="0.3.0">goalign</requirement>
     <requirement type="package" version="20170122">parallel</requirement>
   </requirements>
   <stdio>
@@ -26,18 +26,29 @@
     goalign reformat fasta --clean-names -i $input_align    -o align.tmp;
   #end if
 
+  #if $sequence_type.seqtype == "cfg":
+  #set $info = open( str($input_info) ).read()
+  #else if  $sequence_type.seqtype == "auto":
+  ALPHABET=\$(goalign stats alphabet -i align.tmp 2> log);
+  PARAMS=();
+  echo \$ALPHABET;
+  if [ "\$ALPHABET" == "nucleotide" ]; then PARAMS+=('--nt $sequence_type.modeldna'); elif [ "\$ALPHABET" == "protein" ]; then PARAMS+=('$sequence_type.modelprot');fi;
+  #end if
+
+  
   ######## 1st Fasttree #######
   FastTree
   #if $sequence_type.seqtype == 'cfg' :
     ## Automatic sequence detection
     ## read an info file to choose which option set
-    #set $info = open( str($input_info) ).read()
     #if 'dna' in $info:
       -nt
       $sequence_type.modeldna
     #else if 'protein' in $info :
       $sequence_type.modelprot
     #end if
+  #else if $sequence_type.seqtype == 'auto' :
+   \${PARAMS[@]} 
   #else if $sequence_type.seqtype=='-nt':
     $sequence_type.seqtype
     $sequence_type.modeldna
@@ -55,13 +66,14 @@
     #if $sequence_type.seqtype == 'cfg' :
       ## Automatic sequence detection
       ## read an info file to choose which option set
-      #set $info = open( str($input_info) ).read()
       #if 'dna' in $info:
         -nt
         $sequence_type.modeldna
       #else if 'protein' in $info :
         $sequence_type.modelprot
       #end if
+    #else if $sequence_type.seqtype == 'auto' :
+      \${PARAMS[@]}
     #else if $sequence_type.seqtype=='-nt':
       $sequence_type.seqtype
       $sequence_type.modeldna
@@ -105,9 +117,10 @@
     <conditional name="sequence_type">
       <param name="seqtype" type="select" label="Nucleotide or protein alignment"
              help="Specify if the aligned sequences are nucleotide or protein sequences">
-        <option value="-nt" selected="true">Nucleotide</option>
+        <option value="-nt">Nucleotide</option>
         <option value="">Protein</option>
         <option value="cfg">Type information file</option>
+        <option value="auto" selected="true">Auto detect</option>
       </param>
       <when value="">
         <param name="modelprot" type="select" label="Select the model">
@@ -126,6 +139,17 @@
         <param name="input_info" format="txt" type="data" multiple="false"
 	       label="Information file"
                help="Precompute file containning sequence description (dna or protein)"/>
+	<param name="modeldna" type="select" label="Evolutionary model if type is DNA">
+          <option value="-gtr" selected="true" >GTR</option>
+          <option value="">JC</option>
+        </param>
+        <param name="modelprot" type="select" label="Evolutionary model if type is PROTEIN">
+          <option value="-lg" selected="true">LG</option>
+          <option value="-wag">WAG</option>
+          <option value="">JTT</option>
+        </param>
+      </when>
+      <when value="auto">
 	<param name="modeldna" type="select" label="Evolutionary model if type is DNA">
           <option value="-gtr" selected="true" >GTR</option>
           <option value="">JC</option>

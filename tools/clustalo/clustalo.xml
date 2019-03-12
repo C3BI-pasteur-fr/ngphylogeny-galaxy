@@ -6,7 +6,7 @@
   </edam_operations>
   <requirements>
     <requirement type="package" version="1.2.4">clustalo</requirement>
-    <requirement type="package" version="0.2.8">goalign</requirement>
+    <requirement type="package" version="0.3.0">goalign</requirement>
   </requirements>
   <version_command>
     <![CDATA[ clustalo --version   ]]>

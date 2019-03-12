@@ -3,7 +3,7 @@
     <description>phylogenetic analysis under parsimony</description>
     <requirements>
         <requirement type="package" version="1.5">TNT</requirement>
-        <requirement type="package" version="0.2.8">goalign</requirement>
+        <requirement type="package" version="0.3.0">goalign</requirement>
         <requirement type="package" version="0.2.10">gotree</requirement>
     </requirements>
     <command>
@@ -18,19 +18,6 @@
     <configfiles>
       <configfile name="command_file">
 	<![CDATA[
-	#if $sequence_type.seqtype == "nt":
-	  nstates DNA;
-	#else if $sequence_type.seqtype == "aa":
-	  nstates PROT;
-	#else
-          ## Read information of sequence type
-          #set $info = open( str($input_info) ).read()
-          #if 'dna' in $info:
-            nstates DNA;
-          #else if 'protein' in $info:
-            nstates PROT;
-          #end if
-	#end if
 	#if $ignoregaps == "true"
 	nstates NOGAPS;
 	#else
@@ -103,21 +90,6 @@
     </configfiles>
     <inputs>
       <param name="input_align" type="data" format="fasta" label="Input file (fasta)"/>
-      <conditional name="sequence_type">
-	<param name="seqtype" type="select"  label="Data type" display="radio">
-          <option value="nt">Nucleic acids</option>
-          <option value="aa">Amino acids</option>
-	  <option value="cfg">Type information file</option>
-	</param>
-	<when value="nt"/>
-	<when value="aa"/>
-	<when value="cfg">
-	  <param name="input_info" format="txt" type="data" multiple="false"
-		 label="Config file"
-		 help="Precomputed file containning sequence type (dna or protein)"/>
-	</when>
-      </conditional>
-
       <param name="ignoregaps" type="boolean" truevalue="true" falsevalue="false" checked="False" label="Consider Gaps as missing? (otherwise as an additional character)" />
     </inputs>
     <outputs>

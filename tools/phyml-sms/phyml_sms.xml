@@ -7,17 +7,28 @@
   <requirements>
     <requirement type="package" version="1.8.1">phyml-sms</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement> 
-    <requirement type="package" version="0.2.8">goalign</requirement>
+    <requirement type="package" version="0.3.0">goalign</requirement>
   </requirements>
   <command><![CDATA[
   #if $input_align.is_of_type('fasta'):
-    goalign reformat phylip    --clean-names -i $input_align -o align.phy;
+    goalign reformat phylip    --clean-names -i $input_align -o align.phy 2>log;
   #else
-    goalign reformat phylip -p --clean-names -i $input_align -o align.phy;
+    goalign reformat phylip -p --clean-names -i $input_align -o align.phy 2>log;
   #end if
 
   ## Rename sequences
-  goalign trim name -a -p -m map -i align.phy -o align_rename.phy -m name_map;
+  goalign trim name -a -p -m map -i align.phy -o align_rename.phy -m name_map 2>log;
+
+  #if  $sequence.seqtype == "cfg":
+  #set $info = open( str($input_info) ).read()
+  #else if  $sequence.seqtype == "auto":
+  ALPHABET=\$(goalign stats alphabet -p -i align.phy 2> log);
+  PARAMS=();
+  echo \$ALPHABET;
+  if [ "\$ALPHABET" == "nucleotide" ]; then PARAMS+=('-d nt'); elif [ "\$ALPHABET" == "protein" ]; then PARAMS+=('-d aa');fi;
+  #end if
+
+  cat log;
   
   sms.sh
     -i align_rename.phy
@@ -27,12 +38,13 @@
     #if $sequence.seqtype == 'cfg' :
       ## Automatic sequence detection
       ## read an info file to choose which option set
-      #set $info = open( str($input_info) ).read()
       #if 'dna' in $info:
         -d nt
       #else if 'protein' in $info :
         -d aa
       #end if
+    #else if $sequence.seqtype == 'auto' :
+      \${PARAMS[@]}
     #else :
       -d ${sequence.seqtype}
     #end if
@@ -82,9 +94,11 @@
         <option value="nt">Nucleic acids</option>
         <option value="aa">Amino acids</option>
 	<option value="cfg">Type information file</option>
+	<option value="auto" selected="true">Auto detect</option>
       </param>
       <when value="nt" />
       <when value="aa" />
+      <when value="auto" />
       <when value="cfg">
         <param name="input_info" format="txt" type="data"
 	       multiple="false" label="Information file"

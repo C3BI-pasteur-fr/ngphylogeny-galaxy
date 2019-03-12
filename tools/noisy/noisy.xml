@@ -5,14 +5,24 @@
   </edam_operations>
   <requirements>
     <requirement type="package" version="1.5.12">noisy</requirement>
+    <requirement type="package" version="0.3.0">goalign</requirement>
   </requirements>
   <command><![CDATA[
+
+  #if  $sequence_type.seqtype == "cfg":
+  #set $info = open( str($input_info) ).read()
+  #else if  $sequence_type.seqtype == "auto":
+  ALPHABET=\$(goalign stats alphabet -i ${input_align} 2> log);
+  PARAMS=();
+  echo \$ALPHABET;
+  if [ "\$ALPHABET" == "nucleotide" ]; then PARAMS+=('--seqtype D'); elif [ "\$ALPHABET" == "protein" ]; then PARAMS+=('--seqtype P');else PARAMS+=('--seqtype R');fi;
+  #end if
+  
   noisy
     $input_align
     #if $sequence_type.seqtype == 'cfg' :
       ## Automatic sequence detection
       ## read an info file to choose which option set
-      #set $info = open( str($input_info) ).read()
       #if 'dna' in $info:
         --seqtype D
       #else if 'protein' in $info :
@@ -20,6 +30,8 @@
       #else
         --seqtype R
       #end if
+    #else if $sequence_type.seqtype == 'auto' :
+      \${PARAMS[@]}
     #else :
       --seqtype $sequence_type.seqtype
     #end if
@@ -57,10 +69,12 @@
 	<option value="P">Protein</option>
 	<option value="R">RNA</option>
 	<option value="cfg">Type information file</option>
+	<option value="auto" selected="true">Auto detect</option>
       </param>
       <when value="D"/>
       <when value="P"/>
       <when value="R"/>
+      <when value="auto"/>
       <when value="cfg">
 	<param name="input_info" type="data" format="txt"
 	       label="Information file"

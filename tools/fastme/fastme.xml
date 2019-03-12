@@ -7,7 +7,7 @@
   <requirements>
     <requirement type="package" version="2.1.6.1">fastme</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement>
-    <requirement type="package" version="0.2.8">goalign</requirement>
+    <requirement type="package" version="0.3.0">goalign</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" level="fatal"/>
@@ -22,10 +22,20 @@
 	    #else
 	      goalign reformat phylip --clean-names -p -i ${input_align} -o align_1.tmp;
 	    #end if
+	    
 	    ## Rename taxa to avoid long names  
 	    goalign trim name -p -a -i align_1.tmp -m mapfile.txt -o align.tmp;
 	    rm align_1.tmp;
-	     
+
+	    #if $sequence_type.seqtype =="cfg":
+	     #set $info = open( str($input_info) ).read()
+	    #else if $sequence_type.seqtype =="auto":
+	    ALPHABET=\$(goalign stats alphabet -p -i align.tmp 2> log);
+	    PARAMS=();
+	    echo \$ALPHABET;
+	    if [ "\$ALPHABET" == "nucleotide" ]; then PARAMS+=('--dna=${sequence_type.model_dna}'); elif [ "\$ALPHABET" == "protein" ]; then PARAMS+=('--protein=${sequence_type.model_prot}');fi;
+	    #end if
+
             fastme
               --input_data=align.tmp
               --output_tree=out_tree_tmp
@@ -48,6 +58,8 @@
                #else if 'protein' in $info:
                --protein=${sequence_type.model_prot}
                #end if
+            #else if $sequence_type.seqtype =="auto":
+	     \${PARAMS[@]}
             #end if
             #if $gammaChoice.gamma == "true"
               --gamma=${gammaChoice.rate}
@@ -99,6 +111,7 @@
         <option value="p">Protein</option>
         <option value="m">Matrix</option>
         <option value="cfg">Type information file</option>
+        <option value="auto" selected="true">Auto detect</option>
       </param>
       <when value="d">
         <param name="model_dna" type="select" label="Evolutionary model">
@@ -131,6 +144,30 @@
 	<param name="input_info" format="txt" type="data" multiple="false"
 	       label="Config file"
 	       help="Precomputed file containning sequence type (dna or protein)"/>
+	<param name="model_dna" type="select" label="Evolutionary model if type is DNA">
+          <option value="4">F84</option>
+          <option value="R">RY</option>
+          <option value="1">F81</option>
+          <option value="J">JC69</option>
+          <option value="K">K2P</option>
+          <option value="T" selected="true">TN93</option>
+          <option value="p">p-distance</option>
+        </param>
+        <param name="model_prot" type="select" label="Evolutionary model if type is PROTEIN">
+          <option value="L" selected="true">LG</option>
+          <option value="W">WAG</option>
+          <option value="J">JTT</option>
+          <option value="h">Day off</option>
+          <option value="C">CpRev</option>
+          <option value="D">DCMut</option>
+          <option value="b">HIVb</option>
+          <option value="I">HIVw</option>
+          <option value="M">MtREV</option>
+          <option value="R">RtREV</option>
+          <option value="p">p-distance</option>
+        </param>
+      </when>
+      <when value="auto">
 	<param name="model_dna" type="select" label="Evolutionary model if type is DNA">
           <option value="4">F84</option>
           <option value="R">RY</option>

@@ -5,13 +5,26 @@
   </edam_operations>
   <requirements>
     <requirement type="package" version="0.91b">gblocks</requirement>
-    <requirement type="package" version="0.2.8">goalign</requirement>
+    <requirement type="package" version="0.3.0">goalign</requirement>
   </requirements>
+  <stdio>
+    <exit_code range="1:" level="fatal"/>
+  </stdio>
   <command>
     #if $input_align.is_of_type('phylip'):
-      goalign reformat fasta -i ${input_align} -p -o input.fasta;
+    goalign reformat fasta -i ${input_align} -p -o input.fasta 2>log;
+    cat log;
     #else
       ln -s ${input_align} input.fasta;
+    #end if
+
+    #if  $sequence_type.seqtype == "cfg":
+    #set $info = open( str($input_info) ).read()
+    #else if  $sequence_type.seqtype == "auto":
+    ALPHABET=\$(goalign stats alphabet -i input.fasta);
+    PARAMS=();
+    echo \$ALPHABET;
+    if [ "\$ALPHABET" == "nucleotide" ]; then PARAMS+=('-t=d'); elif [ "\$ALPHABET" == "protein" ]; then PARAMS+=('-t=p'); else PARAMS+=('-t=c');fi;
     #end if
 
     Gblocks
@@ -28,7 +41,6 @@
     #if $sequence_type.seqtype =="cfg":
       ## Read information of sequence type
       ## read an info file to choose which option set and set a model by default
-      #set $info = open( str($input_info) ).read()
       #if 'dna' in $info:
         -t=d
       #else if 'protein' in $info:
@@ -36,6 +48,8 @@
       #else:
         -t=c
       #end if
+    #else if $sequence_type.seqtype =="auto":
+      "\${PARAMS[@]}"
     #else
       $sequence_type.seqtype
     #end if
@@ -52,6 +66,7 @@
         <option value="-t=c">Codon</option>
         <option value="-t=p">Protein</option>
         <option value="cfg">Type information file</option>
+        <option value="auto" selected="true">Auto detect</option>
       </param>
       <when value="-t=d"/>
       <when value="-t=c"/>
@@ -61,6 +76,7 @@
 	       multiple="false" label="Information file"
                help="Precompute file containning sequence description (dna or protein)"/>
       </when>
+      <when value="auto"/>
     </conditional>
     <param name="b1" type="text" value="default"
 	   label="Minimum number of sequences for a conserved position (b1)"
@@ -151,3 +167,4 @@ For further informations, please visite the Gblocks_ website.
     <citation type="doi">10.1093/oxfordjournals.molbev.a026334</citation>
   </citations>
 </tool>
+
