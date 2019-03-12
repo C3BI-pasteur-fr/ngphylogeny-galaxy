@@ -13,7 +13,7 @@
     <![CDATA[ phyml --version ]]>
   </version_command>
   <stdio>
-    <regex match="*"
+    <regex match=".+"
            source="stderr"
            level="fatal"/>
   </stdio>
