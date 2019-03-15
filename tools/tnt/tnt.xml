@@ -8,16 +8,19 @@
     </requirements>
     <command>
       <![CDATA[
-	       goalign reformat tnt --clean-names -i $input_align -o tnt_input.tnt ;
-	       goalign stats taxa -i $input_align | awk '{print \$1+1 "\t" \$2}' > map ;
-	       tnt < $command_file 2>&1 ;
+	       goalign reformat tnt --clean-names -i $input_align -o tnt_input.tnt 2>log;
+	       goalign stats taxa -i $input_align 2>log | awk '{print \$1+1 "\t" \$2}' > map ;
+	       if [ \$(goalign stats alphabet -i $input_align 2>log) == "protein" ]; then sed 's/__ALPHABET__/PROT/' $command_file > commands; else sed 's/__ALPHABET__/DNA/' $command_file > commands; fi;
+	       cat log;
+	       tnt < commands 2>&1 ;
 	       grep "(" tnt_trees.tre | gotree rename -m map -o $out_tree ;
-	       cat $command_file > $tnt_commands
+	       cat commands > $tnt_commands;
       ]]>
     </command>
     <configfiles>
       <configfile name="command_file">
 	<![CDATA[
+	nstates __ALPHABET__;
 	#if $ignoregaps == "true"
 	nstates NOGAPS;
 	#else
