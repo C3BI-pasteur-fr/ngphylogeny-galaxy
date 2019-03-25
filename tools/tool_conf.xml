@@ -15,6 +15,7 @@
     <tool file="/local_tools/tnt/tnt.xml" />
     <tool file="/local_tools/bmge/bmge.xml" />
     <tool file="/local_tools/phyml/phyml.xml" />
+    <tool file="/local_tools/trimal/trimal.xml" />
     <tool file="/local_tools/seqtypedetect/seqtypedetect.xml" />
     <tool file="/local_tools/clustalo/clustalo.xml" />
   </section>
