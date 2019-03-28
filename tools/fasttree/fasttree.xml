@@ -32,7 +32,7 @@
   ALPHABET=\$(goalign stats alphabet -i align.tmp 2> log);
   PARAMS=();
   echo \$ALPHABET;
-  if [ "\$ALPHABET" == "nucleotide" ]; then PARAMS+=('--nt $sequence_type.modeldna'); elif [ "\$ALPHABET" == "protein" ]; then PARAMS+=('$sequence_type.modelprot');fi;
+  if [ "\$ALPHABET" == "nucleotide" ]; then PARAMS+=('-nt $sequence_type.modeldna'); elif [ "\$ALPHABET" == "protein" ]; then PARAMS+=('$sequence_type.modelprot');fi;
   #end if
 
   
@@ -92,7 +92,7 @@
     -o tbe_norm_tree.nhx
     --out-raw tbe_raw_tree.nhx
     -l tbe_log.txt
-    -t \${GALAXY_SLOTS}
+    -t 2
     --moved-taxa --highest-per-branches
     --dist-cutoff 0.3
     --silent;
