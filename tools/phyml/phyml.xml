@@ -133,7 +133,6 @@
     <param name="phylip_format" type="select" label="interleaved format (if input is phylip)"
 	   display="radio">
       <option value="">Interleaved</option>
-      <option value="--sequential">Sequential</option>
     </param>
     <param name="nb_data_set" type="integer" min="1" value="1" label="Number of data sets"/>
     <conditional name="sequence_type">
