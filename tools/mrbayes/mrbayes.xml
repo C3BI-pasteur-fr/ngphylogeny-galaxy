@@ -12,9 +12,9 @@
   <version_command>mb -version</version_command>
   <command><![CDATA[
   #if $input_align.is_of_type('phylip'):
-    goalign trim name -a -i ${input_align} -p -m map | goalign reformat nexus --clean-names -p | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
+    goalign rename --clean-names -i ${input_align} -p | goalign trim name -a -p -m map | goalign reformat nexus --clean-names -p | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
   #else if $input_align.is_of_type('fasta'):
-    goalign trim name -a -i ${input_align}    -m map | goalign reformat nexus --clean-names | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
+    goalign rename --clean-names -i ${input_align} -p | goalign trim name -a    -m map | goalign reformat nexus --clean-names | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
   #else
     touch map
     ln -sf ${input_align} align.nx;
