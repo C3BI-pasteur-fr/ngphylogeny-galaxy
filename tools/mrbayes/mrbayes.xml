@@ -12,10 +12,11 @@
   <version_command>mb -version</version_command>
   <command><![CDATA[
   #if $input_align.is_of_type('phylip'):
-    goalign reformat nexus --clean-names -i ${input_align} -p | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
+    goalign trim name -a -i ${input_align} -p -m map | goalign reformat nexus --clean-names -p | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
   #else if $input_align.is_of_type('fasta'):
-    goalign reformat nexus --clean-names -i ${input_align}    | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
+    goalign trim name -a -i ${input_align}    -m map | goalign reformat nexus --clean-names | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
   #else
+    touch map
     ln -sf ${input_align} align.nx;
   #end if
 
@@ -27,9 +28,9 @@
   tar -cf runs.tar * ;
 
   if [ -e align.nx.t ]; then mv align.nx.t align.nx.run1.t; fi;
-  if [ -e align.nx.con.tre ]; then gotree reformat newick -i align.nx.con.tre --format nexus -o align.nx.con.nhx; fi;
+  if [ -e align.nx.con.tre ]; then gotree reformat newick -i align.nx.con.tre --format nexus | gotree rename -m map -r -o align.nx.con.nhx; fi;
 
-  gotree reformat newick -i align.nx.run1.t --format nexus -o align_run1.nhx;
+  gotree reformat newick -i align.nx.run1.t --format nexus | gotree rename -m map -r -o align_run1.nhx;
 
   ]]>
   </command>
