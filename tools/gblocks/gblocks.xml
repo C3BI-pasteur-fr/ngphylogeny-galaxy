@@ -12,10 +12,10 @@
   </stdio>
   <command>
     #if $input_align.is_of_type('phylip'):
-    goalign reformat fasta -i ${input_align} -p -o input.fasta 2>log;
+    goalign reformat fasta -i ${input_align} -p | goalign trim name -a -o input.fasta -m map 2>log;
     cat log;
     #else
-      ln -s ${input_align} input.fasta;
+      goalign trim name -a -i ${input_align} -o input.fasta -m map;
     #end if
 
     #if  $sequence_type.seqtype == "cfg":
@@ -54,7 +54,7 @@
       $sequence_type.seqtype
     #end if
     > ${gblocks_log};
-    mv input.fasta-gb ${out_align};
+    goalign rename -i input.fasta-gb -m map -r -o ${out_align};
     mv input.fasta-gb.htm ${out_html};
     </command>
   <inputs>
