@@ -12,11 +12,11 @@
   <version_command>mb -version</version_command>
   <command><![CDATA[
   #if $input_align.is_of_type('phylip'):
-    goalign rename --clean-names -i ${input_align} -p | goalign trim name -a -p -m map | goalign reformat nexus --clean-names -p | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
+    goalign rename --clean-names -i ${input_align} -p | goalign trim name -a -p -m map.txt | goalign reformat nexus --clean-names -p | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
   #else if $input_align.is_of_type('fasta'):
-    goalign rename --clean-names -i ${input_align} | goalign trim name -a    -m map | goalign reformat nexus --clean-names | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
+    goalign rename --clean-names -i ${input_align} | goalign trim name -a    -m map.txt | goalign reformat nexus --clean-names | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
   #else
-    touch map
+    touch map.txt
     ln -sf ${input_align} align.nx;
   #end if
 
@@ -28,9 +28,9 @@
   tar -cf runs.tar * ;
 
   if [ -e align.nx.t ]; then mv align.nx.t align.nx.run1.t; fi;
-  if [ -e align.nx.con.tre ]; then gotree reformat newick -i align.nx.con.tre --format nexus | gotree rename -m map -r -o align.nx.con.nhx; fi;
+  if [ -e align.nx.con.tre ]; then gotree reformat newick -i align.nx.con.tre --format nexus | gotree rename -m map.txt -r -o align.nx.con.nhx; fi;
 
-  gotree reformat newick -i align.nx.run1.t --format nexus | gotree rename -m map -r -o align_run1.nhx;
+  gotree reformat newick -i align.nx.run1.t --format nexus | gotree rename -m map.txt -r -o align_run1.nhx;
 
   ]]>
   </command>
@@ -144,6 +144,7 @@
    <data name="mrbayescommand" format="txt" label="Mr Bayes command file" from_work_dir="commands.txt"  />
    <data name="firstrun" format="nhx" label="Mr Bayes run1 results" from_work_dir="align_run1.nhx" />
    <data name="allruns" format="tar" label="Mr Bayes All Runs Outputs" from_work_dir="runs.tar" />
+   <data name="mapfile" format="txt" label="Mapping between short sequence id and names" from_work_dir="map.txt" />
    <data name="consensus" format="nhx" label="Mr Bayes Consensus tree" from_work_dir="align.nx.con.nhx">
      <filter>sumt</filter>
    </data>
