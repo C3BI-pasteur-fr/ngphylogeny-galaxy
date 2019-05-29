@@ -22,8 +22,9 @@
 
   cp $commandfile commands.txt;
 
-  \$group=\$(grep ${outgroup} map | cut -f 2);
-  if [ -z "\$group" ]; then  echo "outgroup \$group;" >> commands.txt ; else echo "outgroup ${outgroup};" >> commands.txt ;fi;
+  group=\$(grep ${outgroup} map.txt | cut -f 2);
+  if [ -z "\$group" ]; then  echo "outgroup ${outgroup};" >> commands.txt ; else echo "outgroup \$group;" >> commands.txt ;fi;
+  echo "end;" >> commands.txt;
   
   mb commands.txt > $stdoutfile;
 
@@ -64,7 +65,6 @@
             #if str($plot) == "plot"
                 plot;
             #end if
-            end;
     </configfile>
   </configfiles>
   <inputs>
