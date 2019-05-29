@@ -22,7 +22,11 @@
 
   cp $commandfile commands.txt;
 
+  \$group=\$(grep ${outgroup} map | cut -f 2);
+  if [ -z "\$group" ]; then  echo "outgroup \$group;" >> commands.txt ; else echo "outgroup ${outgroup};" >> commands.txt ;fi;
+  
   mb commands.txt > $stdoutfile;
+
 
   ##create data collection
   tar -cf runs.tar * ;
@@ -41,7 +45,6 @@
                 set Swapseed=$swapseed;
                 set quitonerror=yes;
                 execute align.nx;
-                outgroup $outgroup;
                 $model;
                 lset rates=$rates;
                 mcmcp ngen=$ngen
