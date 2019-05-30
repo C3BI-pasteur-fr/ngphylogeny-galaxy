@@ -54,6 +54,9 @@
       $sequence_type.seqtype
     #end if
     > ${gblocks_log};
+
+    if grep -q " 0 positions" ${gblocks_log}; then echo "Alignment is empty after GBlocks" >&amp;2; exit 1; fi;
+    
     goalign rename -i input.fasta-gb -m map -r -o ${out_align};
     mv input.fasta-gb.htm ${out_html};
     </command>
