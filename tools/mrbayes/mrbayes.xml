@@ -22,7 +22,7 @@
 
   cp $commandfile commands.txt;
 
-  group=\$(grep ${outgroup} map.txt | cut -f 2);
+  group=\$(grep -e "^${outgroup}\s" map.txt | cut -f 2);
   if [ -z "\$group" ]; then  echo "outgroup ${outgroup};" >> commands.txt ; else echo "outgroup \$group;" >> commands.txt ;fi;
   echo "end;" >> commands.txt;
   
