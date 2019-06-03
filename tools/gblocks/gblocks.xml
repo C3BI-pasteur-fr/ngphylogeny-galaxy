@@ -11,6 +11,7 @@
     <exit_code range="1:" level="fatal"/>
   </stdio>
   <command>
+    <![CDATA[
     #if $input_align.is_of_type('phylip'):
     goalign reformat fasta -i ${input_align} -p | goalign trim name -a -o input.fasta -m map 2>log;
     cat log;
@@ -55,10 +56,11 @@
     #end if
     > ${gblocks_log};
 
-    if grep -q " 0 positions" ${gblocks_log}; then echo "Alignment is empty after GBlocks" >&amp;2; exit 1; fi;
+    if grep -q " 0 positions" ${gblocks_log}; then echo "Alignment is empty after GBlocks" >&2; exit 1; fi;
     
     goalign rename -i input.fasta-gb -m map -r -o ${out_align};
     mv input.fasta-gb.htm ${out_html};
+    ]]>
     </command>
   <inputs>
     <param name="input_align" type="data" format="fasta,phylip"
