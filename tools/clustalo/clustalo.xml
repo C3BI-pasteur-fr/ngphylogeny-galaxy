@@ -137,7 +137,7 @@
         <when input="outputFormat" value="vienna" format="vienna" />                 
       </change_format>
     </data>    
-    <data name="guide_tree" format="nhx,nw,nwk" label="alignment Guide tree" from_work_dir="guidetree.txt">
+    <data name="guide_tree" format="nhx" label="alignment Guide tree" from_work_dir="guidetree.txt">
       <filter>getTree == "--guidetree-out=guidetree.txt"</filter>
     </data> 
   </outputs>
