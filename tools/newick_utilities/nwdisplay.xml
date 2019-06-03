@@ -7,6 +7,8 @@
     <requirement type="package" version="1.6">newick_utilities</requirement>
   </requirements>
   <command>
+    sed 's/[^[:print:]]//' ${input_tree} > input;
+
     nw_display
       -s 
       $scalebar
@@ -32,7 +34,7 @@
         -d "stroke:grey;fill:none;stroke-width:2;stoke-linecap:round;"
         -w  $width
         $radial
-       $input_tree > out_tree.svg;
+       input > out_tree.svg;
        csplit -zs -f tree_ -b '%02d.svg' out_tree.svg '/xml/' {*};
        tar -cf out_trees.tar tree_*.svg;
   </command>
