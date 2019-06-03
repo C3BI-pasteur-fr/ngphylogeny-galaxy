@@ -73,8 +73,11 @@
               --output_boot=fastme_bootstrap_trees_tmp
               --bootstrap=${bootstrap.replicates}
             #end if
-              >> tmp_stdout;
+              >> tmp_stdout 2> tmp_stderr;
               cp tmp_stdout $out_log;
+
+            if grep -q "Give up this dataset because at least one distance exceeds" ${out_log}; then echo "Some sequences are too distant to compute distances" >&2; exit 1; fi;
+	    cat tmp_stderr >&2;
 
             #if $bootstrap.do_bootstrap == "true":
               ##Compute BOOSTER bootstrap supports
