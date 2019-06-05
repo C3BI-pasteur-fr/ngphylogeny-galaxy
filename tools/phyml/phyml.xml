@@ -18,11 +18,13 @@
            level="fatal"/>
   </stdio>
   <command><![CDATA[
+  NBDATASETS=1;
   ## Reformat input alignement, and clean sequence names
   #if $input_align.is_of_type('fasta'):
     goalign reformat phylip    -i $input_align --clean-names -o align_1.tmp 2> log;
   #else
     goalign reformat phylip -p -i $input_align --clean-names -o align_1.tmp 2> log;
+    NBDATASETS=\$(goalign stats length -p -i align_1.tmp | wc);
   #end if
   ## Rename taxa to avoid long names
   goalign trim name -p -a -i align_1.tmp -m mapfile.txt -o align.phy 2> log;
@@ -66,7 +68,7 @@
 	-f ${sequence_type.equi_freq_prot}
       #end if
     #end if
-    --multiple ${nb_data_set}
+    --multiple \$NBDATASETS
     #if (str($bootstrap.support) in ['0','-1','-2','-4','-5']):
       --bootstrap ${bootstrap.support}
     #else:
@@ -134,7 +136,6 @@
 	   display="radio">
       <option value="">Interleaved</option>
     </param>
-    <param name="nb_data_set" type="integer" min="1" value="1" label="Number of data sets"/>
     <conditional name="sequence_type">
       <param name="seqtype" type="select" label="Data type" display="radio">
         <option value="nt">Nucleic acids</option>
@@ -409,10 +410,6 @@ OPTIONS
   
   -q, --sequential
       Changes interleaved format (default) to sequential format.
-  
-  
-  -n, --multiple nb_data_sets
-      nb_data_sets is an integer corresponding to the number of data sets to analyse.
   
   -p, --pars
       Use a minimum parsimony starting tree. This option is taken into account when the '-u' option
