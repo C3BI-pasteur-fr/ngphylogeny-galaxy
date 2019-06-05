@@ -24,12 +24,16 @@
     goalign reformat phylip    -i $input_align --clean-names -o align_1.tmp 2> log;
   #else
     goalign reformat phylip -p -i $input_align --clean-names -o align_1.tmp 2> log;
-    NBDATASETS=\$(goalign stats length -p -i align_1.tmp | wc);
+    NBDATASETS=\$(goalign stats length -p -i align_1.tmp | wc -l);
   #end if
   ## Rename taxa to avoid long names
-  goalign trim name -p -a -i align_1.tmp -m mapfile.txt -o align.phy 2> log;
+  goalign trim name -p -a -i align_1.tmp -m mapfile.txt --one-line -o align.phy 2> log;
   rm align_1.tmp;
 
+  #if ${bootstrap.support} == "1":
+    NBDATASETS=1;
+  #end if
+  
   #if  $sequence_type.seqtype == "cfg":
   #set $info = open( str($input_info) ).read()
   #else if  $sequence_type.seqtype == "auto":
@@ -296,7 +300,7 @@
     </param>
     <conditional name="bootstrap">
       <param name="support" type="select" label="Statistical test for branch support"
-             help="Use aLRT or aBayes to save computing time">
+             help="Use aLRT or aBayes to save computing time.">
         <option value="0" selected='true'>No support</option>
         <option value="1">Bootstrap</option>
         <option value="-1">Likelihood aLRT statistics</option>
