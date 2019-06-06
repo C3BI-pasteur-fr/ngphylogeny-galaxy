@@ -62,7 +62,7 @@
     #else if $bootstrap.support == "boot":
       -b $bootstrap.replicates
     #end if
-    #if $randstart.value != 0 :
+    #if $randstart.value != 0 and $move == "SPR" :
       -r $randstart
     #end if
     > ${out_stdout};
@@ -134,7 +134,7 @@
     <param format="nhx,nwk" name="input_user_tree" type="data"
 	   label="User Tree File (Optional)" help="newick format" optional="true" />
     <param type="integer" name="randstart" value="0" min="0" max="10"
-	   label="Number of random starting trees"/>
+	   label="Number of random starting trees (no effect when NNI selected)"/>
   </inputs>
   <outputs>
     <data name="tbe_log" format="txt" label="Booster: tbe_log.txt"
