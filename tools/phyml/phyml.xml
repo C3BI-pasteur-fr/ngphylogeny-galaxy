@@ -30,7 +30,7 @@
   goalign trim name -p -a -i align_1.tmp -m mapfile.txt --one-line -o align.phy 2> log;
   rm align_1.tmp;
 
-  #if ${bootstrap.support} == "1":
+  #if $bootstrap.support == "1":
     NBDATASETS=1;
   #end if
   
