@@ -16,7 +16,7 @@
   #else if $input_align.is_of_type('fasta'):
     goalign rename --clean-names -i ${input_align} | goalign trim name -a    -m map.txt | goalign reformat nexus --clean-names | sed 's/format datatype=\(dna\|protein\);/format datatype=\1 gap=-;/g' > align.nx;
   #else
-    touch map.txt
+    touch map.txt;
     ln -sf ${input_align} align.nx;
   #end if
 
