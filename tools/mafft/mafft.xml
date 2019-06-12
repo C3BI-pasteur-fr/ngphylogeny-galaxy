@@ -14,6 +14,9 @@
     ]]>
   </version_command>
   <command><![CDATA[
+
+  awk '{if($0~/^>/){print $0}else{gsub("\\.","",$0); gsub("-","",$0);print $0}}' $input_seqs > input_tmp.txt;
+  
   #if $cond_flavour.flavourType != 'custom'
     $cond_flavour.flavourType
   #elif $cond_flavour.flavourType == 'custom'
@@ -41,11 +44,11 @@
     $reorder
     $getTree
     $outputFormat
-    $input_seqs > $out_align 2> log;
+    input_tmp.txt > $out_align 2> log;
     cat log >&2;
     mv log ${out_log};
   
-    mv ${input_seqs}.tree $guide_tree;
+    mv input_tmp.txt.tree $guide_tree;
   ]]>
   </command>
   <inputs>
