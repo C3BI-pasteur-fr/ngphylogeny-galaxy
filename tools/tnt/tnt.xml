@@ -8,9 +8,10 @@
     </requirements>
     <command>
       <![CDATA[
-	       goalign reformat tnt --clean-names -i $input_align -o tnt_input.tnt 2>log;
-	       goalign stats taxa -i $input_align 2>log | awk '{print \$1+1 "\t" \$2}' > map ;
-	       if [ \$(goalign stats alphabet -i $input_align 2>log) == "protein" ]; then sed 's/__ALPHABET__/PROT/' $command_file > commands; else sed 's/__ALPHABET__/DNA/' $command_file > commands; fi;
+	       goalign rename --clean-names -i $input_align -o tmp 2>log;
+	       goalign reformat tnt --clean-names -i tmp -o tnt_input.tnt 2>log;
+	       goalign stats taxa -i tmp 2>log | awk '{print \$1+1 "\t" \$2}' > map ;
+	       if [ \$(goalign stats alphabet -i tmp 2>log) == "protein" ]; then sed 's/__ALPHABET__/PROT/' $command_file > commands; else sed 's/__ALPHABET__/DNA/' $command_file > commands; fi;
 	       cat log;
 	       tnt < commands 2>&1 ;
 	       grep "(" tnt_trees.tre | gotree rename -m map -o $out_tree ;
