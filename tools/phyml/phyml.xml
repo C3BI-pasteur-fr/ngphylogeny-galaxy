@@ -353,6 +353,7 @@
     <data name="out_tree" format="nhx"
 	  label="PhyML Newick tree"
           from_work_dir="*_phyml_tree.txt" />
+    <data name="mapfile" format="txt" label="Mapping between short sequence id and names (useful to interpert some bootstrap log files if any)" from_work_dir="mapfile.txt" />
   </outputs>
   <tests>
     <test>

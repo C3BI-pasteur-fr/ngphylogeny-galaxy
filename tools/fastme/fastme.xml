@@ -269,6 +269,7 @@
     <data name="out_log" format="txt" label="FastME Information"/>
     <data name="dist_matrix" format="txt" label="FastME Distance matrix" />
     <data name="out_tree" format="nhx" label="Output Tree" />
+    <data name="mapfile" format="txt" label="Mapping between short sequence id and names (useful to interpert some bootstrap log files if any)" from_work_dir="mapfile.txt" />    
   </outputs>
   <tests>
     <test>
