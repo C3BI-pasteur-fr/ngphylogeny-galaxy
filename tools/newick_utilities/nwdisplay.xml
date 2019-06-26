@@ -5,9 +5,16 @@
   </edam_operations>
   <requirements>
     <requirement type="package" version="1.6">newick_utilities</requirement>
+    <requirement type="package" version="0.2.10">gotree</requirement>
   </requirements>
   <command>
     sed 's/[^[:print:]]//' ${input_tree} > input;
+
+    #if $input_tree.is_of_type('nex'):
+      gotree reformat newick -f nexus -i input > input2;
+      mv input2 input;
+    #end if
+
 
     nw_display
       -s 
@@ -39,7 +46,7 @@
        tar -cf out_trees.tar tree_*.svg;
   </command>
   <inputs>
-    <param name="input_tree" format="nhx" type="data"
+    <param name="input_tree" format="nhx,nex" type="data"
 	   label="Newick file" />
     <param name="scalebar" type="boolean" truevalue="" falsevalue="-S"
 	   checked="True" label="Display scale bar" />
