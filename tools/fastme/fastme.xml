@@ -243,7 +243,7 @@
 	       label="Number of replicates"/>
       </when>
     </conditional>
-    <param name="decimalPrecision" type="integer" value="6" min="0"
+    <param name="decimalPrecision" type="integer" value="6" min="1" max="17"
 	   label="Decimal precision for branch lengths"/>
   </inputs>
   <outputs>
