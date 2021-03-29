@@ -14,13 +14,15 @@ ENV GALAXY_CONFIG_TOOL_CONFIG_FILE=config/tool_conf.xml.sample,config/shed_tool_
 ENV GALAXY_DOCKER_ENABLED=True
 
 ## Install environment modules & singularity
-RUN apt-get update --fix-missing \
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && mv /etc/apt/sources.list.d/htcondor.list* /tmp \
+    && apt-get update \
     && apt-get install -y wget libssl-dev libssl1.0.0 \
-    && sudo apt-get update \
+    && apt-get update \
     && apt-get install -y environment-modules squashfs-tools libtool libarchive-dev \
-    && git clone https://github.com/singularityware/singularity.git \
+    && mv /tmp/htcondor.list* /etc/apt/sources.list.d/ \
+    && git clone https://github.com/lyklev/singularity \
     && cd singularity \
-    && git checkout 2.6.0 \
     && ./autogen.sh \
     && ./configure --prefix=/usr/local \
     && make \
