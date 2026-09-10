@@ -35,14 +35,33 @@ Using these tools, several workflows are defined:
 * PhyML OneClick: Complete workflow using PhyML
 
 ## Galaxy instance
-To test these galaxy tools and workflows, you can use the [docker image](https://hub.docker.com/r/evolbioinfo/ngphylogeny-galaxy/) automatically built on docker hub:
 
 ```
-docker run --privileged=true \
-           -p 8080:80 \
-		   -p 8121:21 \
-		   -p 8122:22 \
-		   evolbioinfo/ngphylogeny-galaxy
+docker compose up -d
+./docker/build-combined-images.sh   # one-time, see below
 ```
 
-This image integrates a running galaxy instance, with all phylogenetic tools installed on environment modules using singularity images.
+Galaxy comes up on http://localhost:8080. The `tools/` directory is bind-mounted
+into the container and used directly (`tools/tool_conf.xml` lists every tool),
+so editing a tool's XML and restarting the container (`docker compose restart galaxy`)
+is enough to pick up changes - no image rebuild needed.
+
+`docker-compose.yml` runs the actively-maintained [`quay.io/bgruening/galaxy`](https://github.com/bgruening/docker-galaxy-stable)
+image in `privileged: true` mode, which enables its built-in Docker-in-Docker
+daemon. This lets Galaxy run tools as containers:
+
+* Tools with a resolvable bioconda package (the majority - MAFFT, PhyML,
+  BMGE, FastTree, MrBayes, ...) are auto-containerized on demand by Galaxy's
+  `mulled`/`build_mulled` container resolvers - no extra setup.
+* **PhyML-SMS** and **Noisy** have no bioconda package at all, so their tool
+  XML instead declares an explicit `<container>` pointing at a small
+  locally-built image (`docker/combined-images/*/Dockerfile`, each layering
+  `goalign`/`gotree` onto the matching `evolbioinfo/*` base image). These
+  images only exist inside this Galaxy container's own internal Docker
+  daemon, so they need to be built there once with
+  `./docker/build-combined-images.sh` after the stack comes up (and again if
+  those Dockerfiles change) - they are not pulled from a registry
+  automatically.
+* **TNT** has neither a bioconda package nor a Docker image available (it's
+  under a license that requires downloading it manually from the Willi
+  Hennig Society); its tool wrapper is present but won't run out of the box.

@@ -1,0 +1,33 @@
+services:
+  galaxy:
+    image: quay.io/bgruening/galaxy:latest
+    # Docker-in-Docker (used to run tools as containers - see "Container-based
+    # tool execution" in README.md) needs a privileged container.
+    privileged: true
+    ports:
+      - "8080:80"
+    volumes:
+      - ./tools:/local_tools
+      - galaxy-export:/export
+      - galaxy-docker:/var/lib/docker
+      - galaxy-data:/data
+    environment:
+      GALAXY_CONFIG_TOOL_CONFIG_FILE: "/etc/galaxy/tool_conf.xml,/local_tools/tool_conf.xml"
+      GALAXY_CONFIG_CONDA_AUTO_INSTALL: "True"
+      # Route every job through the docker_dispatch destination already
+      # defined in this image's job_conf.xml: tools whose dependencies
+      # resolve to a container (mulled/build_mulled auto-resolution, or an
+      # explicit <container> in the tool XML) run containerized; everything
+      # else falls back to plain conda-resolved execution.
+      GALAXY_DESTINATIONS_DEFAULT: "docker_dispatch"
+      GALAXY_DESTINATIONS_DOCKER_DEFAULT: "slurm_cluster_docker"
+      GALAXY_DESTINATIONS_NO_DOCKER_DEFAULT: "slurm_cluster"
+      # Run containerized jobs as this image's galaxy user (uid/gid 1450) so
+      # output files aren't left root-owned (containers otherwise default to
+      # running as root).
+      GALAXY_DOCKER_SET_USER: "1450:1450"
+
+volumes:
+  galaxy-export:
+  galaxy-docker:
+  galaxy-data:
