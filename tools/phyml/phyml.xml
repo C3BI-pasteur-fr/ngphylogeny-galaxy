@@ -1,13 +1,15 @@
-<tool id="phyml" name="PhyML" version="3.1_1">
+<tool id="phyml" name="PhyML" version="3.3_1">
   <description>Phylogeny software based on the maximum-likelihood</description>
   <edam_operations>
     <edam_operation>operation_0540</edam_operation>
     <edam_operation>operation_0324</edam_operation>
   </edam_operations>
   <requirements>
-    <requirement type="package" version="3.1">phyml</requirement>
+    <requirement type="package" version="3.3.20190909">phyml</requirement>
+    <requirement type="package" version="4.0.5">openmpi</requirement>
+    <requirement type="package">openssh</requirement>
     <requirement type="package" version="0.2.10">gotree</requirement>
-    <requirement type="package" version="0.3.0">goalign</requirement>
+    <requirement type="package" version="0.3.1">goalign</requirement>
   </requirements>
   <version_command>
     <![CDATA[ phyml --version ]]>
@@ -45,7 +47,7 @@
 
   cat log;
   
-  phyml
+  mpirun -n \${GALAXY_SLOTS} phyml
     --input align.phy
     ${phylip_format}
     #if $sequence_type.seqtype == "cfg":

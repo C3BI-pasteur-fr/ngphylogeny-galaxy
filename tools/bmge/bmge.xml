@@ -4,7 +4,7 @@
     <edam_operation>operation_2089</edam_operation>
   </edam_operations>
   <requirements>
-    <requirement type="package" version="1.12">BMGE</requirement>
+    <requirement type="package" version="1.12">bmge</requirement>
     <requirement type="package" version="0.3.0">goalign</requirement>
   </requirements>
   <command>
@@ -17,7 +17,7 @@
 	     echo \$ALPHABET;
 	     if [ "\$ALPHABET" == "nucleotide" ]; then PARAMS+=('-t DNA');PARAMS+=('-m DNAPAM${dataType.estimated_nt}'); elif [ "\$ALPHABET" == "protein" ]; then PARAMS+=('-t AA');PARAMS+=('-m BLOSUM${dataType.estimated_aa}');fi;
 	     #end if
-	     BMGE -i ${input_align}
+	     bmge -i ${input_align}
 	       #if $dataType.codeSeq == "cfg":
 	         ## Read information of sequence type
 	         #if 'dna' in $info or 'nucleotide' in $info:

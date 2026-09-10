@@ -58,7 +58,7 @@ def analyse_file(inputfile):
     """
     typeofseq = ""
 
-    with open(inputfile, "rU") as input_handle:
+    with open(inputfile, "r") as input_handle:
 
         sequence = ""
         first_line = input_handle.readline()
@@ -89,4 +89,4 @@ if __name__ == "__main__":
     parser.add_argument('file', nargs='?', type=str, action="store", default="", help="input fasta file")
     args = parser.parse_args()
 
-    print "%s" % (analyse_file(args.file))
+    print("%s" % (analyse_file(args.file)))

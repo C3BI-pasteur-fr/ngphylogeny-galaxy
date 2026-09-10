@@ -5,9 +5,7 @@
     <edam_operation>operation_0324</edam_operation>
   </edam_operations>
   <requirements>
-    <requirement type="package" version="1.8.1">phyml-sms</requirement>
-    <requirement type="package" version="0.2.10">gotree</requirement> 
-    <requirement type="package" version="0.3.0">goalign</requirement>
+    <container type="docker">local/phyml-sms-full:v1.8.1</container>
   </requirements>
   <command><![CDATA[
   #if $input_align.is_of_type('fasta'):
@@ -23,9 +21,9 @@
   #set $info = open( str($input_info) ).read()
   #else if  $sequence.seqtype == "auto":
   ALPHABET=\$(goalign stats alphabet -p -i align.phy 2> log);
-  PARAMS=();
+  PARAMS="";
   echo \$ALPHABET;
-  if [ "\$ALPHABET" == "nucleotide" ]; then PARAMS+=('-d nt'); elif [ "\$ALPHABET" == "protein" ]; then PARAMS+=('-d aa');fi;
+  if [ "\$ALPHABET" = "nucleotide" ]; then PARAMS="-d nt"; elif [ "\$ALPHABET" = "protein" ]; then PARAMS="-d aa"; fi;
   #end if
 
   cat log;
@@ -44,7 +42,7 @@
         -d aa
       #end if
     #else if $sequence.seqtype == 'auto' :
-      \${PARAMS[@]}
+      \$PARAMS
     #else :
       -d ${sequence.seqtype}
     #end if

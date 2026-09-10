@@ -4,8 +4,7 @@
     <edam_operation>operation_0368</edam_operation>
   </edam_operations>
   <requirements>
-    <requirement type="package" version="1.5.12">noisy</requirement>
-    <requirement type="package" version="0.3.0">goalign</requirement>
+    <container type="docker">local/noisy-full:v1.5.12</container>
   </requirements>
   <command><![CDATA[
 
@@ -13,9 +12,9 @@
   #set $info = open( str($input_info) ).read()
   #else if  $sequence_type.seqtype == "auto":
   ALPHABET=\$(goalign stats alphabet -i ${input_align} 2> log);
-  PARAMS=();
+  PARAMS="";
   echo \$ALPHABET;
-  if [ "\$ALPHABET" == "nucleotide" ]; then PARAMS+=('--seqtype D'); elif [ "\$ALPHABET" == "protein" ]; then PARAMS+=('--seqtype P');else PARAMS+=('--seqtype R');fi;
+  if [ "\$ALPHABET" = "nucleotide" ]; then PARAMS="--seqtype D"; elif [ "\$ALPHABET" = "protein" ]; then PARAMS="--seqtype P"; else PARAMS="--seqtype R"; fi;
   #end if
   
   noisy
@@ -31,7 +30,7 @@
         --seqtype R
       #end if
     #else if $sequence_type.seqtype == 'auto' :
-      \${PARAMS[@]}
+      \$PARAMS
     #else :
       --seqtype $sequence_type.seqtype
     #end if
