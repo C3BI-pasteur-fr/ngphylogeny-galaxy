@@ -65,3 +65,8 @@ daemon. This lets Galaxy run tools as containers:
 * **TNT** has neither a bioconda package nor a Docker image available (it's
   under a license that requires downloading it manually from the Willi
   Hennig Society); its tool wrapper is present but won't run out of the box.
+
+`docker-compose.yml` also runs a `docker-prune` sidecar that periodically
+cleans up that internal Docker-in-Docker daemon's stopped containers/old
+images (they otherwise accumulate unbounded and can fill the host disk) -
+see CLAUDE.md's "Disk usage: the `docker-prune` sidecar" for details.

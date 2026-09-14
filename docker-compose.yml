@@ -27,6 +27,60 @@ services:
       # running as root).
       GALAXY_DOCKER_SET_USER: "1450:1450"
 
+  # Nothing ever prunes the internal Docker-in-Docker daemon's stopped
+  # tool-job containers/images above - they accumulate unbounded and can
+  # fill the host disk (this took down NGPhylogeny_fr_django with a 500 on
+  # 2026-09-14: 5510 stopped containers + hundreds of stale images, tens of
+  # GB reclaimable, none of it ever cleaned up). This sidecar mounts the
+  # host's own Docker socket (same pattern as `galaxy-build-images` in
+  # NGPhylogeny_fr_django's docker-compose.standalone.yml) and, every 2
+  # days at 02:00, prunes both the `galaxy` service's internal daemon and
+  # the host's own. It finds the galaxy container via its compose service
+  # label rather than a hardcoded name, so it keeps working whether or not
+  # an override sets `container_name:` (see docker-compose.prod.yml on the
+  # actual deployment, which does).
+  docker-prune:
+    image: docker:27-cli
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    entrypoint:
+      - sh
+      - -c
+      - |
+        set -eu
+        prune() {
+          echo "=== $$(date -u +%Y-%m-%dT%H:%M:%SZ) docker-prune sidecar running ==="
+          galaxy_id=$$(docker ps -q --filter "label=com.docker.compose.service=galaxy")
+          if [ -n "$$galaxy_id" ]; then
+            docker exec "$$galaxy_id" docker container prune -f || true
+            docker exec "$$galaxy_id" docker image prune -f || true
+          else
+            echo "galaxy container not found/running, skipping its internal prune"
+          fi
+          docker container prune -f || true
+          docker image prune -f || true
+        }
+        # Align to the next 02:00 - the container's own clock, UTC by
+        # default with no TZ set here, same as the IFB Cloud host. (busybox
+        # date has no -d parsing, so this is done via arithmetic on
+        # seconds-since-midnight instead; 10# forces base-10 so a leading
+        # zero, e.g. "08", isn't read as octal.)
+        h=$$(date +%H); m=$$(date +%M); s=$$(date +%S)
+        sod=$$((10#$$h * 3600 + 10#$$m * 60 + 10#$$s))
+        target=$$((2 * 3600))
+        if [ "$$sod" -ge "$$target" ]; then
+          wait=$$((86400 - sod + target))
+        else
+          wait=$$((target - sod))
+        fi
+        echo "docker-prune sidecar: sleeping $${wait}s until the next 02:00, then every 2 days"
+        sleep "$$wait"
+        while true; do
+          prune
+          sleep 172800
+        done
+
 volumes:
   galaxy-export:
   galaxy-docker:

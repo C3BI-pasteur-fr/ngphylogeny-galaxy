@@ -100,6 +100,30 @@ these only surfaced as a real job failure):
   be *present* even for purely local, single-node execution, even though it
   never actually connects anywhere.
 
+## Disk usage: the `docker-prune` sidecar
+
+Nothing about Galaxy's internal Docker-in-Docker daemon (see above) ever
+prunes its own stopped tool-job containers or old images on its own - left
+alone, they accumulate unbounded and can fill the host disk. This actually
+happened on the real IFB Cloud deployment (2026-09-14): 5510 stopped
+containers plus hundreds of stale images, tens of GB reclaimable, none of
+it ever cleaned up, which took `NGPhylogeny_fr_django` down with a 500
+(disk-full Postgres healthcheck failure) - see that repo's `IFB_CLOUD.md`
+for the full incident writeup.
+
+`docker-compose.yml`'s `docker-prune` service is the fix: a small sidecar
+(`docker:27-cli`, host Docker socket mounted - same pattern as
+`NGPhylogeny_fr_django/docker-compose.standalone.yml`'s
+`galaxy-build-images`) that, every 2 days at 02:00 (container/host clock,
+UTC by default), prunes both the `galaxy` service's internal daemon
+(`docker exec <galaxy container> docker container/image prune -f`) and the
+host's own. It resolves the galaxy container via its
+`com.docker.compose.service=galaxy` label rather than a hardcoded name, so
+it keeps working whether or not an override sets `container_name:` (the
+real deployment's `docker-compose.prod.yml` does, to `ngphylo-galaxy`).
+Check `docker compose logs docker-prune` if disk usage becomes a problem
+again, to confirm it's actually running.
+
 ## Local Galaxy instance
 
 ```
