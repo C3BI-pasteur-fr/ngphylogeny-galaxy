@@ -5,7 +5,7 @@
   </edam_operations>
   <requirements>
     <requirement type="package" version="1.12">bmge</requirement>
-    <requirement type="package" version="0.3.0">goalign</requirement>
+    <requirement type="package" version="0.3.1">goalign</requirement>
   </requirements>
   <command>
     <![CDATA[

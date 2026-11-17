@@ -5,7 +5,7 @@
   </edam_operations>
   <requirements>
     <requirement type="package" version="0.91b">gblocks</requirement>
-    <requirement type="package" version="0.3.0">goalign</requirement>
+    <requirement type="package" version="0.3.1">goalign</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" level="fatal"/>
