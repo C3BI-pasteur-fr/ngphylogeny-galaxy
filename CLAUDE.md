@@ -124,7 +124,14 @@ for a tool's own programs (`bmge` present but `java` missing, `gotree`,
 failed step, some of which were ordinary bad input. With the extra entry,
 jobs resolve through `CachedMulledDockerContainerResolver[namespace=local]`
 and an image is only built when it's missing. The entry goes before
-`mulled` so a local build wins over pulling.
+`mulled` so a local build wins over pulling. In the hour after it was
+applied there, no image was built and 121 jobs finished `ok` against 2
+errors, neither a `command not found`.
+
+When checking this in the handler logs, count only `found description
+[ContainerDescription[...` lines. A job that needs no mulled image (an
+upload, for instance) logs `found description [None]` for every resolver,
+`BuildDockerContainerResolver` included, without building anything.
 
 Unconfirmed: why the builds fail. `GALAXY_DOCKER_SET_USER: "1450:1450"` (in
 `docker-compose.yml`) running the build as a user who can't write to `/usr/local` is a
