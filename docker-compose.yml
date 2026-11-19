@@ -10,6 +10,9 @@ services:
       - ./tools:/local_tools
       - galaxy-export:/export
       - galaxy-docker:/var/lib/docker
+      # Makes Galaxy reuse the tool images it builds instead of rebuilding
+      # them on every job - see the file's own comment.
+      - ./config/container_resolvers_conf.yml:/etc/galaxy/container_resolvers_conf.yml:ro
       - galaxy-data:/data
     environment:
       GALAXY_CONFIG_TOOL_CONFIG_FILE: "/etc/galaxy/tool_conf.xml,/local_tools/tool_conf.xml"

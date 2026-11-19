@@ -1,0 +1,23 @@
+# Mounted over the file of the same name in quay.io/bgruening/galaxy (see
+# docker-compose.yml). Identical to that image's own copy except for the
+# `cached_mulled` / `namespace: local` entry.
+#
+# Without that entry, Galaxy never reuses the mulled images it builds itself
+# (`quay.io/local/mulled-v2-*`): `cached_mulled` only looks under the
+# `biocontainers` namespace, so `build_mulled` rebuilds the image on every
+# job. Each rebuild leaves a stopped container (75-740M) and the previous
+# image untagged, which filled a 774G disk in about two days, and a build
+# that fails partway can still be tagged and used, so some jobs failed with
+# "command not found" for one of the tool's own programs.
+- type: explicit
+- type: cached_mulled
+- type: cached_mulled
+  namespace: local
+- type: cached_mulled_singularity
+  cache_directory: "/cvmfs/singularity.galaxyproject.org/all"
+- type: cached_mulled_singularity
+  cache_directory: "/export/container_cache/singularity/mulled"
+- type: mulled
+  namespace: "biocontainers"
+- type: build_mulled
+  namespace: local

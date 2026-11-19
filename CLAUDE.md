@@ -100,6 +100,40 @@ these only surfaced as a real job failure):
   be *present* even for purely local, single-node execution, even though it
   never actually connects anywhere.
 
+### Galaxy has to be told to reuse the images it builds
+
+`config/container_resolvers_conf.yml` is mounted over the image's own
+`/etc/galaxy/container_resolvers_conf.yml` and differs from it by one
+entry: `cached_mulled` with `namespace: local`. The image's list has
+`cached_mulled` only for the default `biocontainers` namespace, while the
+images `build_mulled` creates are named `quay.io/local/mulled-v2-*`, so
+Galaxy never found an already-built image and rebuilt it on every job -
+visible in the handler logs as every job resolving through
+`BuildDockerContainerResolver[namespace=local]`.
+
+Found on the temporary standalone instance (2026-11-19), where this did
+two kinds of damage. Each rebuild leaves its build containers behind
+(`conda search`/`conda create` in `miniforge3`, `involucro`, 75-740M for
+the `conda create` ones) and the previous image untagged: about 7,000
+containers a day, which filled a 774G disk in about two days. And a build
+that fails partway (most `conda create` attempts ended in
+`EnvironmentNotWritableError`) can still be tagged and used with some
+programs missing, so jobs failed intermittently with `command not found`
+for a tool's own programs (`bmge` present but `java` missing, `gotree`,
+`nw_display`) - about 30% of finished analyses on that instance had a
+failed step, some of which were ordinary bad input. With the extra entry,
+jobs resolve through `CachedMulledDockerContainerResolver[namespace=local]`
+and an image is only built when it's missing. The entry goes before
+`mulled` so a local build wins over pulling.
+
+Unconfirmed: why the builds fail. `GALAXY_DOCKER_SET_USER: "1450:1450"` (in
+`docker-compose.yml`) running the build as a user who can't write to `/usr/local` is a
+likely cause. A new tool or a changed requirement still builds once, and
+can still produce an incomplete image; check one with `docker exec
+<galaxy> docker run --rm --entrypoint /bin/sh <image> -c 'ls
+/usr/local/bin'`, and remove a bad one with `docker exec <galaxy> docker
+rmi <image>` so the next job builds it again.
+
 ## Disk usage: the `docker-prune` sidecar
 
 Nothing about Galaxy's internal Docker-in-Docker daemon (see above) ever
@@ -123,6 +157,12 @@ it keeps working whether or not an override sets `container_name:` (the
 real deployment's `docker-compose.prod.yml` does, to `ngphylo-galaxy`).
 Check `docker compose logs docker-prune` if disk usage becomes a problem
 again, to confirm it's actually running.
+
+Every 2 days was enough at the rate seen in September, but not while
+images were rebuilt on every job (see the previous section). The
+standalone stack in `NGPhylogeny_fr_django` has no such sidecar; its
+temporary IFB Cloud instance runs the same two prunes from a host cron
+every 30 minutes instead.
 
 ## Local Galaxy instance
 
